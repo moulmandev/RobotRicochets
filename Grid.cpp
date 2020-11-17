@@ -1,4 +1,4 @@
-#include "Grille.h"
+#include "Grid.h"
 
 Grid::Grid(int row, int col) : nbRow(row), nbCol(col) {
 	board = new Case*[nbRow];
