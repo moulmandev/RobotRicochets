@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "Statistics.h"
 
 class User {
 
@@ -16,12 +17,14 @@ public:
 	void setInvite(bool);
 	void setPrenom(std::string);
 	void setNom(std::string);
+	void displayUserStatistics();
 
 	~User();
 
 private:
 	int idUser;
 	bool invite;
+	Statistics userStatistics;
 	std::string firstName;
 	std::string lastName;
 

@@ -1,8 +1,7 @@
 #include "Statistics.h"
 
-Statistics::Statistics(User* u): gameNb(0), wonGameNb(0), ratio(1.0){
-	user = u;
-	std::cout << "Constructeur Statistiques" << std::endl;
+Statistics::Statistics(): gameNb(0), wonGameNb(0), ratio(0.0){
+	std::cout << "Statistics Constructor" << std::endl;
 }
 
 int Statistics::getgameNb() {
@@ -27,6 +26,14 @@ void Statistics::SetRatio(float r) {
 
 double Statistics::calculRatio() {
 	return wonGameNb/(gameNb - wonGameNb);
+}
+
+void Statistics::displayStatistics() {
+	std::cout << "Nombre de parties jouees : " << gameNb << std::endl;
+	std::cout << "Nombre de parties gagnees : " << wonGameNb << std::endl;
+	std::cout << "Nombre de parties perdues : " << gameNb- wonGameNb << std::endl;
+	std::cout << "Ratio du joueur : " << ratio << std::endl;
+
 }
 
 Statistics::~Statistics() {

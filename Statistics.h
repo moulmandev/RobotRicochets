@@ -1,9 +1,8 @@
 #pragma once
-#include "User.h"
-
+#include <iostream>
 class Statistics {
 public:
-	Statistics(User*);
+	Statistics();
 	
 	int getgameNb();
 	int getWonGameNb();
@@ -13,11 +12,12 @@ public:
 	void setWonGameNb(int);
 	void SetRatio(float);
 
+	void displayStatistics();
 	double calculRatio();
+
 	~Statistics();
 
 private:
-	User* user;
 	int gameNb;
 	int wonGameNb;
 	double ratio;
