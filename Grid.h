@@ -8,5 +8,4 @@ private:
 	Case** board;
 public:
 	Grid(int, int);
-
 };

@@ -1,6 +1,6 @@
 #include "User.h"
 
-User::User(int id, bool i, std::string p, std::string n) : idUser(i), invite(i), firstName(p), lastName(n), userStatistics(){
+User::User(int id, bool i, std::string p, std::string n, std::string ps): idUser(i), invite(i), firstName(p), lastName(n), userStatistics(), pseudo(ps){
 	std::cout << "User Constructor" << std::endl;
 }
 User::User(): idUser(0), invite(0), firstName(""), lastName(""){
@@ -36,9 +36,21 @@ void User::setNom(std::string n) {
 	lastName = n;
 }
 
+void User::setPseudo(std::string p) {
+	pseudo = p;
+}
+
 void User::displayUserStatistics() {
 	std::cout << "Statistiques de " << lastName << " " << firstName << " :" <<std::endl;
 	userStatistics.displayStatistics();
+}
+
+void User::displayUserIdentity() {
+	std::cout << "Nom : " << lastName << std::endl;
+	std::cout << "Prenom : " << firstName << std::endl;
+	std::cout << "Pseudo : " << pseudo << std::endl;
+	displayUserStatistics();
+
 }
 
 User::~User() {

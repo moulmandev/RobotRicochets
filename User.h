@@ -5,7 +5,7 @@
 class User {
 
 public:
-	User(int, bool, std::string, std::string);
+	User(int, bool, std::string, std::string, std::string);
 	User();
 
 	int getIdUser();
@@ -17,8 +17,9 @@ public:
 	void setInvite(bool);
 	void setPrenom(std::string);
 	void setNom(std::string);
+	void setPseudo(std::string);
 	void displayUserStatistics();
-
+	void displayUserIdentity();
 	~User();
 
 private:
@@ -26,6 +27,7 @@ private:
 	bool invite;
 	Statistics userStatistics;
 	std::string firstName;
+	std::string pseudo;
 	std::string lastName;
 
 };

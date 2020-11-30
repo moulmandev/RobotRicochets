@@ -159,12 +159,14 @@
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Robot.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Statistics.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Case.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Robot.h" />
     <ClInclude Include="Statistics.h" />
     <ClInclude Include="User.h" />
