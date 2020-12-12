@@ -1,5 +1,7 @@
 #include "Grid.h"
 
+
+
 Grid::Grid(int row, int col) : nbRow(row), nbCol(col) {
 
 	board = new Case*[nbRow];
@@ -12,4 +14,16 @@ Grid::Grid(int row, int col) : nbRow(row), nbCol(col) {
 
 		}
 	}
+}
+
+int Grid::getNbCol() {
+	return nbCol;
+}
+
+int Grid::getNbRow() {
+	return nbRow;
+}
+
+Case* Grid::getCase(int row, int column) {
+	return &board[row][column];
 }

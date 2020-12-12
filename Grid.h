@@ -8,4 +8,7 @@ private:
 	Case** board;
 public:
 	Grid(int, int);
+	int getNbRow();
+	int getNbCol();
+	Case* getCase(int, int);
 };

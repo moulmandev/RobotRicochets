@@ -52,8 +52,9 @@ int main(int argc, char** argv){
 	u[1].setPseudo("PseudoJean");
 
 	Game g(u, 5, 2);
-	cout << "Display game : " << endl;
-	g.displayGame();
+
+	g.drawBoard();
+
 	cout << "Display user identity : " << endl;
 	u[0].displayUserIdentity();
 

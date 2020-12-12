@@ -7,11 +7,12 @@
 class Game {
 public:
 	Game(User*,int, int);
-	void displayGame();
-private:
+	void GenerateBoard(int nbRow,int nbCol, int nbRobots, Robot tabRobots[]);
+	void GameInformation();
+	void drawBoard();
+protected:
 	Grid* map;
 	User* users;
 	Robot* robots;
 	int nbRobots;
-	int nbJoueurs;
 };
