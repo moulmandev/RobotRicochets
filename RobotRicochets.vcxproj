@@ -165,12 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Case.h" />
-    <ClInclude Include="GameMultiPlayer.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="GameSolo.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="constants.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Robot.h" />

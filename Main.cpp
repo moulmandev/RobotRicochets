@@ -53,7 +53,7 @@ int main(int argc, char** argv){
 
 	Game g(u, 5, 2);
 
-	g.drawBoard();
+	//g.drawBoard();
 
 	cout << "Display user identity : " << endl;
 	u[0].displayUserIdentity();

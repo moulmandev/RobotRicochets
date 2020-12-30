@@ -45,17 +45,3 @@ const char SQUARE = 'Q';
 const char HEXAGON = 'H';
 
 const char SAHPES[4] = { CIRCLE, TRIANGLE, SQUARE, HEXAGON};
-
-
-
-/*const int MAX_DEPTH = 32;
-
-
-
-const unsigned int REVERSE[] = {
-    0, SOUTH, WEST, 0, NORTH, 0, 0, 0, EAST
-};
-
-const int OFFSET[] = {
-    0, -16, 1, 0, 16, 0, 0, 0, -1
-};*/
