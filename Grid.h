@@ -1,14 +1,14 @@
 #pragma once
 #include "Case.h"
+#include<random>
+#include<time.h>
 
 class Grid {
 private:
 	int nbRow;
 	int nbCol;
-	Case** board;
+	int board[16][16];
 public:
-	Grid(int, int);
-	int getNbRow();
-	int getNbCol();
-	Case* getCase(int, int);
+	Grid();
+	void afficherGrille();
 };

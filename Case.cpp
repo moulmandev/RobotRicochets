@@ -6,7 +6,7 @@ Case::Case(): x(-1), y(-1), presenceRobot(false){
 	robot = nullptr;
 }
 
-Case::Case(int coord1, int coord2) : x(coord1), y(coord2), presenceRobot(false) {
+Case::Case(int coord1, int coord2, char m) : x(coord1), y(coord2), mur(m), presenceRobot(false) {
 	robot = nullptr;
 }
 
@@ -20,6 +20,11 @@ int Case::getX() {
 
 int Case::getY() {
 	return y;
+}
+
+char Case::getMur()
+{
+	return mur;
 }
 
 bool Case::getPresenceRobot() {
