@@ -36,6 +36,10 @@ HelloApplication::HelloApplication(const Wt::WEnvironment& env)
 	button->clicked().connect(greet);
 }
 
+
+
+
+
 int main(int argc, char** argv){
 
 	User* u = new User[2];

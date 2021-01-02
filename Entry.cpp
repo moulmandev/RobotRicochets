@@ -7,9 +7,9 @@ unsigned int Entry::getDepth() {
     return depth;
 }
 
-unsigned int Entry::setKey(unsigned int k) {
+void Entry::setKey(unsigned int k) {
     key = k;
 }
-unsigned int Entry::setDepth(unsigned int d) {
+void Entry::setDepth(unsigned int d) {
     depth = d;
 }
