@@ -42,16 +42,16 @@ int Game::hash(unsigned int key){
 
 void Game::set_alloc(Set* set, unsigned int count) {
 	for (unsigned int i = 0; i < count; i++) {
-		set->getMask = 0xfff;
-		set->getSize = 0;
-		set->getData = (Entry*)calloc(set->getMask + 1, sizeof(Entry));
+		set->setMask(0xfff);
+		set->setSize(0);
+		set->setData((Entry*)calloc(set->getMask() + 1, sizeof(Entry)));
 		set++;
 	}
 }
 
 void Game::set_free(Set* set, unsigned int count) {
 	for (unsigned int i = 0; i < count; i++) {
-		free(set->getData);
+		free(set->getData());
 		set++;
 	}
 }

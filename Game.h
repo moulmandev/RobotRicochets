@@ -5,9 +5,6 @@
 #include "Set.h"
 #pragma once
 
-const int MAX_DEPTH = 32;
-
-
 class Game {
 public:
 	Game(User*,int, int);	
@@ -19,7 +16,6 @@ public:
 	void set_grow(Set* set);
 	int hash(unsigned int key);
 	bool set_add(Set* set, unsigned int key, unsigned int depth);
-	void set_grow(Set* set);
 
 protected:
 	unsigned int Grid[256];

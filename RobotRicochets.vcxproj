@@ -156,19 +156,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Case.cpp" />
+    <ClCompile Include="Entry.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Set.cpp" />
     <ClCompile Include="Statistics.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Case.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="Entry.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Robot.h" />
+    <ClInclude Include="Set.h" />
     <ClInclude Include="Statistics.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="Vue.h" />
