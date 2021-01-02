@@ -37,35 +37,27 @@ HelloApplication::HelloApplication(const Wt::WEnvironment& env)
 }
 
 
-
-
-
 int main(int argc, char** argv){
 
-	Grid* grille = new Grid();
-	grille->afficherGrille();
+	User* u = new User[2];
+	u[0].setIdUser(1);
+	u[0].setNom("Dupont");
+	u[0].setPrenom("Paul");
+	u[0].setInvite(0);
+	u[0].setPseudo("PseudoPaul");
 
-	//User* u = new User[2];
-	//u[0].setIdUser(1);
-	//u[0].setNom("Dupont");
-	//u[0].setPrenom("Paul");
-	//u[0].setInvite(0);
-	//u[0].setPseudo("PseudoPaul");
+	u[1].setIdUser(2);
+	u[1].setNom("Dupons");
+	u[1].setPrenom("Jean");
+	u[1].setInvite(1);
+	u[1].setPseudo("PseudoJean");
 
-	//u[1].setIdUser(2);
-	//u[1].setNom("Dupons");
-	//u[1].setPrenom("Jean");
-	//u[1].setInvite(1);
-	//u[1].setPseudo("PseudoJean");
+	Robot* tabRobots = new Robot[4];
 
-	//Game g(u, 5, 2);
+	Game g(u, tabRobots, 5, 2);
+	g.gameVue();
 
-	////g.drawBoard();
-
-	//cout << "Display user identity : " << endl;
-	//u[0].displayUserIdentity();
-
-	//return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
-	//	return std::make_unique<HelloApplication>(env);
-	//});
+	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
+	return std::make_unique<HelloApplication>(env);
+	});
 }

@@ -8,8 +8,10 @@
 
 class Game {
 public:
-	Game(User*,int, int);	
-	inline bool gameOver();
+	Game(User*, Robot*, int, int);
+	void gameVue();
+
+	/*inline bool gameOver();
 	inline unsigned int make_key();
 	inline void swap(unsigned int* array, unsigned int a, unsigned int b);
 	void set_alloc(Set* set, unsigned int count);
@@ -21,15 +23,12 @@ public:
 	unsigned int do_move(unsigned int robot, unsigned int direction);
 	void undo_move(unsigned int undo);
 	void precompute_minimum_moves();
-	unsigned int compute_move(unsigned int robot, unsigned int direction);
+	unsigned int compute_move(unsigned int robot, unsigned int direction);*/
 
 protected:
-	unsigned int grid[256];
-	unsigned int moves[256];
-	unsigned int robots[4];
-	unsigned int token;
-	unsigned int last;
 	User* users;
+	Grid* map;
+	Robot* robots;
 	int nbRobots;
 	int nbJoueurs;
 };

@@ -2,14 +2,26 @@
 #include <time.h>
 using namespace std;
 
-Game::Game(User* u, int nRobots, int nJoueurs) : nbRobots(nRobots){
+Game::Game(User* u, Robot* r, int nRobots, int nJoueurs) : nbRobots(nRobots), nbJoueurs(nJoueurs){
 	users = u;
-	/*robots = new Robot[nbRobots];//Creation tableau de robots
-	GenerateBoard(5, 5, nRobots, robots);*/
+	map = new Grid();
+	robots = r;
 	std::cout << "Game created" << std::endl;
 }
 
-inline void swap(unsigned int* array, unsigned int a, unsigned int b) {
+void Game::gameVue() {
+	map->afficherGrille();
+	cout << endl << endl;
+	cout << "nb joueurs : " << nbJoueurs << endl;
+	std::cout << "Liste joueurs : " << std::endl;
+
+	for (int i = 0; i < nbJoueurs; i++) {
+		std::cout << "-" << users[i].getLastName() << " " << users[i].getFirstName() << endl;
+	}
+	cout << endl;	
+}
+
+/*inline void swap(unsigned int* array, unsigned int a, unsigned int b) {
 	unsigned int temp = array[a];
 	array[a] = array[b];
 	array[b] = temp;
@@ -81,7 +93,7 @@ bool Game::set_add(Set* set, unsigned int key, unsigned int depth) {
 		entry = set->getData() + index;
 	}
 	if (entry->getKey()) {
-		if (entry->getDepth() < depth) {
+		if (entry->getDepth() < depth){
 			entry->setDepth(depth);
 			return true;
 		}
@@ -191,27 +203,10 @@ void Game::precompute_minimum_moves()
 			}
 		}
 	}
-}
+}*/
 
 
-/*void Game::GenerateBoard(int nbRow, int nbCol, int nbRobots, Robot tabRobots[]) {
-	map = new Grid(nbCol, nbRow);
-	int l,c = 0;
-	srand(time(NULL));
-	for (int i = 0; i < nbRobots; i++) {
-		l = rand() %(map->getNbRow());
-		c = rand() % (map->getNbCol());
-		if (map->getCase(l, c)->getPresenceRobot()){
-			i--;
-		}
-		else {			
-			map->getCase(l, c)->ajouterRobot(&tabRobots[i]);
-		}
-	}
-	cout << "Board generated " << endl;
-}
-
-void Game::drawBoard() {
+/*void Game::drawBoard() {
 	for (int i = 0; i < map->getNbRow(); i++) {
 		for (int j = 0; j < map->getNbCol(); j++) {			
 			if (map->getCase(i, j)->getPresenceRobot()) {
@@ -249,15 +244,6 @@ void Game::drawBoard() {
 	}
 	for (int j = 0; j < map->getNbCol(); j++) {
 		cout << "* * * * * * *";
-	}
-	cout << endl;
-}
-
-/*void Game::gameInformation() {
-	std::cout << "Liste joueurs : " << std::endl;
-	cout << "nb joueurs : " << nbJoueurs << endl;
-	for (int i = 0; i < nbJoueurs; i++) {
-		std::cout << users[i].getLastName() << " " << users[i].getFirstName();
 	}
 	cout << endl;
 }*/
