@@ -107,6 +107,93 @@ inline bool Game::gameOver() {
 	}
 }
 
+bool Game::can_move(unsigned int robot, unsigned int direction)
+{
+	unsigned int index = robots[robot];
+	if (HAS_WALL(grid[index], direction)) {
+		return false;
+	}
+	if (last == PACK_MOVE(robot, REVERSE[direction])) {
+		return false;
+	}
+	unsigned int new_index = index + OFFSET[direction];
+	if (HAS_ROBOT(grid[new_index])){
+		return false;
+	}
+	return true;
+}
+
+unsigned int Game::compute_move(unsigned int robot, unsigned int direction){
+	unsigned int index = robots[robot] + OFFSET[direction];
+	while (true) {
+		if (HAS_WALL(grid[index], direction)) {
+			break;
+		}
+		unsigned int new_index = index + OFFSET[direction];
+		if (HAS_ROBOT(grid[new_index])) {
+			break;
+		}
+		index = new_index;
+	}
+	return index;
+}
+
+unsigned int Game::do_move(unsigned int robot, unsigned int direction){
+	unsigned int start = robots[robot];
+	unsigned int end = compute_move(robot, direction);
+	unsigned int l = last;
+	robots[robot] = end;
+	last = PACK_MOVE(robot, direction);
+	UNSET_ROBOT(grid[start]);
+	SET_ROBOT(grid[end]);
+	return PACK_UNDO(robot, start, l);
+}
+
+void Game::undo_move(unsigned int undo){
+	unsigned int robot = UNPACK_ROBOT(undo);
+	unsigned int start = UNPACK_START(undo);
+	unsigned int l = UNPACK_LAST(undo);
+	unsigned int end = robots[robot];
+	robots[robot] = start;
+	last = l;
+	SET_ROBOT(grid[start]);
+	UNSET_ROBOT(grid[end]);
+}
+
+void Game::precompute_minimum_moves()
+{
+	bool status[256];
+	for (unsigned int i = 0; i < 256; i++) {
+		moves[i] = 0xffffffff;
+		status[i] = false;
+	}
+	moves[token] = 0;
+	status[token] = true;
+	bool done = false;
+	while (!done) {
+		done = true;
+		for (unsigned int i = 0; i < 256; i++) {
+			if (!status[i]) {
+				continue;
+			}
+			status[i] = false;
+			unsigned int depth = moves[i] + 1;
+			for (unsigned int direction = 1; direction <= 8; direction <<= 1) {
+				unsigned int index = i;
+				while (!HAS_WALL(grid[index], direction)) {
+					index += OFFSET[direction];
+					if (moves[index] > depth) {
+						moves[index] = depth;
+						status[index] = true;
+						done = false;
+					}
+				}
+			}
+		}
+	}
+}
+
+
 /*void Game::GenerateBoard(int nbRow, int nbCol, int nbRobots, Robot tabRobots[]) {
 	map = new Grid(nbCol, nbRow);
 	int l,c = 0;

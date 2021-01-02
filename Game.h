@@ -5,6 +5,7 @@
 #include "Set.h"
 #pragma once
 
+
 class Game {
 public:
 	Game(User*,int, int);	
@@ -16,9 +17,14 @@ public:
 	void set_grow(Set* set);
 	int hash(unsigned int key);
 	bool set_add(Set* set, unsigned int key, unsigned int depth);
+	bool can_move(unsigned int robot, unsigned int direction);
+	unsigned int do_move(unsigned int robot, unsigned int direction);
+	void undo_move(unsigned int undo);
+	void precompute_minimum_moves();
+	unsigned int compute_move(unsigned int robot, unsigned int direction);
 
 protected:
-	unsigned int Grid[256];
+	unsigned int grid[256];
 	unsigned int moves[256];
 	unsigned int robots[4];
 	unsigned int token;

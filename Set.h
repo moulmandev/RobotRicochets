@@ -7,8 +7,9 @@ public:
 	unsigned int getSize();
 	void setMask(unsigned int i);
 	void setSize(unsigned int i);
-	Entry* setData(Entry* data);
 	Entry* getData();
+	Entry* setData(Entry* data);
+
 private:
 	unsigned int mask;
 	unsigned int size;
