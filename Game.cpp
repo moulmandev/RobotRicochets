@@ -2,10 +2,9 @@
 #include <time.h>
 using namespace std;
 
-Game::Game(User* u, Robot* r, int nRobots, int nJoueurs) : nbRobots(nRobots), nbJoueurs(nJoueurs){
+Game::Game(User* u, int nRobots, int nJoueurs) : nbRobots(nRobots), nbJoueurs(nJoueurs){
 	users = u;
 	map = new Grid();
-	robots = r;
 	std::cout << "Game created" << std::endl;
 }
 

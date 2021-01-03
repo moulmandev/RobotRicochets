@@ -2,7 +2,8 @@
 using namespace std;
 
 Grid::Grid() : nbCol(16), nbRow(16) {
-	
+
+	tabRobots = new Robot[4];
 	srand(time(NULL));
 	int mursPossibles[] = { 16, 8, 4, 2, 20, 18, 12, 10 };
 	for (int i = 0; i < nbRow; i++) {

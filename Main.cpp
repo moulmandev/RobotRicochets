@@ -52,9 +52,7 @@ int main(int argc, char** argv){
 	u[1].setInvite(1);
 	u[1].setPseudo("PseudoJean");
 
-	Robot* tabRobots = new Robot[4];
 
-	Game g(u, tabRobots, 5, 2);
 	g.gameVue();
 
 	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
