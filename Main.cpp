@@ -52,8 +52,8 @@ int main(int argc, char** argv){
 	u[1].setInvite(1);
 	u[1].setPseudo("PseudoJean");
 
+	Robot* r = new Robot(2, 2);
 
-	g.gameVue();
 
 	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
 	return std::make_unique<HelloApplication>(env);

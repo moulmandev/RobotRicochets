@@ -2,7 +2,6 @@
 #include "User.h"
 #include "Robot.h"
 #include "constants.h"
-#include "Set.h"
 #pragma once
 
 
@@ -10,6 +9,7 @@ class Game {
 public:
 	Game(User*, int, int);
 	void gameVue();
+	
 
 protected:
 	User* users;

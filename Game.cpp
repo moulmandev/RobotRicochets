@@ -20,6 +20,11 @@ void Game::gameVue() {
 	cout << endl;	
 }
 
+unsigned int nodes;
+unsigned int hits;
+unsigned int inner;
+
+
 /*inline void swap(unsigned int* array, unsigned int a, unsigned int b) {
 	unsigned int temp = array[a];
 	array[a] = array[b];
