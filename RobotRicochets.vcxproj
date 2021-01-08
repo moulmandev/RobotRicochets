@@ -161,7 +161,9 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Set.cpp" />
+    <ClCompile Include="Set.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Statistics.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>
@@ -172,7 +174,9 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Robot.h" />
-    <ClInclude Include="Set.h" />
+    <ClInclude Include="Set.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Statistics.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="Vue.h" />

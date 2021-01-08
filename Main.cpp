@@ -54,6 +54,10 @@ int main(int argc, char** argv){
 
 	Robot* r = new Robot(2, 2);
 
+	Game* g = new Game(u, 4, 2);
+	g->getMap()->oneDtoTwoD();
+
+
 
 	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
 	return std::make_unique<HelloApplication>(env);

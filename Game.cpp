@@ -20,6 +20,10 @@ void Game::gameVue() {
 	cout << endl;	
 }
 
+Grid* Game::getMap() {
+	return map;
+}
+
 unsigned int nodes;
 unsigned int hits;
 unsigned int inner;

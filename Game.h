@@ -8,8 +8,8 @@
 class Game {
 public:
 	Game(User*, int, int);
+	Grid* getMap();
 	void gameVue();
-	
 
 protected:
 	User* users;

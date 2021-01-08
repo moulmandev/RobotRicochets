@@ -3,11 +3,9 @@
 using namespace std;
 
 Grid::Grid() : nbCol(16), nbRow(16), depth(0), nodes(0), inner(0), hits(0){
-		
-	for (int i = 0; i < 16; i++) {
-		for (int j = 0; j < 16; j++) {
-			moves[i][j] = 0;
-		}
+	
+	for (int i = 0; i < 256; i++) {
+			moves[i] = 0;
 	}
 
 	srand(time(NULL));
@@ -42,6 +40,7 @@ Grid::Grid() : nbCol(16), nbRow(16), depth(0), nodes(0), inner(0), hits(0){
 		}
 	}
 
+
 	for (int i = 0; i < 4; i++) {
 		int x = rand() % 16;
 		int y = rand() % 16;
@@ -54,11 +53,16 @@ Grid::Grid() : nbCol(16), nbRow(16), depth(0), nodes(0), inner(0), hits(0){
 		}
 	}
 
+	for (int i = 0; i < 16; i++) {
+		for (int j = 0; j < 16; j++) {
+			boardOneD[i * 16 + j] = board[i][j];
+		}
+	}
+
 	/*Attribution RobotGoal*/
 	int numRobotTarget = rand() % 4;
 	tabRobots.at(numRobotTarget)->setTarget(true);
-	tokenX = tabRobots.at(numRobotTarget)->getX();
-	tokenY = tabRobots.at(numRobotTarget)->getY();
+	token = (tabRobots.at(numRobotTarget)->getX()*1+ tabRobots.at(numRobotTarget)->getY());
 
 }
 
@@ -70,6 +74,7 @@ void Grid::afficherGrille(){
 		cout << endl;
 	}
 }
+
 
 Robot* Grid::getRobotGoal() {
 	for (int i = 0; i < tabRobots.size(); i++) {
@@ -83,7 +88,7 @@ Robot* Grid::getRobotGoal() {
 inline bool Grid::gameOver() {
 	Robot* robotGoal = getRobotGoal();	
 
-	if (robotGoal->getX() == tokenX && robotGoal->getY() == tokenY) {//robotGoal arrivé case objectif
+	if (robotGoal->getX()*16+robotGoal->getY() == token){//robotGoal arrivé case objectif
 		return true;
 	}
 	else {
@@ -95,8 +100,8 @@ void Grid::pathSave() {
 	cout << "Depth: " << depth << ",Nodes: " << nodes << "(" << inner << "inner," << hits << "hits)" << endl;
 }
 
-void Grid::precomputeMinimumMoves() {
-	bool status[16][16];
+void Grid::precomputeMinimumMoves(){
+	bool status[256];
 
 	for (int i = 0; i < 16; i++) {
 		for (int j = 0; j < 16; j++) {
