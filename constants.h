@@ -22,6 +22,8 @@
 #define UNPACK_LAST(undo) (undo & 0xff)
 #define MAKE_KEY(x) (x[0] | (x[1] << 8) | (x[2] << 16) | (x[3] << 24))
 
+const int OFFSET[] = { 0, -16, 1, 0, 16, 0, 0, 0, -1 };
+
 /*Directions*/
 /*char NORTH = 'N';
 char EAST = 'E';
@@ -48,9 +50,6 @@ const unsigned int REVERSE[] = {
 	0, SOUTH, WEST, 0, NORTH, 0, 0, 0, EAST
 };
 
-const int OFFSET[] = {
-	0, -16, 1, 0, 16, 0, 0, 0, -1
-};
 
 /*Masks*/
 const unsigned char M_NORTH = 0x01;

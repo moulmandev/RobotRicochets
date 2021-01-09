@@ -5,7 +5,7 @@
 using namespace std;
 
 
-Robot::Robot(int k, int v): x(k), y(v){
+Robot::Robot(int k): position(k){
 	srand(time(NULL));
 	c = (color)(rand() % 8);
 	target = false;
@@ -16,25 +16,15 @@ bool Robot::getTarget() {
 	return target;
 }
 
-int Robot::getX() {
-	return x;
+int Robot::getPosition() {
+	return position;
 }
 
-int Robot::getY() {
-	return y;
+
+void Robot::setPosition(int k) {
+	position = k;
 }
 
-void Robot::setXY(int k, int v) {
-	x = k;
-	y = v;
-}
-
-void Robot::setX(int k) {
-	x = k;
-}
-void Robot::setY(int v) {
-	y = v;
-}
 
 void Robot::setTarget(bool b){
 	target = b;

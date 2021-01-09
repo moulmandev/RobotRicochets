@@ -6,17 +6,13 @@ enum color { blue, red, green, yellow, purple, pink, black, cyan };
 class Robot {
 private:
 	color c;
-	int x;
-	int y;
+	int position;
 	bool target;
 public:
-	Robot(int x, int y);
+	Robot(int x);
 	bool getTarget();
-	void setX(int);
-	void setY(int);
 	void setTarget(bool);
-	void setXY(int, int);
-	int getX();
-	int getY();
+	void setPosition(int);
+	int getPosition();
 	~Robot();
 };
