@@ -31,8 +31,12 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0) {
 				boardOneD[i] = 16;
 			else if ((int)i / 16 == 0 && i % 16 == 15)
 				boardOneD[i] = 8;
-			else
-				boardOneD[i] = mursPossibles[rand() % 8];
+			else {
+				if(rand()%4 != 0)
+					boardOneD[i] = mursPossibles[rand() % 4];
+				else
+					boardOneD[i] = mursPossibles[4 + (rand() % 4)];
+			}
 		}
 		else {
 			boardOneD[i] = 0;
@@ -40,6 +44,8 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0) {
 	}
 
 	for (int i = 0; i < 4; i++) {
+		rand();
+		rand();
 		int x = rand() % 256;
 		if (boardOneD[x] % 2 == 0) {
 			boardOneD[x]++;//Rajout d'un robot
@@ -58,13 +64,27 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0) {
 	/*Attribution RobotGoal*/
 	int numRobotTarget = rand() % 4;
 	tabRobots.at(numRobotTarget)->setTarget(true);
+	cout << "Objectif : " << tabRobots[numRobotTarget]->getColor() << endl;
+	goal = rand() % 256;
+	goal = rand() % 256;
+	goal = rand() % 256;
+	goal = rand() % 256;
 	token = (tabRobots.at(numRobotTarget)->getPosition());
 }
 
 void Grid::afficherGrille() {
+
+	srand(time(NULL));
+
 	for (int i = 1; i <= 256; i++) {
-		if (boardOneD[i - 1] % 2 == 0)
-			cout << boardOneD[i - 1] << "\t";
+		if (i - 1 == goal)
+			cout << "X";
+		if (boardOneD[i - 1] % 2 == 0) {
+			if (boardOneD[i - 1] != 0)
+				cout << boardOneD[i - 1] << "\t";
+			else
+				cout << ".\t";
+		}
 		else {
 			if (boardOneD[i - 1] == 1) {
 				for (int j = 0; j < 4; j++) {
@@ -185,7 +205,7 @@ void Grid::deplacerRobot(color c, char dir) {
 	switch (dir)
 	{
 	case 'z':
-		if (index > 15) {
+		if (index > 15 && (boardOneD[index] != 16 && boardOneD[index] != 18 && boardOneD[index] != 20)) {
 			bool continuer = true;
 			while (continuer) {
 
@@ -221,7 +241,7 @@ void Grid::deplacerRobot(color c, char dir) {
 		break;
 
 	case 's':
-		if (index < 255 - 15) {
+		if (index < 255 - 15 && (boardOneD[index] != 8 && boardOneD[index] != 12 && boardOneD[index] != 10)) {
 			bool continuer = true;
 			while (continuer) {
 
@@ -257,7 +277,7 @@ void Grid::deplacerRobot(color c, char dir) {
 		break;
 
 	case 'q':
-		if (index % 16 != 0) {
+		if (index % 16 != 0 && (boardOneD[index] != 2 && boardOneD[index] != 18 && boardOneD[index] != 10)) {
 			bool continuer = true;
 			while (continuer) {
 
@@ -293,7 +313,7 @@ void Grid::deplacerRobot(color c, char dir) {
 		break;
 
 	case 'd':
-		if (index % 16 != 0) {
+		if ((boardOneD[index] != 4 && boardOneD[index] != 20 && boardOneD[index] != 12)) {
 			bool continuer = true;
 			while (continuer) {
 
@@ -310,7 +330,7 @@ void Grid::deplacerRobot(color c, char dir) {
 					continuer = false;
 				}
 				//Droite de la grille
-				else if (index % 15 == 0) {
+				else if (index == 15 || index == 31 || index == 47 || index == 63 || index == 79 || index == 95 || index == 111 || index == 127 || index == 143 || index == 159 || index == 175 || index == 191 || index == 207 || index == 223 || index == 239 || index == 255) {
 					continuer = false;
 				}
 				//Autre robot sur une case
@@ -332,6 +352,9 @@ void Grid::deplacerRobot(color c, char dir) {
 	for (int i = 0; i < 4; i++)
 		if (tabRobots[i]->getColor() == c)
 			tabRobots[i] = rob;
+
+	if (rob->getTarget() && rob->getPosition() == goal)
+		cout << "Fini !!!" << endl;
 
 }
 

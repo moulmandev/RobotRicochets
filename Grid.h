@@ -12,6 +12,7 @@ private:
 	int boardOneD[256];
 	std::vector <Robot*> tabRobots;
 	int token;
+	int goal;
 	unsigned int moves[256];
 	unsigned int depth;
 	unsigned int nodes;
