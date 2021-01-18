@@ -44,31 +44,34 @@ int main(int argc, char** argv){
 
 	color selectColor;
 	char selectColorC;
-	cout << "Choisir une couleur (r/g/b/y) :";
-	cin >> selectColorC;
-	switch (selectColorC)
-	{
-	case 'r':
-		selectColor = red;
-		break;
-	case 'g':
-		selectColor = green;
-		break;
-	case 'b':
-		selectColor = blue;
-		break;
-	case 'y':
-		selectColor = yellow;
-		break;
-	}
-	char selectDir;
-	cout << "Choisir une direction (z/q/s/d) :";
-	cin >> selectDir;
-	
 
-	grille->deplacerRobot(selectColor, selectDir);
-	cout << endl << endl;
-	grille->afficherGrille();
+	while (1) {
+		cout << "Choisir une couleur (r/g/b/y) :";
+		cin >> selectColorC;
+		switch (selectColorC)
+		{
+		case 'r':
+			selectColor = red;
+			break;
+		case 'g':
+			selectColor = green;
+			break;
+		case 'b':
+			selectColor = blue;
+			break;
+		case 'y':
+			selectColor = yellow;
+			break;
+		}
+		char selectDir;
+		cout << "Choisir une direction (z/q/s/d) :";
+		cin >> selectDir;
+
+
+		grille->deplacerRobot(selectColor, selectDir);
+		cout << endl << endl;
+		grille->afficherGrille();
+	}
 
 	/*User* u = new User[2];
 	u[0].setIdUser(1);
