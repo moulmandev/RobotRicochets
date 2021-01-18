@@ -39,7 +39,38 @@ HelloApplication::HelloApplication(const Wt::WEnvironment& env)
 
 int main(int argc, char** argv){
 
-	User* u = new User[2];
+	Grid* grille = new Grid();
+	grille->afficherGrille();
+
+	color selectColor;
+	char selectColorC;
+	cout << "Choisir une couleur (r/g/b/y) :";
+	cin >> selectColorC;
+	switch (selectColorC)
+	{
+	case 'r':
+		selectColor = red;
+		break;
+	case 'g':
+		selectColor = green;
+		break;
+	case 'b':
+		selectColor = blue;
+		break;
+	case 'y':
+		selectColor = yellow;
+		break;
+	}
+	char selectDir;
+	cout << "Choisir une direction (z/q/s/d) :";
+	cin >> selectDir;
+	
+
+	grille->deplacerRobot(selectColor, selectDir);
+	cout << endl << endl;
+	grille->afficherGrille();
+
+	/*User* u = new User[2];
 	u[0].setIdUser(1);
 	u[0].setNom("Dupont");
 	u[0].setPrenom("Paul");
@@ -54,9 +85,11 @@ int main(int argc, char** argv){
 
 	Robot* r = new Robot(2);
 	Game* g = new Game(u, 4, 2);
+	g->getMap()->oneDtoTwoD();*/
 
 
-	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
+
+	/*return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
 	return std::make_unique<HelloApplication>(env);
-	});
+	});*/
 }

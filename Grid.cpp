@@ -2,62 +2,58 @@
 #include "Set.h"
 using namespace std;
 
-
-Grid::Grid() : nbCol(16), nbRow(16), depth(0), nodes(0), inner(0), hits(0){
+Grid::Grid() : depth(0), nodes(0), inner(0), hits(0){
 	
 	for (int i = 0; i < 256; i++) {
 			moves[i] = 0;
+			boardOneD[i] = 0;
 	}
 
 	srand(time(NULL));
 	tabRobots.clear();
 
 	int mursPossibles[] = { 16, 8, 4, 2, 20, 18, 12, 10 };
-	for (int i = 0; i < nbRow; i++) {
-		for (int j = 0; j < nbCol; j++) {
-			if (rand() % 10 == 0) {				
-				if (i == 0 && j != 0)
-					board[i][j] = 2;
-				else if (i == 0 && j == 0)
-					board[i][j] = 4;
-				else if (i == 15 && j != 0)
-					board[i][j] = 2;
-				else if (i == 15 && j == 0)
-					board[i][j] = 4;
-				else if (i != 0 && j == 0)
-					board[i][j] = 16;
-				else if (i == 0 && j == 0)
-					board[i][j] = 8;
-				else if (i != 0 && j == 15)
-					board[i][j] = 16;
-				else if (i == 0 && j == 15)
-					board[i][j] = 8;
-				else
-					board[i][j] = mursPossibles[rand()%8];
-			}
-			else {
-				board[i][j] = 0;
-			}
+	for (int i = 0; i < 256; i++) {
+		if (rand() % 10 == 0) {				
+			if ((int)i/16 == 0 && i%16 != 0)
+				boardOneD[i] = 2;
+			else if ((int)i / 16 == 0 && i % 16 == 0)
+				boardOneD[i] = 4;
+			else if ((int)i / 16 == 15 && i % 16 != 0)
+				boardOneD[i] = 2;
+			else if ((int)i / 16 == 15 && i % 16 == 0)
+				boardOneD[i] = 4;
+			else if ((int)i / 16 != 0 && i % 16 == 0)
+				boardOneD[i] = 16;
+			else if ((int)i / 16 == 0 && i % 16 == 0)
+				boardOneD[i] = 8;
+			else if ((int)i / 16 != 0 && i % 16 == 15)
+				boardOneD[i] = 16;
+			else if ((int)i / 16 == 0 && i % 16 == 15)
+				boardOneD[i] = 8;
+			else
+				boardOneD[i] = mursPossibles[rand()%8];
+		}
+		else {
+			boardOneD[i] = 0;
 		}
 	}
 
 	for (int i = 0; i < 4; i++) {
-		int x = rand() % 16;
-		int y = rand() % 16;
-		if (board[x][y] % 2 == 0) {
-			board[x][y]++;//Rajout d'un robot
-			tabRobots.push_back((new Robot(x*16 + y)));
+		int x = rand() % 256;
+		if (boardOneD[x] % 2 == 0) {
+			boardOneD[x]++;//Rajout d'un robot
+			//Mettre le robot dans votre tableau
+			tabRobots.push_back(new Robot(x));
 		}
 		else {
 			i--;
 		}
 	}
-
-	for (int i = 0; i < 16; i++) {
-		for (int j = 0; j < 16; j++) {
-			boardOneD[i * 16 + j] = board[i][j];
-		}
-	}
+	tabRobots[0]->setColor(blue);
+	tabRobots[1]->setColor(red);
+	tabRobots[2]->setColor(green);
+	tabRobots[3]->setColor(yellow);
 
 	/*Attribution RobotGoal*/
 	int numRobotTarget = rand() % 4;
@@ -66,11 +62,10 @@ Grid::Grid() : nbCol(16), nbRow(16), depth(0), nodes(0), inner(0), hits(0){
 }
 
 void Grid::afficherGrille(){
-	for (int i = 0; i < 16; i++) {
-		for (int j = 0; j < 16; j++) {
-			cout << board[i][j] << "\t";
-		}
-		cout << endl;
+	for (int i = 1; i <= 256; i++) {
+		cout << boardOneD[i-1] << "\t";
+			if (i != 0 && i % 16 == 0)
+				cout << endl;
 	}
 }
 
@@ -86,7 +81,7 @@ Robot* Grid::getRobotGoal() {
 inline bool Grid::gameOver() {
 	Robot* robotGoal = getRobotGoal();
 
-	if (robotGoal->getPosition() == token){//robotGoal arrivé case objectif
+	if (robotGoal->getPosition() == token){ //robotGoal arrive case objectif
 		return true;
 	}
 	else {
@@ -99,55 +94,215 @@ void Grid::pathSave() {
 	cout << "Depth: " << depth << ",Nodes: " << nodes << "(" << inner << "inner," << hits << "hits)" << endl;
 }
 
-void Grid::precomputeMinimumMoves() {//Calcule le nb min de mouvements pour chaque case pour aller à l'objectif
+void Grid::precomputeMinimumMoves() { //Calcule le nb min de mouvements pour chaque case pour aller ï¿½ l'objectif
 	bool status[256];
 
 	for (int i = 0; i < 256; i++) {
 		moves[i] = INT_MAX;//Initialisation avec une valeur "impossible"
-		status[i] = false; //Aucun move n'a été rempli
+		status[i] = false; //Aucun move n'a ï¿½tï¿½ rempli
 	}
-	moves[token] = 0;//0 mouvement pr aller de token à token
-	status[token] = true;// On a trouvé le plus court mouvement pour aller de token a token
+	moves[token] = 0;//0 mouvement pr aller de token ï¿½ token
+	status[token] = true;// On a trouvï¿½ le plus court mouvement pour aller de token a token
 
-	bool done = false;
-	while (!done) {//Tant qu'on a pas trouvé tous les chemins les plus courts
-		done = true;
 
-		for (unsigned int i = 0; i < 256; i++) {
-			if (!status[i]) {
-				continue;
-			}
-			status[i] = false;
-			unsigned int dept = moves[i];
-			for (unsigned int direction = 1; direction <= 8; direction <<= 1) {
-				unsigned int index = i;
-				while (!HAS_WALL(boardOneD[index], direction)) {
-					index += OFFSET[direction];
-					if (moves[index] > depth) {
-						moves[index] = depth;
-						status[index] = true;
-						done = false;
-					}
+	for (unsigned int i = 0; i < 256; i++) {
+		if (!status[i]) {
+			continue;
+		}
+		status[i] = false;
+		unsigned int dept = moves[i];
+		for (unsigned int direction = 1; direction <= 8; direction <<= 1) {
+			unsigned int index = i;
+			while (!HAS_WALL(boardOneD[index], direction)) {
+				index += OFFSET[direction];
+				if (moves[index] > depth) {
+					moves[index] = depth;
+					status[index] = true;
+					//done = false;
 				}
-
-
 			}
 		}
-
 	}
 }
 
-void Grid::setGrow(Set* setE) {
-	Set newSet;
+					
+void Grid::deplacerRobot(color c, char dir) {
+	Robot* rob = new Robot(0);
+	for (int i = 0; i < 4; i++)
+		if (tabRobots[i]->getColor() == c)
+			rob = tabRobots[i];
 
-	for (unsigned int index = 0; index <= setE->getMask(); index++) {
-		Entry* entry = setE->getData() + index;
-		if (entry->getKey()) {
-			setAdd(&newSet, entry->getKey(), entry->getDepth());
+	int xRob = (int)(rob->getPosition() / 16);
+	int yRob = (int)(rob->getPosition() % 16);
+	int index;
+	index = xRob * 16 + yRob;
+
+	switch (dir)
+	{
+	case 'z':
+		if (index > 15) {
+			bool continuer = true;
+			while (continuer) {
+
+				//Mur au Sud
+				if (boardOneD[index - 16] == 8) {
+					continuer = false;
+				}
+				//Mur au Nord et case vide
+				else if (boardOneD[index - 16] == 16 && boardOneD[index - 16] % 2 == 0) {
+					boardOneD[index]--;
+					boardOneD[index - 16]++;
+					rob->setPosition(rob->getPosition() - 16);
+					index -= 16;
+					continuer = false;
+				}
+				//Haut de la grille
+				else if (index <= 15) {
+					continuer = false;
+				}
+				//Autre robot sur une case
+				else if (boardOneD[index - 16] % 2 != 0) {
+					continuer = false;
+				}
+				//Case libre on avance
+				else {
+					boardOneD[index]--;
+					index -= 16;
+					boardOneD[index]++;
+					rob->setPosition(rob->getPosition() - 16);
+				}
+			}
 		}
+		break;
+
+	case 's':
+		if (index < 255 - 15) {
+			bool continuer = true;
+			while (continuer) {
+
+				//Mur au Nord
+				if (boardOneD[index + 16] == 16) {
+					continuer = false;
+				}
+				//Mur au Sud et case vide
+				else if (boardOneD[index + 16] == 8 && boardOneD[index + 16] % 2 == 0) {
+					boardOneD[index]--;
+					boardOneD[index + 16]++;
+					rob->setPosition(rob->getPosition() + 16);
+					index += 16;
+					continuer = false;
+				}
+				//Bas de la grille
+				else if (index >= 255 - 15) {
+					continuer = false;
+				}
+				//Autre robot sur une case
+				else if (boardOneD[index + 16] % 2 != 0) {
+					continuer = false;
+				}
+				//Case libre on avance
+				else {
+					boardOneD[index]--;
+					index += 16;
+					boardOneD[index]++;
+					rob->setPosition(rob->getPosition() + 16);
+				}
+			}
+		}
+		break;
+
+	case 'q':
+		if (index % 16 != 0) {
+			bool continuer = true;
+			while (continuer) {
+
+				//Mur a l'Est
+				if (boardOneD[index - 1] == 4) {
+					continuer = false;
+				}
+				//Mur a l'Ouest et case vide
+				else if (boardOneD[index - 1] == 2 && boardOneD[index - 1] % 2 == 0) {
+					boardOneD[index]--;
+					boardOneD[index - 1]++;
+					rob->setPosition(rob->getPosition() - 1);
+					index -= 1;
+					continuer = false;
+				}
+				//Gauche de la grille
+				else if (index % 16 == 0) {
+					continuer = false;
+				}
+				//Autre robot sur une case
+				else if (boardOneD[index - 1] % 2 != 0) {
+					continuer = false;
+				}
+				//Case libre on avance
+				else {
+					boardOneD[index]--;
+					index -= 1;
+					boardOneD[index]++;
+					rob->setPosition(rob->getPosition() - 1);
+				}
+			}
+		}
+		break;
+
+	case 'd':
+		if (index % 16 != 0) {
+			bool continuer = true;
+			while (continuer) {
+
+				//Mur a l'Ouest
+				if (boardOneD[index + 1] == 2) {
+					continuer = false;
+				}
+				//Mur a l'Est et case vide
+				else if (boardOneD[index + 1] == 4 && boardOneD[index + 1] % 2 == 0) {
+					boardOneD[index]--;
+					boardOneD[index + 1]++;
+					rob->setPosition(rob->getPosition() + 1);
+					index += 1;
+					continuer = false;
+				}
+				//Droite de la grille
+				else if (index % 15 == 0) {
+					continuer = false;
+				}
+				//Autre robot sur une case
+				else if (boardOneD[index + 1] % 2 != 0) {
+					continuer = false;
+				}
+				//Case libre on avance
+				else {
+					boardOneD[index]--;
+					index += 1;
+					boardOneD[index]++;
+					rob->setPosition(rob->getPosition() + 1);
+				}
+			}
+		}
+		break;
 	}
-	
+
+	for (int i = 0; i < 4; i++)
+		if (tabRobots[i]->getColor() == c)
+			tabRobots[i] = rob;
+
 }
+
+//void Grid::setGrow(Set* setE) {
+//	Set newSet;
+//
+//
+//
+//	for (unsigned int index = 0; index <= setE->getMask(); index++) {
+//		Entry* entry = setE->getData() + index;
+//		if (entry->getKey()) {
+//			setAdd(&newSet, entry->getKey(), entry->getDepth());
+//		}
+//	}
+//	
+//}
 
 unsigned int Grid::hash(unsigned int key) {
 	key = ~key + (key << 15);
@@ -159,30 +314,30 @@ unsigned int Grid::hash(unsigned int key) {
 	return key;
 }
 
-bool Grid::setAdd(Set* setE, unsigned int key, unsigned int depth){
-	unsigned int index = hash(key) & setE->getMask();
-	Entry* entry = setE->getData() + index;
-	while (entry->getKey() && entry->getKey() != key) {
-		index = (index + 1) & setE->getMask();
-		entry = setE->getData() + index;
-	}
-	if (entry->getKey()) {
-		if (entry->getDepth() < depth) {
-			entry->setDepth(depth);
-			return true;
-		}
-		return false;
-	}
-	else {
-		entry->setKey(key);
-		entry->setDepth(depth);
-		setE->setSize(setE->getSize() + 1);
-		if (setE->getSize() * 2 > setE->getMask()) {
-			setGrow(setE);
-		}
-		return true;
-	}
-}
+//bool Grid::setAdd(Set* setE, unsigned int key, unsigned int depth){
+//	unsigned int index = hash(key) & setE->getMask();
+//	Entry* entry = setE->getData() + index;
+//	while (entry->getKey() && entry->getKey() != key) {
+//		index = (index + 1) & setE->getMask();
+//		entry = setE->getData() + index;
+//	}
+//	if (entry->getKey()) {
+//		if (entry->getDepth() < depth) {
+//			entry->setDepth(depth);
+//			return true;
+//		}
+//		return false;
+//	}
+//	else {
+//		entry->setKey(key);
+//		entry->setDepth(depth);
+//		setE->setSize(setE->getSize() + 1);
+//		if (setE->getSize() * 2 > setE->getMask()) {
+//			setGrow(setE);
+//		}
+//		return true;
+//	}
+//}
 
 inline void swap(std::vector<Robot> tab, unsigned int a, unsigned int b) {
 	unsigned int temp = tab.at(a).getPosition();
@@ -217,7 +372,7 @@ inline unsigned int Grid::makeKey() {
 
 unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector <char> path, Set* set) {
 	if (gameOver()) {
-		return depth;// Gagné, en "depth" déplacements
+		return depth;// Gagnï¿½, en "depth" dï¿½placements
 	}
 	if (depth == maxDepth) {// perdu
 		return 0;
@@ -250,7 +405,7 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector
 
 }
 
-unsigned int Grid::computeMove(Robot* robot, unsigned int direction){//Regarde si déplacement possible
+unsigned int Grid::computeMove(Robot* robot, unsigned int direction){//Regarde si dï¿½placement possible
 	unsigned int index = robot->getPosition() + OFFSET[direction];
 	while (true) {
 		if (HAS_WALL(boardOneD[index], direction)) {
@@ -297,7 +452,7 @@ unsigned int Grid::principalSearch(std::vector <char> path, void (*pathSave)(uns
 	//set_alloc(&set, 1);//////Remplacer avec fonction ?
 	
 	precomputeMinimumMoves();
-	for (unsigned int maxDepth = 1; maxDepth < MAX_DEPTH; maxDepth++){ //Tant que l'on a pas réussi
+	for (unsigned int maxDepth = 1; maxDepth < MAX_DEPTH; maxDepth++){ //Tant que l'on a pas rï¿½ussi
 		depth = 0;
 		nodes = 0;
 		hits = 0;

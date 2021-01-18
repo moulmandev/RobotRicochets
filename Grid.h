@@ -1,5 +1,5 @@
 #pragma once
-#include "Case.h"
+#include"Robot.h"
 #include<random>
 #include<time.h>
 #include <vector>
@@ -9,9 +9,6 @@
 
 class Grid {
 private:
-	int nbRow;
-	int nbCol;
-	int board[16][16];
 	int boardOneD[256];
 	std::vector <Robot*> tabRobots;
 	int token;
@@ -42,4 +39,5 @@ public:
 	inline unsigned int makeKey();
 	bool canMove(Robot* robot, unsigned int direction);
 
+	void deplacerRobot(color c, char dir);
 };
