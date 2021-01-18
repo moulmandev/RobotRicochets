@@ -20,6 +20,7 @@ private:
 	unsigned int nodes;
 	unsigned int inner;
 	unsigned int hits;
+	unsigned int last;
 	std::set <Entry*> setEntry;
 public:
 	Grid();
@@ -35,6 +36,10 @@ public:
 	unsigned int hash(unsigned int key);
 	bool setAdd(Set* setE, unsigned int key, unsigned int depth);
 	void setGrow(Set* setE);
+	unsigned int computeMove(Robot* robot, unsigned int direction);
+	unsigned int doMove(Robot* robot, unsigned int direction);
+	void undoMove(unsigned int undo);
+	inline unsigned int makeKey();
 	bool canMove(Robot* robot, unsigned int direction);
 
 };
