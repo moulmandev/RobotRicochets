@@ -3,13 +3,13 @@
 #include<random>
 #include<time.h>
 #include <vector>
-#include "constants.h"
 #include <set>
 #include "Entry.h"
 
 class Grid {
 private:
 	int boardOneD[256];
+	//TODO : changer en tableau statique
 	std::vector <Robot*> tabRobots;
 	int goal;
 	unsigned int moves[256];
@@ -34,12 +34,12 @@ public:
 	void precomputeMinimumMoves();
 	inline bool gameOver();
 	unsigned int hash(unsigned int key);
-	//bool setAdd(Set* setE, unsigned int key, unsigned int depth);
+	bool setAdd(unsigned int* key, unsigned int depth);
 	//void setGrow(Set* setE);
 	unsigned int computeMove(unsigned int robot, unsigned int direction);
 	unsigned int doMove(unsigned int, unsigned int direction);
 	void undoMove(unsigned int undo);
-	inline unsigned int makeKey();
+	unsigned int* makeKey();
 	bool canMove(unsigned int, unsigned int);
 
 	void deplacerRobot(color c, char dir);

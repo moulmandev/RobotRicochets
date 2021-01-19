@@ -148,22 +148,22 @@ inline void swap(unsigned int* array, unsigned int a, unsigned int b) {
 	array[b] = temp;
 }
 
-inline unsigned int Grid::makeKey() {
+unsigned int* Grid::makeKey() {
 	unsigned int tabRobotsCopy[4];//Tableau avec la position des robots
 
 	for (int i = 0; i < tabRobots.size(); i++) {
 		tabRobotsCopy[i] = tabRobots.at(i)->getPosition();
 	}
-	if (tabRobotsCopy[1] > tabRobotsCopy[2]){
+	if (tabRobotsCopy[1] > tabRobotsCopy[2]) {
 		swap(tabRobotsCopy, 1, 2);
 	}
-	if (tabRobotsCopy[2] > tabRobotsCopy[3]){
+	if (tabRobotsCopy[2] > tabRobotsCopy[3]) {
 		swap(tabRobotsCopy, 2, 3);
 	}
-	if (tabRobotsCopy[1] > tabRobotsCopy[2]){
+	if (tabRobotsCopy[1] > tabRobotsCopy[2]) {
 		swap(tabRobotsCopy, 1, 2);
 	}
-	return MAKE_KEY(tabRobotsCopy);
+	return tabRobotsCopy;
 }
 
 /*unsigned int Grid::hash(unsigned int key) {
@@ -178,7 +178,7 @@ inline unsigned int Grid::makeKey() {
 
 inline bool Grid::gameOver() {
 	Robot* robotGoal = getRobotGoal();
-		
+
 	if (robotGoal->getPosition() == goal) {//Game gagnée : robotGoal arrivé case objectif
 		return true;
 	}
@@ -450,12 +450,12 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector
 		return 0;
 	}
 	unsigned int remainingDepth = maxDepth - depth;
-	
-	if (moves[getRobotGoal()->getPosition()] > remainingDepth){//perdu
+
+	if (moves[getRobotGoal()->getPosition()] > remainingDepth) {//perdu
 		return 0;
 	}
 
-	pair<std::set<Entry*>, bool> insert(const int &s, int t);
+	pair<std::set<Entry*>, bool> insert(const int& s, int t);
 	setEntry.insert(makeKey(), remainingDepth);
 
 	if (remainingDepth != 1 && !setEntry.insert(makeKey(), remainingDepth).second()) {//Assigne clé unique à chaque robot
@@ -508,13 +508,13 @@ unsigned int Grid::principalSearch(std::vector <char> path, void (*pathSave)(uns
 		}
 
 	}
-	/*Verifier*/
+
 	for (auto i : setEntry) {
 		cout << "Delete setEntry ";
 		delete i;
 	}
 	setEntry.clear();
-	/*---------------------------*/
+
 	return resultDepth;
 
 }
@@ -523,12 +523,37 @@ void Grid::pathSave() {
 	cout << "Depth: " << depth << ",Nodes: " << nodes << "(" << inner << "inner," << hits << "hits)" << endl;
 }
 
-int Grid::compare(Entry* e1,Entry* e2) {
+int Grid::compare(Entry* e1, Entry* e2) {
 	if (*e1 < *e2)
 		return -1;
 	else if (*e1 == *e2)
 		return 0;
 	return 1;
+}
+
+bool Grid::setAdd(unsigned int key, unsigned int depth) {
+	Entry* entry = setEntry
+	while (entry->key && entry->key != key) {
+		index = (index + 1) & set->mask;
+		entry = set->data + index;
+	}
+	if (entry->key) {
+		if (entry->depth < depth) {
+			entry->depth = depth;
+			return true;
+		}
+		return false;
+	}
+	else {
+		entry->key = key;
+		entry->depth = depth;
+		set->size++;
+		if (set->size * 2 > set->mask) {
+			set_grow(set);
+		}
+		return true;
+
+	}
 }
 
 /*Set*/
@@ -545,28 +570,6 @@ void Grid::setGrow(Set* setE) {
 
 }
 
-bool Grid::setAdd(Set* setE, unsigned int key, unsigned int depth){
-	unsigned int index = hash(key) & setE->getMask();
-	Entry* entry = setE->getData() + index;
-	while (entry->getKey() && entry->getKey() != key) {
-		index = (index + 1) & setE->getMask();
-		entry = setE->getData() + index;
-	}
-	if (entry->getKey()) {
-		if (entry->getDepth() < depth) {
-			entry->setDepth(depth);
-			return true;
-		}
-		return false;
-	}
-	else {
-		entry->setKey(key);
-		entry->setDepth(depth);
-		setE->setSize(setE->getSize() + 1);
-		if (setE->getSize() * 2 > setE->getMask()) {
-			setGrow(setE);
-		}
-		return true;
-	}
+
 }*/
 

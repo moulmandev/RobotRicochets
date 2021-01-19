@@ -3,6 +3,7 @@
 #pragma once
 
 #define MAX_DEPTH 32
+#define NB_ROBOTS 4
 
 #define NORTH 0x01
 #define EAST  0x02
