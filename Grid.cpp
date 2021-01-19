@@ -142,8 +142,6 @@ Robot* Grid::getRobotGoal() {
 	}
 }
 
-
-
 inline void swap(unsigned int* array, unsigned int a, unsigned int b) {
 	unsigned int temp = array[a];
 	array[a] = array[b];
@@ -151,24 +149,24 @@ inline void swap(unsigned int* array, unsigned int a, unsigned int b) {
 }
 
 inline unsigned int Grid::makeKey() {
-	unsigned int tabRobotsCopy[4];
+	unsigned int tabRobotsCopy[4];//Tableau avec la position des robots
 
 	for (int i = 0; i < tabRobots.size(); i++) {
 		tabRobotsCopy[i] = tabRobots.at(i)->getPosition();
 	}
-	if (tabRobotsCopy[1] > tabRobotsCopy[2]) {
+	if (tabRobotsCopy[1] > tabRobotsCopy[2]){
 		swap(tabRobotsCopy, 1, 2);
 	}
-	if (tabRobotsCopy[2] > tabRobotsCopy[3]) {
+	if (tabRobotsCopy[2] > tabRobotsCopy[3]){
 		swap(tabRobotsCopy, 2, 3);
 	}
-	if (tabRobotsCopy[1] > tabRobotsCopy[2]) {
+	if (tabRobotsCopy[1] > tabRobotsCopy[2]){
 		swap(tabRobotsCopy, 1, 2);
 	}
 	return MAKE_KEY(tabRobotsCopy);
 }
 
-unsigned int Grid::hash(unsigned int key) {
+/*unsigned int Grid::hash(unsigned int key) {
 	key = ~key + (key << 15);
 	key = key ^ (key >> 12);
 	key = key + (key << 2);
@@ -176,16 +174,12 @@ unsigned int Grid::hash(unsigned int key) {
 	key = key * 2057;
 	key = key ^ (key >> 16);
 	return key;
-}
-
-//SetGrow
-//SetAdd
-//setGrow
+}*/
 
 inline bool Grid::gameOver() {
 	Robot* robotGoal = getRobotGoal();
-
-	if (robotGoal->getPosition() == goal) {//Game gagn�e : robotGoal arriv� case objectif
+		
+	if (robotGoal->getPosition() == goal) {//Game gagnée : robotGoal arrivé case objectif
 		return true;
 	}
 	else {
@@ -208,8 +202,8 @@ bool Grid::canMove(unsigned int robot, unsigned direction) {
 	return true;
 }
 
-unsigned int Grid::computeMove(Robot* robot, unsigned int direction) {//Regarde si d�placement possible
-	unsigned int index = robot->getPosition() + OFFSET[direction];
+unsigned int Grid::computeMove(unsigned int robot, unsigned int direction) {//Regarde si d�placement possible
+	unsigned int index = tabRobots.at(robot)->getPosition() + OFFSET[direction];
 	while (true) {
 		if (HAS_WALL(boardOneD[index], direction)) {
 			break;
@@ -223,15 +217,15 @@ unsigned int Grid::computeMove(Robot* robot, unsigned int direction) {//Regarde 
 	return index;
 }
 
-unsigned int Grid::doMove(Robot* robot, unsigned int direction) {
-	unsigned int start = robot->getPosition();
+unsigned int Grid::doMove(unsigned int robot, unsigned int direction) {
+	unsigned int start = tabRobots.at(robot)->getPosition();
 	unsigned int end = computeMove(robot, direction);
 	unsigned int lastMove = last;
-	robot->setPosition(end);
-	last = PACK_MOVE(robot->getPosition(), direction);
+	tabRobots.at(robot)->setPosition(end);
+	last = PACK_MOVE(tabRobots.at(robot)->getPosition(), direction);
 	UNSET_ROBOT(boardOneD[start]);
 	SET_ROBOT(boardOneD[end]);
-	return PACK_UNDO(robot->getPosition(), start, last);
+	return PACK_UNDO(tabRobots.at(robot)->getPosition(), start, last);
 }
 
 void Grid::undoMove(unsigned int undo) {
@@ -246,7 +240,7 @@ void Grid::undoMove(unsigned int undo) {
 }
 
 
-void Grid::precomputeMinimumMoves() {//Calcule le nb min de mouvements pour chaque case pour aller � l'objectif
+void Grid::precomputeMinimumMoves() {//Calcule le nb min de mouvements pour chaque case pour aller à l'objectif
 	bool status[256];
 
 	for (int i = 0; i < 256; i++) {
@@ -257,10 +251,10 @@ void Grid::precomputeMinimumMoves() {//Calcule le nb min de mouvements pour chaq
 	status[goal] = true;// On a trouv� le plus court mouvement pour aller de goal a goal
 
 	bool done = false;
-	while (!done) {//Tant qu'on a pas trouvé tous les chemins minimum pour aller � token
+	while (!done) {//Tant qu'on a pas trouvé tous les chemins minimum pour aller à goal
 		done = true;
 		for (unsigned int i = 0; i < 256; i++) {
-			if (!status[i]) {//On cherche ?????????????
+			if (!status[i]) {
 				continue;
 			}
 			status[i] = false;
@@ -456,17 +450,15 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector
 		return 0;
 	}
 	unsigned int remainingDepth = maxDepth - depth;
-	if (moves[getRobotGoal()->getPosition()] > remainingDepth) {
+	
+	if (moves[getRobotGoal()->getPosition()] > remainingDepth){//perdu
 		return 0;
 	}
 
-	for (std::set<Entry*>::iterator i = setEntry.begin(); i != setEntry.end(); i++) {
-
-	}
-
+	pair<std::set<Entry*>, bool> insert(const int &s, int t);
 	setEntry.insert(makeKey(), remainingDepth);
 
-	if (remainingDepth != 1 && (!insertSet.second)) {
+	if (remainingDepth != 1 && !setEntry.insert(makeKey(), remainingDepth).second()) {//Assigne clé unique à chaque robot
 		hits++;
 		return 0;
 	}
@@ -479,8 +471,16 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector
 			if (!canMove(robot, direction)) {
 				continue;
 			}
+			unsigned int undo = doMove(robot, direction);
+			unsigned int result = search(depth + 1, maxDepth, path, set);
+			undoMove(undo);
+			if (result) {
+				path[depth] = PACK_MOVE(robot, direction);
+				return result;
+			}
 		}
 	}
+	return 0;
 }
 
 
