@@ -441,8 +441,8 @@ void Grid::deplacerRobot(color c, char dir) {
 		}
 		break;
 
-		if (tabRobots[i]->getColor() == c)
-			for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
+			if (tabRobots[i]->getColor() == c)
 				tabRobots[i] = rob;
 
 		if (rob->getTarget() && rob->getPosition() == goal)
