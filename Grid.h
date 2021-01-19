@@ -3,15 +3,14 @@
 #include<random>
 #include<time.h>
 #include <vector>
-#include "Set.h"
 #include "constants.h"
 #include <set>
+#include "Entry.h"
 
 class Grid {
 private:
 	int boardOneD[256];
 	std::vector <Robot*> tabRobots;
-	int token;
 	int goal;
 	unsigned int moves[256];
 	unsigned int depth;
@@ -29,6 +28,7 @@ public:
 	
 	/*Plus court chemin*/
 	void pathSave();
+	int compare(Entry*, Entry*);
 	unsigned int search(unsigned int, unsigned int, std::vector <char>, std::set <Entry*>);
 	unsigned int principalSearch(std::vector <char> path, void (*callback)(unsigned int, unsigned int, unsigned int, unsigned int));
 	void precomputeMinimumMoves();

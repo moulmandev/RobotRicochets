@@ -5,6 +5,8 @@ using namespace std;
 Game::Game(User* u, int nRobots, int nJoueurs) : nbRobots(nRobots), nbJoueurs(nJoueurs){
 	users = u;
 	map = new Grid();
+	robots = new unsigned int[nbRobots];
+	//GenerateBoard(5, 5, nRobots, robots);
 	std::cout << "Game created" << std::endl;
 }
 
@@ -143,7 +145,11 @@ bool Game::can_move(unsigned int robot, unsigned int direction)
 	return true;
 }
 
-unsigned int Game::compute_move(unsigned int robot, unsigned int direction){
+
+unsigned int Game::compute_move(
+	unsigned int robot,
+	unsigned int direction)
+{
 	unsigned int index = robots[robot] + OFFSET[direction];
 	while (true) {
 		if (HAS_WALL(grid[index], direction)) {

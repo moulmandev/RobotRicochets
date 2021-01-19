@@ -1,12 +1,21 @@
 #pragma once
+#include <vector>
+#include <iostream>
+
 
 class Entry {
 public:
-	unsigned int getKey();
+	Entry();
+	Entry(unsigned int, unsigned int, unsigned int, unsigned int);
+	~Entry();
+	std::vector<unsigned int> getKey();
 	unsigned int getDepth();
-	void setKey(unsigned int key);
-	void setDepth(unsigned int depth);
+	void setKey(std::vector<unsigned int>);
+	void setDepth(unsigned int);
+	void sort();
+	bool operator <(Entry&);
+	bool operator ==(Entry&);
 private:
-	unsigned int key;
+	std::vector<unsigned int> key;
 	unsigned int depth;
 };

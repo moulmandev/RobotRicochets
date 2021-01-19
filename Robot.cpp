@@ -5,7 +5,7 @@
 using namespace std;
 
 
-Robot::Robot(int k) : position(k) {
+Robot::Robot(unsigned int k): position(k){
 	srand(time(NULL));
 	c = (color)(rand() % 8);
 }
@@ -14,11 +14,12 @@ bool Robot::getTarget() {
 	return target;
 }
 
-int Robot::getPosition() {
+unsigned int Robot::getPosition() {
 	return position;
 }
 
-void Robot::setPosition(int k) {
+
+void Robot::setPosition(unsigned int k) {
 	position = k;
 }
 void Robot::setColor(color col)

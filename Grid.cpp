@@ -1,5 +1,5 @@
 #include "Grid.h"
-#include "Set.h"
+
 using namespace std;
 
 Grid::Grid() : depth(0), nodes(0), inner(0), hits(0) {
@@ -32,7 +32,7 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0) {
 			else if ((int)i / 16 == 0 && i % 16 == 15)
 				boardOneD[i] = 8;
 			else {
-				if(rand()%4 != 0)
+				if (rand() % 4 != 0)
 					boardOneD[i] = mursPossibles[rand() % 4];
 				else
 					boardOneD[i] = mursPossibles[4 + (rand() % 4)];
@@ -64,13 +64,11 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0) {
 	/*Attribution RobotGoal*/
 	numRobotTarget = rand() % 4;
 	tabRobots.at(numRobotTarget)->setTarget(true);
-	token =  (tabRobots.at(numRobotTarget)->getPosition());
 	cout << "Objectif : " << tabRobots[numRobotTarget]->getColor() << endl;
 	goal = rand() % 256;
 	goal = rand() % 256;
 	goal = rand() % 256;
 	goal = rand() % 256;
-	token = (tabRobots.at(numRobotTarget)->getPosition());
 }
 
 void Grid::afficherGrille() {
@@ -180,8 +178,6 @@ unsigned int Grid::hash(unsigned int key) {
 	return key;
 }
 
-//SetAlloc
-//SetFree
 //SetGrow
 //SetAdd
 //setGrow
@@ -255,13 +251,13 @@ void Grid::precomputeMinimumMoves() {//Calcule le nb min de mouvements pour chaq
 
 	for (int i = 0; i < 256; i++) {
 		moves[i] = INT_MAX;//Initialisation avec une valeur "impossible"
-		status[i] = false; //Aucun move n'a �t� rempli
+		status[i] = false; //Aucun move n'a été rempli
 	}
-	moves[goal] = 0;//0 mouvement pr aller de goal � goal
+	moves[goal] = 0;//0 mouvement pr aller de goal à goal
 	status[goal] = true;// On a trouv� le plus court mouvement pour aller de goal a goal
 
 	bool done = false;
-	while (!done) {//Tant qu'on a pas trouv� tous les chemins minimum pour aller � token
+	while (!done) {//Tant qu'on a pas trouvé tous les chemins minimum pour aller � token
 		done = true;
 		for (unsigned int i = 0; i < 256; i++) {
 			if (!status[i]) {//On cherche ?????????????
@@ -273,8 +269,8 @@ void Grid::precomputeMinimumMoves() {//Calcule le nb min de mouvements pour chaq
 				unsigned int index = i;
 				while (!HAS_WALL(boardOneD[index], direction)) {//Tant qu'il n'y a pas de mur dans la direction observ�e
 					index += OFFSET[direction];
-					if (moves[index] > depth) {
-						moves[index] = depth;
+					if (moves[index] > dept) {
+						moves[index] = dept;
 						status[index] = true;
 						done = false;
 					}
@@ -450,7 +446,7 @@ void Grid::deplacerRobot(color c, char dir) {
 
 	}
 }
-        
+
 
 unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector <char> path, std::set <Entry*> set) {// Set* set
 	if (gameOver()) {
@@ -467,9 +463,8 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector
 	for (std::set<Entry*>::iterator i = setEntry.begin(); i != setEntry.end(); i++) {
 
 	}
-	std::pair<std::set<Entry*>::iterator, bool> insertSet;
-	insertSet = setEntry.insert(makeKey(), remainingDepth);//Pb avec booleens
 
+	setEntry.insert(makeKey(), remainingDepth);
 
 	if (remainingDepth != 1 && (!insertSet.second)) {
 		hits++;
@@ -484,14 +479,10 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector
 			if (!canMove(robot, direction)) {
 				continue;
 			}
-
 		}
-
-
 	}
-
 }
-	
+
 
 unsigned int Grid::principalSearch(std::vector <char> path, void (*pathSave)(unsigned int, unsigned int, unsigned int, unsigned int)) {
 	if (gameOver()) {
@@ -499,19 +490,16 @@ unsigned int Grid::principalSearch(std::vector <char> path, void (*pathSave)(uns
 	}
 	unsigned int resultDepth = 0;
 
-	std::set <Entry*> set;
-	
-
-	//set_alloc(&set, 1);//////Remplacer avec fonction ?
+	set <Entry*> set;
 
 	precomputeMinimumMoves();
-	for (unsigned int maxDepth = 1; maxDepth < MAX_DEPTH; maxDepth++) { //Tant que l'on a pas r�ussi
+	for (unsigned int maxDepth = 1; maxDepth < MAX_DEPTH; maxDepth++) { //Tant que l'on a pas réussi
 		depth = 0;
 		nodes = 0;
 		hits = 0;
 		inner = 0;
 
-		resultDepth = search(0, maxDepth, path, &set);
+		resultDepth = search(0, maxDepth, path, set);
 		if (pathSave) {
 			pathSave(maxDepth, nodes, inner, hits);
 		}
@@ -521,8 +509,9 @@ unsigned int Grid::principalSearch(std::vector <char> path, void (*pathSave)(uns
 
 	}
 	/*Verifier*/
-	for (std::set<Entry*>::iterator i = setEntry.begin(); i != setEntry.end(); i++) {
-		delete* i;
+	for (auto i : setEntry) {
+		cout << "Delete setEntry ";
+		delete i;
 	}
 	setEntry.clear();
 	/*---------------------------*/
@@ -534,18 +523,16 @@ void Grid::pathSave() {
 	cout << "Depth: " << depth << ",Nodes: " << nodes << "(" << inner << "inner," << hits << "hits)" << endl;
 }
 
-
-
-/*Set*/
-/*void set_alloc(std::set<Entry*> set, unsigned int count) {
-	for (unsigned int i = 0; i < count; i++) {
-		set->mask = 0xfff;
-		set->size = 0;
-		set->data = (Entry*)calloc(set->mask + 1, sizeof(Entry));
-		set++;
-	}
+int Grid::compare(Entry* e1,Entry* e2) {
+	if (*e1 < *e2)
+		return -1;
+	else if (*e1 == *e2)
+		return 0;
+	return 1;
 }
 
+/*Set*/
+/*
 void Grid::setGrow(Set* setE) {
 	Set newSet;
 
@@ -555,7 +542,7 @@ void Grid::setGrow(Set* setE) {
 			setAdd(&newSet, entry->getKey(), entry->getDepth());
 		}
 	}
-	
+
 }
 
 bool Grid::setAdd(Set* setE, unsigned int key, unsigned int depth){
