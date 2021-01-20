@@ -432,7 +432,7 @@ void Grid::deplacerRobot(color c, char dir) {
 }
 
 
-unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector <char> path, std::set <Entry*> set) {// Set* set
+unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, vector <char> path, map <unsigned int*, unsigned int> map) {// Set* set
 	if (gameOver()) {
 		return depth;// Gagné, en "depth" déplacements
 	}
@@ -459,7 +459,7 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector
 				continue;
 			}
 			unsigned int undo = doMove(robot, direction);
-			unsigned int result = search(depth + 1, maxDepth, path, set);
+			unsigned int result = search(depth + 1, maxDepth, path, map);
 			undoMove(undo);
 			if (result) {
 				path[depth] = PACK_MOVE(robot, direction);
@@ -477,7 +477,7 @@ unsigned int Grid::principalSearch(std::vector <char> path, void (*pathSave)(uns
 	}
 	unsigned int resultDepth = 0;
 
-	set <Entry*> set;
+	map <unsigned int*, unsigned int> map;
 
 	precomputeMinimumMoves();
 	for (unsigned int maxDepth = 1; maxDepth < MAX_DEPTH; maxDepth++) { //Tant que l'on a pas réussi
@@ -486,7 +486,7 @@ unsigned int Grid::principalSearch(std::vector <char> path, void (*pathSave)(uns
 		hits = 0;
 		inner = 0;
 
-		resultDepth = search(0, maxDepth, path, set);
+		resultDepth = search(0, maxDepth, path, map);
 		if (pathSave) {
 			pathSave(maxDepth, nodes, inner, hits);
 		}

@@ -28,11 +28,11 @@ public:
 	void afficherGrille();
 	Robot* getRobotGoal();
 	void deplacerRobot(color c, char dir);
-	
+
 	/*Plus court chemin*/
 	void pathSave();
-	int compare(Entry*, Entry*);
-	unsigned int search(unsigned int, unsigned int, std::vector <char>, std::set <Entry*>);
+	int compare(Entry* e1, Entry* e2);
+	unsigned int search(unsigned int, unsigned int, std::vector <char>, std::map <unsigned int*, unsigned int>);
 	unsigned int principalSearch(std::vector <char> path, void (*callback)(unsigned int, unsigned int, unsigned int, unsigned int));
 	void precomputeMinimumMoves();
 	inline bool gameOver();
@@ -43,5 +43,5 @@ public:
 	unsigned int* makeKey();
 	bool operator<(unsigned int tab[NB_ROBOTS]);
 	bool canMove(unsigned int, unsigned int);
-	
+
 };
