@@ -4,6 +4,7 @@
 #include<time.h>
 #include <vector>
 #include <set>
+#include <map>
 #include "Entry.h"
 
 class Grid {
@@ -20,11 +21,14 @@ private:
 	unsigned int last;
 	int numRobotTarget;
 	std::set <Entry*> setEntry;
+
+	std::map <unsigned int*, unsigned int> mapSearch;//Tableau 4 keys robots, int : depth
 	int goal; //Position objectif
 public:
 	Grid();
 	void afficherGrille();
 	Robot* getRobotGoal();
+	void deplacerRobot(color c, char dir);
 	
 	/*Plus court chemin*/
 	void pathSave();
@@ -33,14 +37,12 @@ public:
 	unsigned int principalSearch(std::vector <char> path, void (*callback)(unsigned int, unsigned int, unsigned int, unsigned int));
 	void precomputeMinimumMoves();
 	inline bool gameOver();
-	unsigned int hash(unsigned int key);
-	bool setAdd(unsigned int* key, unsigned int depth);
-	//void setGrow(Set* setE);
+	bool mapAdd(unsigned int key[NB_ROBOTS], unsigned int depth);
 	unsigned int computeMove(unsigned int robot, unsigned int direction);
 	unsigned int doMove(unsigned int, unsigned int direction);
 	void undoMove(unsigned int undo);
 	unsigned int* makeKey();
+	bool operator<(unsigned int tab[NB_ROBOTS]);
 	bool canMove(unsigned int, unsigned int);
-
-	void deplacerRobot(color c, char dir);
+	
 };

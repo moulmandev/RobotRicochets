@@ -166,16 +166,6 @@ unsigned int* Grid::makeKey() {
 	return tabRobotsCopy;
 }
 
-/*unsigned int Grid::hash(unsigned int key) {
-	key = ~key + (key << 15);
-	key = key ^ (key >> 12);
-	key = key + (key << 2);
-	key = key ^ (key >> 4);
-	key = key * 2057;
-	key = key ^ (key >> 16);
-	return key;
-}*/
-
 inline bool Grid::gameOver() {
 	Robot* robotGoal = getRobotGoal();
 
@@ -187,7 +177,7 @@ inline bool Grid::gameOver() {
 	}
 }
 
-bool Grid::canMove(unsigned int robot, unsigned direction) {
+bool Grid::canMove(unsigned int robot, unsigned int direction) {
 	unsigned int index = tabRobots.at(robot)->getPosition();
 	if (HAS_WALL(boardOneD[index], direction)) {
 		return false;
@@ -455,11 +445,8 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector
 		return 0;
 	}
 
-	pair<std::set<Entry*>, bool> insert(const int& s, int t);
-	setEntry.insert(makeKey(), remainingDepth);
-
-	if (remainingDepth != 1 && !setEntry.insert(makeKey(), remainingDepth).second()) {//Assigne clé unique à chaque robot
-		hits++;
+	if (remainingDepth != 1 && !mapAdd(makeKey(), remainingDepth)) {//Si on n'a pas pu ajouter tel déplacement à la map
+		hits++;//Statistics++
 		return 0;
 	}
 	inner++;
@@ -508,13 +495,15 @@ unsigned int Grid::principalSearch(std::vector <char> path, void (*pathSave)(uns
 		}
 
 	}
-
-	for (auto i : setEntry) {
+	/*for (auto i : setEntry) {
 		cout << "Delete setEntry ";
 		delete i;
 	}
-	setEntry.clear();
+	setEntry.clear();*/
 
+	mapSearch.clear;
+	cout << "map deleted" << endl;
+	
 	return resultDepth;
 
 }
@@ -529,47 +518,49 @@ int Grid::compare(Entry* e1, Entry* e2) {
 	else if (*e1 == *e2)
 		return 0;
 	return 1;
+	
 }
 
-bool Grid::setAdd(unsigned int key, unsigned int depth) {
-	Entry* entry = setEntry
-	while (entry->key && entry->key != key) {
-		index = (index + 1) & set->mask;
-		entry = set->data + index;
+bool Grid::operator<(unsigned int tab[NB_ROBOTS]){	
+	map<unsigned int*, unsigned int>::iterator i;
+	for(i = mapSearch.begin(); i!=mapSearch.end(); i++){
+		for (int j = 0; j < 4; j++) {
+			if (i->first[j] < tab[j]) {//Key de setMap < Key de tab
+				return true;
+			}
+		}
 	}
-	if (entry->key) {
-		if (entry->depth < depth) {
-			entry->depth = depth;
+	return false;
+}
+
+bool Grid::mapAdd(unsigned int key[NB_ROBOTS], unsigned int remainingDepth){
+	bool equal;
+	pair<unsigned int*, unsigned int> newElement;
+	newElement.first = new unsigned int[4];
+
+	for (auto m : mapSearch) {
+		equal = true;
+		for (int i = 0; i < NB_ROBOTS; i++){//On cherche si key existe déjà dans map
+			if (key < m.first) {
+				equal = false;
+			}
+		}
+		if (equal) {
+			if (m.second < remainingDepth) {
+				m.second = remainingDepth;
+				return true;
+			}
+			return false;
+		}
+		else {//Si key n'existe pas dans la map
+			for (int i = 0; i < NB_ROBOTS; i++) {
+				newElement.first[i] = key[i];
+			}
+			newElement.second = remainingDepth;
+			mapSearch.insert(newElement);
 			return true;
 		}
-		return false;
 	}
-	else {
-		entry->key = key;
-		entry->depth = depth;
-		set->size++;
-		if (set->size * 2 > set->mask) {
-			set_grow(set);
-		}
-		return true;
-
-	}
+	
 }
-
-/*Set*/
-/*
-void Grid::setGrow(Set* setE) {
-	Set newSet;
-
-	for (unsigned int index = 0; index <= setE->getMask(); index++) {
-		Entry* entry = setE->getData() + index;
-		if (entry->getKey()) {
-			setAdd(&newSet, entry->getKey(), entry->getDepth());
-		}
-	}
-
-}
-
-
-}*/
 
