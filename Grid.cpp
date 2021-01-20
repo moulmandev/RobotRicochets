@@ -501,7 +501,7 @@ unsigned int Grid::principalSearch(std::vector <char> path, void (*pathSave)(uns
 	}
 	setEntry.clear();*/
 
-	mapSearch.clear;
+	mapSearch.clear();
 	cout << "map deleted" << endl;
 	
 	return resultDepth;

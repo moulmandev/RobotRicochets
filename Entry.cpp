@@ -47,21 +47,21 @@ void Entry::setDepth(unsigned int d) {
     depth = d;
 }
 
-void Entry::sort() {
-	cout << "Key before sort: ";
-	for (int i = 0; i < NB_ROBOTS; i++) {
-		cout << key[i] << " / ";
-	}
-	cout << endl;
-
-	std::sort(key[0], key[NB_ROBOTS-1]);
-
-	cout << "Key : ";
-	for (int i = 0; i < NB_ROBOTS; i++) {
-		cout << key[i] << " / ";
-	}
-	cout << endl;
-}
+//void Entry::sort() {
+//	cout << "Key before sort: ";
+//	for (int i = 0; i < NB_ROBOTS; i++) {
+//		cout << key[i] << " / ";
+//	}
+//	cout << endl;
+//
+//	std::sort(key[0], key[NB_ROBOTS-1]);
+//
+//	cout << "Key : ";
+//	for (int i = 0; i < NB_ROBOTS; i++) {
+//		cout << key[i] << " / ";
+//	}
+//	cout << endl;
+//}
 
 
 bool Entry::operator<(Entry& e2) {

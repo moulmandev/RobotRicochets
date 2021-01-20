@@ -15,7 +15,7 @@ public:
 	unsigned int getDepth();
 	void setKey(unsigned int, unsigned int, unsigned int, unsigned int);
 	void setDepth(unsigned int);
-	void sort();
+	//void sort();
 	bool operator <(Entry&);
 	bool operator ==(Entry&);
 private:

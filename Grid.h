@@ -12,7 +12,6 @@ private:
 	int boardOneD[256];
 	//TODO : changer en tableau statique
 	std::vector <Robot*> tabRobots;
-	int goal;
 	unsigned int moves[256];
 	unsigned int depth;
 	unsigned int nodes;
@@ -21,9 +20,9 @@ private:
 	unsigned int last;
 	int numRobotTarget;
 	std::set <Entry*> setEntry;
-
 	std::map <unsigned int*, unsigned int> mapSearch;//Tableau 4 keys robots, int : depth
 	int goal; //Position objectif
+
 public:
 	Grid();
 	void afficherGrille();
