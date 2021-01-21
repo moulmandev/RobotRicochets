@@ -77,9 +77,10 @@ int main(int argc, char** argv) {
 		grille->deplacerRobot(selectColor, selectDir);
 		cout << endl << endl;
 		grille->afficherGrille();
+		cout << endl << endl;
 	}
 
-	/*User* u = new User[2];
+	User* u = new User[2];
 	u[0].setIdUser(1);
 	u[0].setNom("Dupont");
 	u[0].setPrenom("Paul");
@@ -91,10 +92,6 @@ int main(int argc, char** argv) {
 	u[1].setPrenom("Jean");
 	u[1].setInvite(1);
 	u[1].setPseudo("PseudoJean");
-
-	Robot* r = new Robot(2);
-	Game* g = new Game(u, 4, 2);
-	g->getMap()->oneDtoTwoD();*/
 
 
 

@@ -71,7 +71,7 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0) {
 	goal = rand() % 256;
 }
 
-void Grid::afficherGrille() {
+void Grid::afficherGrille(){
 
 	srand(time(NULL));
 
@@ -131,6 +131,9 @@ void Grid::afficherGrille() {
 		if (i != 0 && i % 16 == 0)
 			cout << endl;
 	}
+
+	vector <char> path;
+	principalSearch(path);
 }
 
 
@@ -230,38 +233,68 @@ void Grid::undoMove(unsigned int undo) {
 }
 
 
-void Grid::precomputeMinimumMoves() {//Calcule le nb min de mouvements pour chaque case pour aller à l'objectif
+void Grid::precomputeMinimumMoves(){//Calcule le nb min de mouvements pour chaque case pour aller à l'objectif
+	//cout << "Dans precompute minimum moves : " << endl;
 	bool status[256];
 
 	for (int i = 0; i < 256; i++) {
 		moves[i] = INT_MAX;//Initialisation avec une valeur "impossible"
 		status[i] = false; //Aucun move n'a été rempli
 	}
+	
 	moves[goal] = 0;//0 mouvement pr aller de goal à goal
-	status[goal] = true;// On a trouv� le plus court mouvement pour aller de goal a goal
+	status[goal] = true;// On a trouvé le plus court mouvement pour aller de goal a goal
+	cout << "INDEX GOAL : " << goal << endl;
+	/*for (int i = 0; i < 256; i++) {
+		cout << "Moves : " << moves[i] << " status : ";
+		cout << status[i] << endl;
+	}*/
 
 	bool done = false;
-	while (!done) {//Tant qu'on a pas trouvé tous les chemins minimum pour aller à goal
+	unsigned int depth = 0;
+	while (!done){//Tant qu'on a pas trouvé tous les chemins minimum pour aller à goal
 		done = true;
-		for (unsigned int i = 0; i < 256; i++) {
+		for (unsigned int i = 0; i < 256; i++){
+			//cout << "------------------------------Nouvelle case-------------------------------------" << i << endl;
 			if (!status[i]) {
 				continue;
 			}
 			status[i] = false;
-			unsigned int dept = moves[i];
-			for (unsigned int direction = 1; direction <= 8; direction <<= 1) {
+			depth = moves[i]+1;
+			cout << "DEPTH ++" << endl;
+			cout << depth << endl;
+			//cout << "DEPTH : " << depth << endl;
+			for (unsigned int direction = 1; direction <= 8; direction <<= 1){
 				unsigned int index = i;
-				while (!HAS_WALL(boardOneD[index], direction)) {//Tant qu'il n'y a pas de mur dans la direction observ�e
-					index += OFFSET[direction];
-					if (moves[index] > dept) {
-						moves[index] = dept;
-						status[index] = true;
-						done = false;
-					}
+				/*cout << "------------Nouvelles direction" << endl;
+				cout << "INDEEEEEEEEX" << index << endl;*/
+				while (!HAS_WALL(boardOneD[index], direction) && OFFSET[direction] == 16 && index <240 || OFFSET[direction]== -16 && index >= 16 || OFFSET[direction] == 1 && (index == 15 || index == 31 || index == 47 || index == 63 || index == 79 || index == 95 || index == 111 || index == 127 || index == 143 || index == 159 || index == 175 || index == 191 || index == 207 || index == 223 || index == 239 || index == 255) || OFFSET[direction] == -1 && index % 16 != 0) {
+						index += OFFSET[direction];
+						//cout << "Apres Index: " << index << endl;				
+						if (moves[index] > depth){
+							moves[index] = depth;
+							status[index] = true;
+							done = false;
+						}
+						/*cout << "moves[ "<< index << "] : " << moves[index] << endl;
+						cout << "depth : " << depth << endl;	*/			
+
 				}
+				//cout << "Il y a un mur " << endl;
 			}
+			/*cout << "------------------------------------------TOUR "<< i <<" : " << endl;
+			for (int i = 0; i < 256; i++) {
+				cout << "Moves : " << moves[i] << " status : ";
+				cout << status[i] << endl;
+			}*/
+			
 		}
 	}
+	/*cout << "AFFICHAGE : " << endl;
+	for (int i = 0; i < 256; i++) {
+		cout << "Moves : " <<moves[i] << " status : "; 
+		cout << status[i] << endl;
+	}*/
 }
 
 
@@ -471,12 +504,11 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, vector <cha
 }
 
 
-unsigned int Grid::principalSearch(std::vector <char> path, void (*pathSave)(unsigned int, unsigned int, unsigned int, unsigned int)) {
+unsigned int Grid::principalSearch(std::vector <char> path) {
 	if (gameOver()) {
 		return 0;
 	}
 	unsigned int resultDepth = 0;
-
 	map <unsigned int*, unsigned int> map;
 
 	precomputeMinimumMoves();
@@ -487,9 +519,9 @@ unsigned int Grid::principalSearch(std::vector <char> path, void (*pathSave)(uns
 		inner = 0;
 
 		resultDepth = search(0, maxDepth, path, map);
-		if (pathSave) {
+		//if (pathSave()) {       //J'ai enlevé ça parce que pas booléen
 			pathSave(maxDepth, nodes, inner, hits);
-		}
+		//}
 		if (resultDepth) {
 			break;
 		}
@@ -508,7 +540,7 @@ unsigned int Grid::principalSearch(std::vector <char> path, void (*pathSave)(uns
 
 }
 
-void Grid::pathSave() {
+void Grid::pathSave(unsigned int maxDepth, unsigned int nodes, unsigned int inner, unsigned int hits) {
 	cout << "Depth: " << depth << ",Nodes: " << nodes << "(" << inner << "inner," << hits << "hits)" << endl;
 }
 

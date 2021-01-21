@@ -30,10 +30,10 @@ public:
 	void deplacerRobot(color c, char dir);
 
 	/*Plus court chemin*/
-	void pathSave();
+	void pathSave(unsigned int maxDepth, unsigned int nodes, unsigned int inner, unsigned int hits);
 	int compare(Entry* e1, Entry* e2);
 	unsigned int search(unsigned int, unsigned int, std::vector <char>, std::map <unsigned int*, unsigned int>);
-	unsigned int principalSearch(std::vector <char> path, void (*callback)(unsigned int, unsigned int, unsigned int, unsigned int));
+	unsigned int principalSearch(std::vector <char> path);
 	void precomputeMinimumMoves();
 	inline bool gameOver();
 	bool mapAdd(unsigned int key[NB_ROBOTS], unsigned int depth);
