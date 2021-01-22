@@ -19,13 +19,13 @@ private:
 	unsigned int hits;
 	unsigned int last;
 	int numRobotTarget;
-	std::set <Entry*> setEntry;
-	std::map <unsigned int*, unsigned int> mapSearch;//Tableau 4 keys robots, int : depth
+	std::map <unsigned int, unsigned int> mapSearch;//Tableau 4 keys robots, int : depth
 	int goal; //Position objectif
 
 public:
 	Grid();
 	void afficherGrille();
+	void afficherMoves();
 	Robot* getRobotGoal();
 	void deplacerRobot(color c, char dir);
 
@@ -36,12 +36,12 @@ public:
 	unsigned int principalSearch(std::vector <char> path);
 	void precomputeMinimumMoves();
 	inline bool gameOver();
-	bool mapAdd(unsigned int key[NB_ROBOTS], unsigned int depth);
+	bool mapAdd(unsigned int key, unsigned int depth);
 	unsigned int computeMove(unsigned int robot, unsigned int direction);
 	unsigned int doMove(unsigned int, unsigned int direction);
 	void undoMove(unsigned int undo);
-	unsigned int* makeKey();
-	bool operator<(unsigned int tab[NB_ROBOTS]);
+	inline unsigned int makeKey();
+	bool operator<(unsigned int key);
 	bool canMove(unsigned int, unsigned int);
 
 };

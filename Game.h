@@ -12,8 +12,7 @@ public:
 	void gameVue();
 
 protected:
-	unsigned int grid[256];
-	unsigned int moves[256];
+	//unsigned int grid[256];
 	unsigned int* robots;
 	unsigned int token;
 	unsigned int last;
