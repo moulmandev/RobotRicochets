@@ -38,8 +38,12 @@ public:
 	inline bool gameOver();
 	bool mapAdd(unsigned int key, unsigned int depth);
 	unsigned int computeMove(unsigned int robot, unsigned int direction);
-	unsigned int doMove(unsigned int, unsigned int direction);
-	void undoMove(unsigned int undo);
+	unsigned int* doMove(unsigned int, unsigned int direction);
+	void undoMove(unsigned int* undo);
+	bool checkLeftMove(unsigned int index, unsigned int direction);
+	bool checkRightMove(unsigned int index, unsigned int direction);
+	bool checkUpMove(unsigned int index, unsigned int direction);
+	bool checkDownMove(unsigned int index, unsigned int direction);
 	inline unsigned int makeKey();
 	bool operator<(unsigned int key);
 	bool canMove(unsigned int, unsigned int);

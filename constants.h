@@ -18,6 +18,8 @@
 
 #define PACK_MOVE(robot, direction) (robot << 4 | direction)
 #define PACK_UNDO(robot, start, last) (robot << 16 | start << 8 | last)
+
+
 #define UNPACK_ROBOT(undo) ((undo >> 16) & 0xff)
 #define UNPACK_START(undo) ((undo >> 8) & 0xff)
 #define UNPACK_LAST(undo) (undo & 0xff)
