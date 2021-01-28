@@ -36,6 +36,9 @@ public:
 	unsigned int principalSearch(std::vector <char> path);
 	void precomputeMinimumMoves();
 	inline bool gameOver();
+	inline void swap(unsigned int* array, unsigned int a, unsigned int b);
+	bool hasWall(unsigned int, unsigned int);
+	bool hasRobot(unsigned int index, unsigned int direction);
 	bool mapAdd(unsigned int key, unsigned int depth);
 	unsigned int computeMove(unsigned int robot, unsigned int direction);
 	unsigned int* doMove(unsigned int, unsigned int direction);
