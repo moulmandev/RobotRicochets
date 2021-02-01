@@ -10,71 +10,89 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 		boardOneD[i] = 0;
 	}
 
-	srand(time(NULL));
-	tabRobots.clear();
+	//srand(time(NULL));
+	//tabRobots.clear();
 
-	int mursPossibles[] = { 16, 8, 4, 2, 20, 18, 12, 10 };
-	for (int i = 0; i < 256; i++) {
-		if (rand() % 10 == 0){
-			if ((int)i / 16 == 0 && i % 16 != 0)
-				boardOneD[i] = 2;
-			else if ((int)i / 16 == 0 && i % 16 == 0)
-				boardOneD[i] = 4;
-			else if ((int)i / 16 == 15 && i % 16 != 0)
-				boardOneD[i] = 2;
-			else if ((int)i / 16 == 15 && i % 16 == 0)
-				boardOneD[i] = 4;
-			else if ((int)i / 16 != 0 && i % 16 == 0)
-				boardOneD[i] = 16;
-			else if ((int)i / 16 == 0 && i % 16 == 0)
-				boardOneD[i] = 8;
-			else if ((int)i / 16 != 0 && i % 16 == 15)
-				boardOneD[i] = 16;
-			else if ((int)i / 16 == 0 && i % 16 == 15)
-				boardOneD[i] = 8;
-			else {
-				if (rand() % 4 != 0)
-					boardOneD[i] = mursPossibles[rand() % 4];
-				else
-					boardOneD[i] = mursPossibles[4 + (rand() % 4)];
-			}
-		}
-		else {
-			boardOneD[i] = 0;
-		}
-	}
+	//int mursPossibles[] = { 16, 8, 4, 2, 20, 18, 12, 10 };
+	//for (int i = 0; i < 256; i++) {
+	//	if (rand() % 10 == 0){
+	//		if ((int)i / 16 == 0 && i % 16 != 0)
+	//			boardOneD[i] = 2;
+	//		else if ((int)i / 16 == 0 && i % 16 == 0)
+	//			boardOneD[i] = 4;
+	//		else if ((int)i / 16 == 15 && i % 16 != 0)
+	//			boardOneD[i] = 2;
+	//		else if ((int)i / 16 == 15 && i % 16 == 0)
+	//			boardOneD[i] = 4;
+	//		else if ((int)i / 16 != 0 && i % 16 == 0)
+	//			boardOneD[i] = 16;
+	//		else if ((int)i / 16 == 0 && i % 16 == 0)
+	//			boardOneD[i] = 8;
+	//		else if ((int)i / 16 != 0 && i % 16 == 15)
+	//			boardOneD[i] = 16;
+	//		else if ((int)i / 16 == 0 && i % 16 == 15)
+	//			boardOneD[i] = 8;
+	//		else {
+	//			if (rand() % 4 != 0)
+	//				boardOneD[i] = mursPossibles[rand() % 4];
+	//			else
+	//				boardOneD[i] = mursPossibles[4 + (rand() % 4)];
+	//		}
+	//	}
+	//	else {
+	//		boardOneD[i] = 0;
+	//	}
+	//}
 
-	for (int i = 0; i < 4; i++) {
-		rand();
-		rand();
-		int x = rand() % 256;
-		if (boardOneD[x] % 2 == 0) {
-			boardOneD[x]++;//Rajout d'un robot
-			//Mettre le robot dans votre tableau
-			tabRobots.push_back(new Robot(x));
-		}
-		else {
-			i--;
-		}
-	}
-	tabRobots[0]->setColor(blue);
-	tabRobots[1]->setColor(red);
-	tabRobots[2]->setColor(green);
-	tabRobots[3]->setColor(yellow);
+	//for (int i = 0; i < 4; i++) {
+	//	rand();
+	//	rand();
+	//	int x = rand() % 256;
+	//	if (boardOneD[x] % 2 == 0) {
+	//		boardOneD[x]++;//Rajout d'un robot
+	//		//Mettre le robot dans votre tableau
+	//		tabRobots.push_back(new Robot(x));
+	//	}
+	//	else {
+	//		i--;
+	//	}
+	//}
+	//tabRobots[0]->setColor(blue);
+	//tabRobots[1]->setColor(red);
+	//tabRobots[2]->setColor(green);
+	//tabRobots[3]->setColor(yellow);
 
-	numRobotTarget = rand() % 4;
-	tabRobots.at(numRobotTarget)->setTarget(true);
-	
-	goal = rand() % 256;
-	goal = rand() % 256;
-	goal = rand() % 256;
-	goal = rand() % 256;
-	cout << "Choix robot goal position: " << tabRobots.at(numRobotTarget)->getPosition() << endl;
+	//numRobotTarget = rand() % 4;
+	//tabRobots.at(numRobotTarget)->setTarget(true);
+	//
+	//goal = rand() % 256;
+	//goal = rand() % 256;
+	//goal = rand() % 256;
+	//goal = rand() % 256;
+	//cout << "Choix robot goal position: " << tabRobots.at(numRobotTarget)->getPosition() << endl;
 
-	/*unsigned int liste[256] = {9, 1, 5, 1, 3, 9, 1, 1, 1, 3, 9, 1, 1, 1, 1, 3, 8, 2, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 6, 8, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 0, 3, 8, 0, 0, 0, 0, 2, 12, 0, 2, 9, 0, 0, 0, 0, 4, 2, 12, 0, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 3, 10, 9, 0, 0, 0, 3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 6, 8, 0, 0, 0, 0, 4, 4, 0, 0, 2, 12, 0, 0, 2, 8, 1, 0, 0, 0, 0, 2, 9, 3, 8, 0, 0, 1, 0, 0, 2, 8, 0, 4, 0, 2, 12, 2, 12, 6, 8, 0, 0, 0, 0, 0, 6, 8, 18, 9, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 4, 0, 3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 0, 2, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 0, 0, 0, 2, 9, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, 2, 12, 2, 8, 0, 0, 16, 3, 8, 0, 0, 0, 4, 0, 0, 0, 0, 1, 2, 8, 6, 8, 0, 0, 0, 0, 0, 0, 3, 8, 0, 0, 0, 16, 2, 12, 5, 4, 4, 4, 6, 12, 4, 4, 4, 4, 6, 12, 4, 4, 6};
+	unsigned int liste[256] = {9, 1, 5, 1, 3, 9, 1, 1, 1, 3, 9, 1, 1, 1, 1, 3, 8, 2, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 6, 8, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 0, 3, 8, 0, 0, 0, 0, 2, 12, 0, 2, 9, 0, 0, 0, 0, 4, 2, 12, 0, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 3, 10, 9, 0, 0, 0, 3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 6, 8, 0, 0, 0, 0, 4, 4, 0, 0, 2, 12, 0, 0, 2, 8, 1, 0, 0, 0, 0, 2, 9, 3, 8, 0, 0, 1, 0, 0, 2, 8, 0, 4, 0, 2, 12, 2, 12, 6, 8, 0, 0, 0, 0, 0, 6, 8, 18, 9, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 4, 0, 3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 0, 2, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 0, 0, 0, 2, 9, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, 2, 12, 2, 8, 0, 0, 16, 3, 8, 0, 0, 0, 4, 0, 0, 0, 0, 1, 2, 8, 6, 8, 0, 0, 0, 0, 0, 0, 3, 8, 0, 0, 0, 16, 2, 12, 5, 4, 4, 4, 6, 12, 4, 4, 4, 4, 6, 12, 4, 4, 6};
 	
 	for (int i = 0; i < 256; i++){
-		boardOneD[i] = liste[i];
+		if (liste[i] == 1) {
+			boardOneD[i] = 16;
+		}
+		if (liste[i] == 2)
+			boardOneD[i] = 4;
+		if (liste[i] == 4)
+			boardOneD[i] = 8;
+		if (liste[i] == 8)
+			boardOneD[i] = 2;
+		if (liste[i] == 9)
+			boardOneD[i] = 18;
+		if (liste[i] == 3)
+			boardOneD[i] = 20;
+		if (liste[i] == 6)
+			boardOneD[i] = 12;
+		if (liste[i] == 12)
+			boardOneD[i] = 10;
+		if (liste[i] == 0)
+			boardOneD[i] = 0;
 	}
 
 	tabRobots.push_back(new Robot(176));
@@ -94,7 +112,7 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 	goal = 54;
 	last = 0;
 	numRobotTarget = rand() % 4;
-	tabRobots.at(numRobotTarget)->setTarget(true);*/
+	tabRobots.at(numRobotTarget)->setTarget(true);
 }
 
 void Grid::afficherMoves(){
@@ -241,7 +259,7 @@ bool Grid::canMove(unsigned int robot, unsigned int direction) {
 	return true;
 }
 
-bool Grid:: hasWall(unsigned int index, unsigned int direction){
+bool Grid::hasWall(unsigned int index, unsigned int direction){
 	if (index + OFFSET[direction] >= 0 && index + OFFSET[direction] < 256 && boardOneD[index + OFFSET[direction]] % 2 == 0 && boardOneD[index + OFFSET[direction]] != 0 || boardOneD[index] % 2 == 0 && boardOneD[index] != 0 && OFFSET[direction] == 16 && index < 240 || OFFSET[direction] == -16 && index > 15 || OFFSET[direction] == 1 && (index != 15 || index != 31 || index != 47 || index != 63 || index != 79 || index != 95 || index != 111 || index != 127 || index != 143 || index != 159 || index != 175 || index != 191 || index != 207 || index != 223 || index != 239 || index != 255) || OFFSET[direction] == -1 && index % 16 != 0) {
 		if ((OFFSET[direction] == -16 && checkUpMove(index, direction) || OFFSET[direction] == 16 && checkDownMove(index, direction) || OFFSET[direction] == -1 && checkLeftMove(index, direction) || OFFSET[direction] == 1 && checkRightMove(index, direction))) {
 			return false;
@@ -574,8 +592,8 @@ void Grid::deplacerRobot(color c, char dir){
 
 
 unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, vector <char> path, map <unsigned int*, unsigned int> map){
-	cout << "--------------------------------------------------------------------------------" << endl;
-	cout << "Nouvelle recherche : " << endl;
+	/*cout << "--------------------------------------------------------------------------------" << endl;
+	cout << "Nouvelle recherche : " << endl;*/
 
 	nodes++;
 	if (gameOver()) { 
@@ -587,11 +605,11 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, vector <cha
 		return 0;
 	}
 	unsigned int remainingDepth = maxDepth - depth;
-	cout << "Max depth : " << maxDepth << endl;
+	/*cout << "Max depth : " << maxDepth << endl;
  	cout << "Remaining depth : " << remainingDepth << endl;
 	cout << "Position robot goal " << getRobotGoal()->getPosition() << endl;
 	cout << "Moves robot Goal " << moves[getRobotGoal()->getPosition()] << endl << endl;
-	
+	*/
 	if (moves[getRobotGoal()->getPosition()] > remainingDepth) {//Plus de déplacements que ce qu'il reste pour aller au goal
 		//cout << "Perdu 2 " << endl;
 		return 0;
@@ -603,9 +621,9 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, vector <cha
 	}
 	inner++;
 	for (unsigned int robot = 0; robot < 4; robot++) {
-		cout << "robot : " << robot << ",moves[tabRobots[numRobotTarget]->getPosition()] : " << moves[tabRobots[numRobotTarget]->getPosition()] << endl;
+		/*cout << "robot : " << robot << ",moves[tabRobots[numRobotTarget]->getPosition()] : " << moves[tabRobots[numRobotTarget]->getPosition()] << endl;
 		cout << "= " << (robot && moves[tabRobots[numRobotTarget]->getPosition()]);
-		cout << endl;
+		cout << endl;*/
 		if(robot && moves[tabRobots[numRobotTarget]->getPosition()] == remainingDepth){
 			//cout << "Continue " << endl;
 			continue;
