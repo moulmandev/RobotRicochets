@@ -124,7 +124,7 @@ void Grid::afficherMoves(){
 		}
 		else {
 			cout << "pb" << "\t";
-		}		
+		}
 	}
 }
 
@@ -189,8 +189,7 @@ void Grid::afficherGrille(){
 		if (i != 0 && i % 16 == 0)
 			cout << endl;
 	}
-	vector <char> path;
-	principalSearch(path);
+	
 }
 
 
@@ -246,17 +245,21 @@ inline bool Grid::gameOver() {
 
 bool Grid::canMove(unsigned int robot, unsigned int direction) {
 	unsigned int index = tabRobots.at(robot)->getPosition();
-	if (hasWall(index, direction)) {
+	if (hasWall(index, direction)) {//S'il y a un mur
 		return false;
 	}
-	if (last == PACK_MOVE(robot, REVERSE[direction])) {
+	//cout << "Last vaut " << last << endl;
+	if (last == PACK_MOVE(robot, REVERSE[direction])){//S'il veut refaire en sens inverse ???????
 		return false;
 	}
-	//unsigned int newIndex = index + OFFSET[direction];
-	if (hasRobot(index, direction)){
+	if (hasRobot(index, direction)){//S'il y a un robot
 		return false;
 	}
 	return true;
+}
+
+unsigned int*Grid::getPrecomputeMinimumMovesArray(){
+	return moves;
 }
 
 bool Grid::hasWall(unsigned int index, unsigned int direction){
@@ -279,7 +282,7 @@ unsigned int Grid::computeMove(unsigned int robot, unsigned int direction) {//Re
 	unsigned int index = tabRobots.at(robot)->getPosition() + OFFSET[direction];
 	while (true) {
 		if (hasWall(index, direction)){
-				break;
+			break;
 		}	
 		unsigned int newIndex = index + OFFSET[direction];
 		if (hasRobot(index, direction)) {//S'il y a un robot
@@ -300,17 +303,15 @@ unsigned int* Grid::doMove(unsigned int robot, unsigned int direction) {
 	//cout << "Robot goal part de " << start << " et arrive a " << end << endl;
 	unsigned int lastMove = last;
 	tabRobots.at(robot)->setPosition(end);
-	last = PACK_MOVE(tabRobots.at(robot)->getPosition(), direction);
+	last = PACK_MOVE(tabRobots.at(robot)->getPosition(), direction);///////////////////////////////Pb Pack_Move
+	//cout << "On met last a " << last << endl;
 	UNSET_ROBOT(boardOneD[start]);
 	SET_ROBOT(boardOneD[end]);
 	tabMove[0] = robot;
 	tabMove[1] = start;
 	tabMove[2] = lastMove;
-
 	return tabMove;
 }
-
-
 
 void Grid::undoMove(unsigned int* undo){
 	/*unsigned int robot = UNPACK_ROBOT(undo);
@@ -598,7 +599,7 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, vector <cha
 	nodes++;
 	if (gameOver()) { 
 		return depth;// Gagné, en "depth" déplacements
-		cout << "Gagné " << endl;
+		//cout << "Gagné " << endl;
 	}
 	if (depth == maxDepth) {// perdu
 		//cout << "Perdu" << endl;
@@ -620,11 +621,12 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, vector <cha
 		return 0;
 	}
 	inner++;
-	for (unsigned int robot = 0; robot < 4; robot++) {
+	for (unsigned int robot = 0; robot < 4; robot++) {//Pour chaque robot
 		/*cout << "robot : " << robot << ",moves[tabRobots[numRobotTarget]->getPosition()] : " << moves[tabRobots[numRobotTarget]->getPosition()] << endl;
 		cout << "= " << (robot && moves[tabRobots[numRobotTarget]->getPosition()]);
 		cout << endl;*/
 		if(robot && moves[tabRobots[numRobotTarget]->getPosition()] == remainingDepth){
+			//robot && moves[tabRobots[numRobotTarget]->getPosition()] == remainingDepth){
 			//cout << "Continue " << endl;
 			continue;
 		}
@@ -665,7 +667,7 @@ unsigned int Grid::principalSearch(std::vector <char> path) {
 	map <unsigned int*, unsigned int> map;
 
 	precomputeMinimumMoves();
-	for (unsigned int maxDepth = 1; maxDepth < MAX_DEPTH; maxDepth++){ //Tant que l'on a pas réussi
+	/*for (unsigned int maxDepth = 1; maxDepth < MAX_DEPTH; maxDepth++){ //Tant que l'on a pas réussi
 		depth = 0;
 		nodes = 0;
 		hits = 0;
@@ -682,8 +684,9 @@ unsigned int Grid::principalSearch(std::vector <char> path) {
 	}
 	
 	mapSearch.clear();
-	cout << "map deleted" << endl;	
-	return resultDepth;
+	cout << "map deleted" << endl;
+	return resultDepth;*/
+	return 0;
 }
 
 void Grid::pathSave(unsigned int maxDepth, unsigned int nodes, unsigned int inner, unsigned int hits) {

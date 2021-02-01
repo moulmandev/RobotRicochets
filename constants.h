@@ -50,9 +50,7 @@ void OFFSET(){
 	WEST = -1;
 };*/
 
-const unsigned int REVERSE[] = {
-	0, SOUTH, WEST, 0, NORTH, 0, 0, 0, EAST
-};
+const unsigned int REVERSE[] = { 16, -1, -16, 1 };
 
 
 /*Masks*/

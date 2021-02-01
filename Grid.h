@@ -50,5 +50,6 @@ public:
 	inline unsigned int makeKey();
 	bool operator<(unsigned int key);
 	bool canMove(unsigned int, unsigned int);
+	unsigned int* getPrecomputeMinimumMovesArray();
 
 };
