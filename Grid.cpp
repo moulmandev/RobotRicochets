@@ -369,18 +369,17 @@ void Grid::precomputeMinimumMoves() {//Calcule le nb min de mouvements pour chaq
 
 			for (unsigned int direction = 0; direction < 4; direction++){
 				unsigned int index = i;
-				while (index + OFFSET[direction] >= 0 && index + OFFSET[direction] < 256 && (OFFSET[direction] == 16 && index < 240 || OFFSET[direction] == -16 && index > 15 || OFFSET[direction] == 1 && (index != 15 || index != 31 || index != 47 || index != 63 || index != 79 || index != 95 || index != 111 || index != 127 || index != 143 || index != 159 || index != 175 || index != 191 || index != 207 || index != 223 || index != 239 || index != 255) || OFFSET[direction] == -1 && index % 16 != 0)) {
+				while (index + OFFSET[direction] >= 0 && index + OFFSET[direction] < 256 && (OFFSET[direction] == 16 && index < 240 || OFFSET[direction] == -16 && index > 15 || OFFSET[direction] == 1 && (index != 15 && index != 31 || index != 47 && index != 63 && index != 79 && index != 95 && index != 111 && index != 127 && index != 143 && index != 159 && index != 175 && index != 191 && index != 207 && index != 223 && index != 239 && index != 255) || OFFSET[direction] == -1 && index % 16 != 0)) {
 					if (boardOneD[index + OFFSET[direction]] % 2 == 0 && boardOneD[index + OFFSET[direction]]!=0 || boardOneD[index]%2 == 0 && boardOneD[index]!=0){
 						//cout << "On rencontre un mur " << endl;
 						if ((OFFSET[direction] == -16 && checkUpMove(index, direction) || OFFSET[direction] == 16 && checkDownMove(index, direction) || OFFSET[direction] == -1 && checkLeftMove(index, direction) || OFFSET[direction] == 1 && checkRightMove(index, direction))){
 						//cout << "Ce mur ne gene pas pour aller a la destination " << endl;
-							//cout << "ok " << i << endl;
 							index += OFFSET[direction];
 								if (moves[index] > depth){
 									moves[index] = depth;
 										status[index] = true;
 										done = false;
-								}
+								}					
 						}
 						else {
 							//cout << "Un mur gene a " << index << " pour aller a " << direction << endl;
@@ -584,7 +583,7 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, vector <cha
 		cout << "Gagné " << endl;
 	}
 	if (depth == maxDepth) {// perdu
-		cout << "Perdu" << endl;
+		//cout << "Perdu" << endl;
 		return 0;
 	}
 	unsigned int remainingDepth = maxDepth - depth;
@@ -594,24 +593,26 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, vector <cha
 	cout << "Moves robot Goal " << moves[getRobotGoal()->getPosition()] << endl << endl;
 	
 	if (moves[getRobotGoal()->getPosition()] > remainingDepth) {//Plus de déplacements que ce qu'il reste pour aller au goal
-		cout << "Perdu 2 " << endl;
+		//cout << "Perdu 2 " << endl;
 		return 0;
 	}
 
 	if (remainingDepth != 1 && !mapAdd(makeKey(), remainingDepth)) {//Si on n'a pas pu ajouter tel déplacement à la map
 		hits++;
-		cout << "On a pas pu ajouter tel deplacement a la map " << endl;
 		return 0;
 	}
 	inner++;
 	for (unsigned int robot = 0; robot < 4; robot++) {
-		if (robot && moves[getRobotGoal()->getPosition()] == remainingDepth){
-			cout << "Continue " << endl;
+		cout << "robot : " << robot << ",moves[tabRobots[numRobotTarget]->getPosition()] : " << moves[tabRobots[numRobotTarget]->getPosition()] << endl;
+		cout << "= " << (robot && moves[tabRobots[numRobotTarget]->getPosition()]);
+		cout << endl;
+		if(robot && moves[tabRobots[numRobotTarget]->getPosition()] == remainingDepth){
+			//cout << "Continue " << endl;
 			continue;
 		}
 		for (unsigned int direction = 0; direction < 4; direction++){
-			if (!canMove(robot, direction)) {
-				cout << "Continue2" << endl;
+			if (!canMove(robot, direction)){
+				//cout << "Continue2" << endl;
 				continue;
 			}
 			unsigned int* u = doMove(robot, direction);
@@ -620,10 +621,10 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, vector <cha
 				tabUndo[i] = u[i];
 			}
 
-			cout << "LE RESULTAT : " << endl;
+			/*cout << "LE RESULTAT : " << endl;
 			cout << "ROBOT : " << tabUndo[0] << endl;
 			cout << "START : " << tabUndo[1] << endl;
-			cout << "LAST : " << tabUndo[2] << endl;
+			cout << "LAST : " << tabUndo[2] << endl;*/
 
 			unsigned int result = search(depth + 1, maxDepth, path, map);	
 			
