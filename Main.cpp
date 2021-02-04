@@ -78,7 +78,7 @@ private:
 HelloApplication::HelloApplication(const Wt::WEnvironment& env)
 	: Wt::WApplication(env)
 {
-	setTitle("Résolution algorithme");
+	setTitle("Rï¿½solution algorithme");
 
 	/*Wt::WPen pen;
 	pen.setWidth(5);
@@ -157,7 +157,7 @@ int main(int argc, char** argv) {
 		cout << endl << endl;
 	}*/
 
-	User* u = new User[2];
+	/*User* u = new User[2];
 	u[0].setIdUser(1);
 	u[0].setNom("Dupont");
 	u[0].setPrenom("Paul");
