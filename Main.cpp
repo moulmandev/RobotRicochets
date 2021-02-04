@@ -26,6 +26,15 @@
 #include <Wt/WText.h>
 #include <Wt/WTableView.h>
 
+#include <Wt/WContainerWidget.h>
+#include <Wt/WPaintDevice.h>
+#include <Wt/WPaintedWidget.h>
+#include <Wt/WPainter.h>
+#include <Wt/WSlider.h>
+#include <Wt/WSpinBox.h>
+
+#include <cmath>
+
 
 using namespace std;
 
@@ -39,6 +48,7 @@ public:
 	HelloApplication(const Wt::WEnvironment& env);
 
 	void fct() {
+		cptClick++;
 		table->setWidth(Wt::WLength("100%"));
 
 		for (int i = 0; i < 16; i++) {
@@ -60,6 +70,7 @@ private:
 	Wt::WLineEdit* nameEdit;
 	Wt::WText* greeting;
 	Wt::WTable* table = root()->addWidget(std::make_unique<Wt::WTable>());
+	int cptClick = 0;
 
 };
 
@@ -69,9 +80,26 @@ HelloApplication::HelloApplication(const Wt::WEnvironment& env)
 {
 	setTitle("Résolution algorithme");
 
+	/*Wt::WPen pen;
+	pen.setWidth(5);
+	painter.setPen(pen);
+
+	Wt::WPainterPath path;
+	path.moveTo(-50, 100);
+	path.lineTo(50, 100);
+	path.lineTo(50, 20);
+	path.lineTo(100, 20);
+	path.lineTo(0, -100);
+	path.lineTo(-100, 20);
+	path.lineTo(-50, 20);
+	path.lineTo(-50, 100);
+	path.lineTo(50, 100);*/
+
+
 	Wt::WPushButton* btnPrecomputeMinMoves = root()->addWidget(std::make_unique<Wt::WPushButton>("Precompute minimum moves"));
 	Wt::WPushButton* btnSolutionPath = root()->addWidget(std::make_unique<Wt::WPushButton>("Shortest path"));
 
+	
 	auto precomputeMinimumMovesArray = [this] {
 		fct();
 	};
@@ -84,12 +112,15 @@ HelloApplication::HelloApplication(const Wt::WEnvironment& env)
 int main(int argc, char** argv) {
 
 	grille = new Grid();
-	grille->afficherGrille();
+	vector <char> path;
+	grille->principalSearch(path);
+
+	/*grille->afficherGrille();
 	vector <char> path;
 	grille->principalSearch(path);
 
 	color selectColor;
-	char selectColorC;
+	char selectColorC;*/
 
 	/*while (1) {
 		cout << "Choisir une couleur (r/g/b/y) :";

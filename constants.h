@@ -28,6 +28,7 @@
 
 const int OFFSET[] = {-16, 1, 16, -1};
 
+
 /*Directions*/
 /*char NORTH = 'N';
 char EAST = 'E';
@@ -50,7 +51,7 @@ void OFFSET(){
 	WEST = -1;
 };*/
 
-const unsigned int REVERSE[] = { 16, -1, -16, 1 };
+const unsigned int REVERSE[] = {16, -1, -16, 1};
 
 
 /*Masks*/
