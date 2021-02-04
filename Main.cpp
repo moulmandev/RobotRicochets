@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
 		cout << endl << endl;
 	}
 
-	User* u = new User[2];
+	/*User* u = new User[2];
 	u[0].setIdUser(1);
 	u[0].setNom("Dupont");
 	u[0].setPrenom("Paul");
@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
 	u[1].setNom("Dupons");
 	u[1].setPrenom("Jean");
 	u[1].setInvite(1);
-	u[1].setPseudo("PseudoJean");
+	u[1].setPseudo("PseudoJean");*/
 
 
 
