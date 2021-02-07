@@ -25,13 +25,11 @@
 #include <Wt/WLineEdit.h>
 #include <Wt/WText.h>
 #include <Wt/WTableView.h>
+#include <Wt/WCssDecorationStyle.h>
 
-#include <Wt/WContainerWidget.h>
-#include <Wt/WPaintDevice.h>
-#include <Wt/WPaintedWidget.h>
-#include <Wt/WPainter.h>
-#include <Wt/WSlider.h>
-#include <Wt/WSpinBox.h>
+#include <Wt/WApplication.h>
+#include <Wt/WStandardItemModel.h>
+#include <Wt/WTableView.h>
 
 #include <cmath>
 
@@ -48,12 +46,27 @@ public:
 	HelloApplication(const Wt::WEnvironment& env);
 
 	void fct() {
-		cptClick++;
+
+		/*auto tableView = cpp14::make_unique<WTableView>();
+		tableView->setModel(csvToModel(WApplication::appRoot() + "table.csv"));
+
+		tableView->setColumnResizeEnabled(false);
+		tableView->setColumnAlignment(0, AlignmentFlag::Center);
+		tableView->setHeaderAlignment(0, AlignmentFlag::Center);
+		tableView->setAlternatingRowColors(true);
+		tableView->setRowHeight(28);
+		tableView->setHeaderHeight(28);
+		tableView->setSelectionMode(SelectionMode::Single);
+		tableView->setEditTriggers(EditTrigger::None);*/
+
+
+		/*cptClick++;
 		table->setWidth(Wt::WLength("100%"));
 
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
-				if (grille->getPrecomputeMinimumMovesArray()[i * 16 + j] != INT_MAX && grille->getPrecomputeMinimumMovesArray()[i * 16 + j] !=0) {
+				table->elementAt(i, j)->setColumnSpan());
+					if (grille->getPrecomputeMinimumMovesArray()[i * 16 + j] != INT_MAX && grille->getPrecomputeMinimumMovesArray()[i * 16 + j] != 0) {
 					table->elementAt(i, j)->addNew<Wt::WText>(to_string(grille->getPrecomputeMinimumMovesArray()[i * 16 + j]));
 				}
 				else if (grille->getPrecomputeMinimumMovesArray()[i * 16 + j] ==0) {
@@ -63,13 +76,16 @@ public:
 					table->elementAt(i, j)->addNew<Wt::WText>("");
 				}
 			}
-		}
+		}*/
 	}
+
 
 private:
 	Wt::WLineEdit* nameEdit;
 	Wt::WText* greeting;
 	Wt::WTable* table = root()->addWidget(std::make_unique<Wt::WTable>());
+	Wt::WTableView* table2 = root()->addWidget(std::make_unique<Wt::WTableView>());
+
 	int cptClick = 0;
 
 };
@@ -78,23 +94,9 @@ private:
 HelloApplication::HelloApplication(const Wt::WEnvironment& env)
 	: Wt::WApplication(env)
 {
-	setTitle("R�solution algorithme");
+	setTitle("Resolution algorithme");
 
-	/*Wt::WPen pen;
-	pen.setWidth(5);
-	painter.setPen(pen);
-
-	Wt::WPainterPath path;
-	path.moveTo(-50, 100);
-	path.lineTo(50, 100);
-	path.lineTo(50, 20);
-	path.lineTo(100, 20);
-	path.lineTo(0, -100);
-	path.lineTo(-100, 20);
-	path.lineTo(-50, 20);
-	path.lineTo(-50, 100);
-	path.lineTo(50, 100);*/
-
+	
 
 	Wt::WPushButton* btnPrecomputeMinMoves = root()->addWidget(std::make_unique<Wt::WPushButton>("Precompute minimum moves"));
 	Wt::WPushButton* btnSolutionPath = root()->addWidget(std::make_unique<Wt::WPushButton>("Shortest path"));
@@ -169,7 +171,7 @@ int main(int argc, char** argv) {
 	u[1].setPrenom("Jean");
 	u[1].setInvite(1);
 	u[1].setPseudo("PseudoJean");
-	cout << "Tout fait " << endl;
+	cout << "Tout fait " << endl;*/
 
 
 	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {

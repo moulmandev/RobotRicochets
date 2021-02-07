@@ -26,7 +26,11 @@
 #define MAKE_KEY(x) (x[0] | (x[1] << 8) | (x[2] << 16) | (x[3] << 24))
 
 
-const int OFFSET[] = {-16, 1, 16, -1};
+//const int OFFSET[] = {-16, 1, 16, -1};
+
+const int OFFSET[] = {0, -16, 1, 0, 16, 0, 0, 0, -1};
+
+const unsigned int REVERSE[] = {0, SOUTH, WEST, 0, NORTH, 0, 0, 0, EAST};
 
 
 /*Directions*/
@@ -51,7 +55,8 @@ void OFFSET(){
 	WEST = -1;
 };*/
 
-const unsigned int REVERSE[] = {16, -1, -16, 1};
+//const unsigned int REVERSE[] = {16, -1, -16, 1};
+//const unsigned int REVERSE[] = {0, SOUTH, WEST, 0, NORTH, 0, 0, 0, EAST};
 
 
 /*Masks*/
