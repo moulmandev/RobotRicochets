@@ -100,12 +100,12 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 			boardOneD[i] = 2;
 		if (liste[i] == WEST + NORTH)
 			boardOneD[i] = 18;
+		if (liste[i] == WEST + SOUTH)
+			boardOneD[i] = 10;
 		if (liste[i] == EAST + NORTH)
 			boardOneD[i] = 20;
 		if (liste[i] == EAST + SOUTH)
-			boardOneD[i] = 12;
-		if (liste[i] == WEST + SOUTH)
-			boardOneD[i] = 10;
+			boardOneD[i] = 12;		
 		if (liste[i] == NORTH + SOUTH) {
 			boardOneD[i] = 24;
 		}
@@ -115,14 +115,14 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 		if (liste[i] == 0) {
 			boardOneD[i] = 0;
 		}
-		//if (liste[i] > WEST+SOUTH){
-		if (liste[i] > WEST+SOUTH || liste[i]==10){
-			if (liste[i] == 10) {
-				boardOneD[i] = 0;
-				//cout << "juste robot " << liste[i] << endl;
+
+
+		if (liste[i] >= 16){
+			if (liste[i] == 16) {
+				boardOneD[i] = 0;//Juste un robot
 			}
-			else {
-				//cout << "mur + robot a " << liste[i] << endl;
+
+			else {//Un robot + un mur
 				int k = liste[i] % 10;
 				if (k == NORTH) {
 					boardOneD[i] = 16;
@@ -141,11 +141,9 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 					boardOneD[i] = 12;
 				if (k == WEST + SOUTH)
 					boardOneD[i] = 10;
-				if (k == NORTH + SOUTH)
-					boardOneD[i] = 24;
-				if (k == EAST + WEST)
-					boardOneD[i] = 6;
 			}
+
+			
 		}
 	}
 
@@ -157,12 +155,6 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 	boardOneD[211]++;
 	tabRobots.push_back(new Robot(238));
 	boardOneD[238]++;
-
-	/*cout << "Les fameux robots : " << endl;
-	cout << boardOneD[176] << endl;
-	cout << boardOneD[145] << endl;
-	cout << boardOneD[211] << endl;
-	cout << boardOneD[238] << endl;*/
 
 	tabRobots[0]->setColor(blue);
 	tabRobots[1]->setColor(red);
@@ -176,8 +168,7 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 
 	afficherGrille();
 	cout << endl;
-	/*vector <char> path;
-	principalSearch(path);*/
+	
 }
 
 void Grid::afficherMoves(){
@@ -479,27 +470,23 @@ void Grid::precomputeMinimumMoves() {//Calcule le nb min de mouvements pour chaq
 	afficherMoves();
 	cout << endl;
 
-
-
+	cout << "On va mettre dans fichier " << endl;
 	/*Mise dans fichier CSV*/
-	ofstream valeursPrecomputeMinimumMoves;
-	valeursPrecomputeMinimumMoves.open("Bureau\precomputeValues.csv", ios::out);
-	if (valeursPrecomputeMinimumMoves.bad()) {
-		cout << "Probleme avec fichier csv" << endl;
-		//return 0;
+	ofstream valeursPrecomputeMinimumMoves("C:/Users/33660/Documents/precomputeMinimumMoves.csv", ios::out);
+	if (valeursPrecomputeMinimumMoves) {
+		char v = ';';
+		for (int i = 0; i < 256; i++) {
+			std::string s = std::to_string(moves[i]);
+			char const* pchar = s.c_str();
+			valeursPrecomputeMinimumMoves.write(pchar, 1);
+			valeursPrecomputeMinimumMoves.write(&v, 1);
+		}
 	}
-
-	char v = ';';
-	for (int i = 0; i < 256; i++) {
-		std::string s = std::to_string(moves[i]);
-		char const* pchar = s.c_str();
-		
-		valeursPrecomputeMinimumMoves.write(pchar, 1);
-		valeursPrecomputeMinimumMoves.write(&v, 1);
+	else {
+		cout << "Impossible d'ouvrir le fichier " << endl;
 	}
+	
 	valeursPrecomputeMinimumMoves.close();
-
-
 }
 
 void Grid::deplacerRobot(color c, char dir){
@@ -695,6 +682,7 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, vector <cha
 		hits++;
 		return 0;
 	}
+	//cout << "inner " << inner << endl;
 	inner++;
 	for (unsigned int robot = 0; robot < 4; robot++) {//Pour chaque robot
 		/*printf("robot :");
@@ -751,6 +739,7 @@ unsigned int Grid::principalSearch(std::vector <char> path) {
 
 		resultDepth = search(0, maxDepth, path, map);
 		//if (pathSave()) {       //J'ai enlevé ça parce que pas booléen
+		cout << "pathSave a " << "maxDepth : " << maxDepth << "nodes : " << nodes << " inner : " << inner << " hits : " << hits << endl;
 			pathSave(maxDepth, nodes, inner, hits);
 		//}
 		if (resultDepth) {//Si robotGoal à goal
