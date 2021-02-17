@@ -29,15 +29,14 @@
 
 #include <Wt/WApplication.h>
 #include <Wt/WStandardItemModel.h>
-#include <Wt/WTableView.h>
 #include <Wt/WAbstractItemModel.h>
 #include <Wt/WColor.h>
 #include <Wt/WCssDecorationStyle.h>
 #include <Wt/WFont.h>
 #include <Wt/WVBoxLayout.h>
-#include <Wt/WAbstractItemModel.h>
 #include <Wt/WStandardItemModel.h>
 #include <Windows.h>
+#include <Wt/WHBoxLayout.h>
 #include <cmath>
 
 
@@ -65,42 +64,46 @@ public:
 		root()->resize(window_width, window_height);//Mettre taille ecran
 		Wt::WCssDecorationStyle decorationPage;
 		decorationPage.setBackgroundColor(Wt::WColor::WColor(135, 233, 144, 255));
-		//decorationPage.setBackgroundImage("C://Users//33660//Desktop//technology.jpg");
+		//decorationPage.setBackgroundImage("C:/Users/33660/Desktop/technology.jpg");
 
 		root()->setDecorationStyle(decorationPage);
-		Wt::WText* pageTitle = root()->addWidget(std::make_unique<Wt::WText>("Resolution d'algorithme"));
+		Wt::WText* pageTitle = root()->addWidget(std::make_unique<Wt::WText>(Wt::WString("<p>Resolution d'algorithme</p>")));
 		Wt::WFont fontTitle;
-		//fontTitle.setFamily(FontFamily::Monospace, "'Courier New'");
-		fontTitle.setSize(20);
+
+		fontTitle.setFamily(Wt::FontFamily::Monospace, "'Courier New'");
+		fontTitle.setSize(45);
+
 		pageTitle->decorationStyle().setFont(fontTitle);
 
-
-		Wt::WText* ExplanationsPage = root()->addWidget(std::make_unique<Wt::WText>("Choisissez l'action que vous souhaitez effectuer : "));
+		Wt::WText* ExplanationsPage = root()->addWidget(std::make_unique<Wt::WText>(Wt::WString("<p>Choisissez l'action que vous souhaitez effectuer : </p>")));
 		Wt::WFont fontExplanations;
-		//fontExplanations.setFamily(FontFamily::Monospace, "'Courier New'");
+		fontExplanations.setFamily(Wt::FontFamily::Fantasy, "'Western'");
 		fontExplanations.setSize(12);
-		ExplanationsPage->decorationStyle().setFont(fontTitle);
+		ExplanationsPage->decorationStyle().setFont(fontExplanations);
 
-		Wt::WPushButton* btnPrecomputeMinMoves = root()->addWidget(std::make_unique<Wt::WPushButton>("Precompute minimum moves"));
-		Wt::WPushButton* btnSolutionPath = root()->addWidget(std::make_unique<Wt::WPushButton>("Shortest path"));
-
+		btnPrecomputeMinMoves = root()->addWidget(std::make_unique<Wt::WPushButton>("Precompute minimum moves"));		
+		btnSolutionPath = root()->addWidget(std::make_unique<Wt::WPushButton>("Shortest path"));
 		btnSolutionPath->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
 		btnPrecomputeMinMoves->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
 
 
 		auto precomputeMinimumMovesArray = [this] {
-			fctDisplayPrecomputeMinimumMoves();
+			btnPrecomputeMinMoves->setEnabled(false);
+			btnSolutionPath->setEnabled(true);
+			fctDisplayPrecomputeMinimumMoves();		
 		};
 
-		auto pathArray = [this] {
+		auto pathArray = [this]{
+			btnSolutionPath->setEnabled(false);
+			table->clear();
+			btnPrecomputeMinMoves->setEnabled(true);
 			fctDisplayPath();
 		};
 
 		btnPrecomputeMinMoves->clicked().connect(precomputeMinimumMovesArray);
+		
 		btnSolutionPath->clicked().connect(pathArray);
-
 	}
-
 	
 	void fctDisplayPrecomputeMinimumMoves() {
 		
@@ -123,14 +126,12 @@ public:
 			}
 		}
 	
-	}
-
-	
+	}	
 
 	void fctDisplayPath() {
 		root()->refresh();///////////TROUVER AUTRE
 
-		vector <char> path;
+		
 		path.push_back('t');
 		path.push_back('d');
 		path.push_back('l');
@@ -145,8 +146,7 @@ public:
 		textDown.setForegroundColor(Wt::WColor(0, 255, 0, 155));
 		textLeft.setForegroundColor(Wt::WColor(255, 0, 0, 155));
 		textRight.setForegroundColor(Wt::WColor(0, 0, 255, 155));
-
-		
+	
 		for (int i = 0; i < path.size(); i++){
 			cout << "On rentre " << endl;
 			if (path.at(i) == 't') {
@@ -167,14 +167,16 @@ public:
 private:
 	
 	Wt::WTable* table = root()->addWidget(std::make_unique<Wt::WTable>());
-	//Wt::WTableView* table2 = root()->addWidget(std::make_unique<Wt::WTableView>());
-
+	Wt::WPushButton* btnPrecomputeMinMoves;
+	Wt::WPushButton* btnSolutionPath;
+	vector <char> path;
 };
 
 
 HelloApplication::HelloApplication(const Wt::WEnvironment& env)
 	: Wt::WApplication(env)
 {
+
 	menuPrincipalAlgorithmeResolution();
 
 }
