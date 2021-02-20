@@ -4,10 +4,6 @@
 #include<Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WText.h>
-#include <Wt/WPaintDevice.h>
-#include <Wt/WPaintedWidget.h>
-#include <Wt/WPainter.h>
-#include <Wt/WSpinBox.h>
 #include "Game.h"
 #include "Grid.h"
 #include "User.h"
@@ -26,7 +22,7 @@
 #include <Wt/WText.h>
 #include <Wt/WTableView.h>
 #include <Wt/WCssDecorationStyle.h>
-
+#include <Wt/WImage.h>
 #include <Wt/WApplication.h>
 #include <Wt/WStandardItemModel.h>
 #include <Wt/WAbstractItemModel.h>
@@ -34,9 +30,9 @@
 #include <Wt/WCssDecorationStyle.h>
 #include <Wt/WFont.h>
 #include <Wt/WVBoxLayout.h>
+#include <Wt/WFlags.h>
 #include <Wt/WStandardItemModel.h>
 #include <Windows.h>
-#include <Wt/WHBoxLayout.h>
 #include <cmath>
 
 
@@ -81,8 +77,13 @@ public:
 		fontExplanations.setSize(12);
 		ExplanationsPage->decorationStyle().setFont(fontExplanations);
 
+		
+		//root()->setPadding(12, Wt::WFlags<Wt::Side::CenterX>);
+		
 		btnPrecomputeMinMoves = root()->addWidget(std::make_unique<Wt::WPushButton>("Precompute minimum moves"));		
 		btnSolutionPath = root()->addWidget(std::make_unique<Wt::WPushButton>("Shortest path"));
+
+
 		btnSolutionPath->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
 		btnPrecomputeMinMoves->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
 
@@ -100,8 +101,7 @@ public:
 			fctDisplayPath();
 		};
 
-		btnPrecomputeMinMoves->clicked().connect(precomputeMinimumMovesArray);
-		
+		btnPrecomputeMinMoves->clicked().connect(precomputeMinimumMovesArray);		
 		btnSolutionPath->clicked().connect(pathArray);
 	}
 	
@@ -130,7 +130,6 @@ public:
 
 	void fctDisplayPath() {
 		root()->refresh();///////////TROUVER AUTRE
-
 		
 		path.push_back('t');
 		path.push_back('d');
@@ -146,9 +145,10 @@ public:
 		textDown.setForegroundColor(Wt::WColor(0, 255, 0, 155));
 		textLeft.setForegroundColor(Wt::WColor(255, 0, 0, 155));
 		textRight.setForegroundColor(Wt::WColor(0, 0, 255, 155));
-	
+
+		
 		for (int i = 0; i < path.size(); i++){
-			cout << "On rentre " << endl;
+
 			if (path.at(i) == 't') {
 				root()->addWidget(std::make_unique<Wt::WText>("Top\n"))->setDecorationStyle(textTop);
 			}
@@ -159,7 +159,8 @@ public:
 				root()->addWidget(std::make_unique<Wt::WText>("Left\n"))->setDecorationStyle(textLeft);
 			}
 			else if (path.at(i) == 'r') {
-				root()->addWidget(std::make_unique<Wt::WText>("Right\n"))->setDecorationStyle(textRight);
+				//root()->addWidget(std::make_unique<Wt::WText>("Right\n"))->setDecorationStyle(textRight);
+				root()->addNew<Wt::WImage>(Wt::WLink("C:/Users/33660/Desktop/arrow.png"));
 			}
 		}
 	}
