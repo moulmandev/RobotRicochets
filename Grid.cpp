@@ -167,10 +167,10 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 
 	std::sort(tabRobots.begin() + 1, tabRobots.begin() + 4);
 
-	printf("Case 208 : ");
+	/*printf("Case 208 : ");
 	printf("%d\n", boardOneD[208]);
 	printf("Case haut 192 : ");
-	printf("%d\n", boardOneD[192]);
+	printf("%d\n", boardOneD[192]);*/
 
 	afficherGrille();
 	std::cout << std::endl;
@@ -259,20 +259,12 @@ Robot* Grid::getRobotGoal() {
 	return tabRobots.at(numRobotTarget);
 }
 
-inline void Grid::swap(unsigned int* array, unsigned int a, unsigned int b) {
-	unsigned int temp = array[a];
-	array[a] = array[b];
-	array[b] = temp;
-}
-
 std::vector<unsigned int> Grid::makeKey(){
-	unsigned int robots[4];
 	std::vector<unsigned int> tabRobotsCopy;
 
 	for (int i = 0; i < NB_ROBOTS; i++) {
-		tabRobotsCopy.push_back(tabRobots[i]->getPosition());
-	}
-	
+		tabRobotsCopy.push_back(tabRobots[i]->getPosition());//tabRobots[i] deja triés à partir de tabRobots[1]
+	}	
 	return tabRobotsCopy;
 }
 
@@ -325,7 +317,9 @@ bool Grid::hasRobot(unsigned int index, unsigned int direction) {
 }
 
 unsigned int Grid::computeMove(unsigned int robot, unsigned int direction) {//Regarde si déplacement possible
+	
 	unsigned int index = tabRobots.at(robot)->getPosition() + OFFSET[direction];
+	//printf("%d\n", index);
 	while (true) {
 		if (hasWall(index, direction)){
 			break;
@@ -339,16 +333,33 @@ unsigned int Grid::computeMove(unsigned int robot, unsigned int direction) {//Re
 	return index;
 }
 
-unsigned int packMove(unsigned int robot, unsigned int direction){
-	return robot<<4 | direction;
-}
-
+//int cpt = 0;
 unsigned int* Grid::doMove(unsigned int robot, unsigned int direction) {
-		
+	/*printf("doMove avec ");
+	printf("robot : ");
+	printf("%d", robot);
+	printf(" ");
+	printf("direction : ");
+	printf("%d\n", direction);*/
+
 	unsigned int start = tabRobots.at(robot)->getPosition();//Position de départ du robot goal
 	unsigned int end = computeMove(robot, direction);//position d'arrivée du robot goal	
 	unsigned int lastMove = last;
+
+	/*printf("Start vaut ");
+	printf("%d", start);
+	printf("  ");
+	printf("End vaut ");
+	printf("%d", end);
+	printf("  ");
+	printf("last vaut ");
+	printf("%d\n", lastMove);*/
+
 	tabRobots.at(robot)->setPosition(end);
+
+	/*printf("do_move position robot : ");
+	printf("%d\n", tabRobots.at(robot)->getPosition());*/
+
 	last = PACK_MOVE(robot, direction);
 
 	//setRobot(start);
@@ -377,6 +388,7 @@ void Grid::undoMove(unsigned int* undo){
 	unsigned int lastMove = undo[2];
 	unsigned int end = tabRobots.at(robot)->getPosition();
 	tabRobots.at(robot)->setPosition(start);
+
 	last = lastMove;	
 	//setRobot(start);
 	//unsetRobot(end);
@@ -386,14 +398,14 @@ void Grid::undoMove(unsigned int* undo){
 
 bool Grid::checkLeftMove(unsigned int index, unsigned int direction){
 	
-	if (boardOneD[index + OFFSET[direction]] != 4 && boardOneD[index + OFFSET[direction]] != 20 && boardOneD[index + OFFSET[direction]] != 12 && boardOneD[index]!= 2 && boardOneD[index] !=10 && boardOneD[index] !=18){
+	if (boardOneD[index + OFFSET[direction]] != 4 && boardOneD[index + OFFSET[direction]] != 20 && boardOneD[index + OFFSET[direction]] != 12 && boardOneD[index]!= 2 + 1 && boardOneD[index] !=10 + 1 && boardOneD[index] !=18 + 1){
 		return true;
 	}
 	return false;
 }
 
 bool Grid::checkRightMove(unsigned int index, unsigned int direction) {
-	if(boardOneD[index + OFFSET[direction]] != 2 && boardOneD[index + OFFSET[direction]] != 18 && boardOneD[index + OFFSET[direction]] != 10 && boardOneD[index]!= 4 && boardOneD[index] != 20 && boardOneD[index] != 12){
+	if(boardOneD[index + OFFSET[direction]] != 2 && boardOneD[index + OFFSET[direction]] != 18 && boardOneD[index + OFFSET[direction]] != 10 && boardOneD[index]!= 4 + 1 && boardOneD[index] != 20 + 1 && boardOneD[index] != 12 + 1){
 		return true;
 	}
 	return false;
@@ -402,14 +414,14 @@ bool Grid::checkRightMove(unsigned int index, unsigned int direction) {
 
 bool Grid::checkUpMove(unsigned int index, unsigned int direction) {
 
-	if((boardOneD[index + OFFSET[direction]] != 8 && boardOneD[index + OFFSET[direction]] != 12 && boardOneD[index + OFFSET[direction]] != 10 && boardOneD[index] != 16 && boardOneD[index] != 18 && boardOneD[index] != 20)){
+	if((boardOneD[index + OFFSET[direction]] != 8 && boardOneD[index + OFFSET[direction]] != 12 && boardOneD[index + OFFSET[direction]] != 10 && boardOneD[index] != 16+1 && boardOneD[index] != 18 + 1 && boardOneD[index] != 20 + 1)){
 		return true;
 	}
 	return false;
 }
 
 bool Grid::checkDownMove(unsigned int index, unsigned int direction) {
-	if((boardOneD[index + OFFSET[direction]] != 16 && boardOneD[index + OFFSET[direction]] != 20 && boardOneD[index + OFFSET[direction]] != 18 && boardOneD[index] != 8 && boardOneD[index] != 10 && boardOneD[index] != 12)){
+	if((boardOneD[index + OFFSET[direction]] != 16 && boardOneD[index + OFFSET[direction]] != 20 && boardOneD[index + OFFSET[direction]] != 18 && boardOneD[index] != 8 + 1 && boardOneD[index] != 10 + 1 && boardOneD[index] != 12 + 1)){
 		return true;
 	}
 	return false;
@@ -651,7 +663,6 @@ void Grid::deplacerRobot(color c, char dir){
 
 
 unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector <char> path, std::map <unsigned int*, unsigned int> map) {
-		
 	nodes++;
 	
 	if (gameOver()) {
@@ -709,7 +720,6 @@ unsigned int Grid::principalSearch(std::vector <char> path) {
 	precomputeMinimumMoves();
 	for (unsigned int maxDepth = 1; maxDepth < MAX_DEPTH; maxDepth++){ //Tant que l'on a pas réussi
 
-		depth = 0;
 		nodes = 0;
 		hits = 0;
 		inner = 0;
@@ -747,9 +757,7 @@ bool Grid::operator<(unsigned int keyCompare[4]) {
 	return false;
 }
 
-int cpt = 0;
 bool Grid::mapAdd(std::vector<unsigned int> key, unsigned int d){
-	cpt++;
 	//printf("%d\n", cpt);
 	keyFound.clear();
 	std::pair<std::vector<unsigned int>, unsigned int> p;
