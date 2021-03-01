@@ -52,5 +52,12 @@ Robot Robot::operator=(const Robot& rob)
 	return *this;
 }
 
+bool Robot::operator<(const Robot r) const {
+	if (this->position < r.position) {
+		return true;
+	}
+	return false;
+}
+
 
 

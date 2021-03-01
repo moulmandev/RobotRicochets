@@ -87,7 +87,10 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 	cout << "Choix robot goal position: " << tabRobots.at(numRobotTarget)->getPosition() << endl;*/
 
 	unsigned int liste[256] = {9, 1, 5, 1, 3, 9, 1, 1, 1, 3, 9, 1, 1, 1, 1, 3, 8, 2, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 6, 8, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 0, 3, 8, 0, 0, 0, 0, 2, 12, 0, 2, 9, 0, 0, 0, 0, 4, 2, 12, 0, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 3, 10, 9, 0, 0, 0, 3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 6, 8, 0, 0, 0, 0, 4, 4, 0, 0, 2, 12, 0, 0, 2, 8, 1, 0, 0, 0, 0, 2, 9, 3, 8, 0, 0, 1, 0, 0, 2, 8, 0, 4, 0, 2, 12, 2, 12, 6, 8, 0, 0, 0, 0, 0, 6, 8, 18, 9, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 4, 0, 3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 0, 2, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 0, 0, 0, 2, 9, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, 2, 12, 2, 8, 0, 0, 16, 3, 8, 0, 0, 0, 4, 0, 0, 0, 0, 1, 2, 8, 6, 8, 0, 0, 0, 0, 0, 0, 3, 8, 0, 0, 0, 16, 2, 12, 5, 4, 4, 4, 6, 12, 4, 4, 4, 4, 6, 12, 4, 4, 6};
-
+	std::cout << "CASE 54 : " << liste[54] << std::endl;
+	std::cout << "CASE 144 : " << liste[144] << std::endl;
+	std::cout << "CASE 145 : " << liste[145] << std::endl;
+	std::cout << "CASE 146 : " << liste[146] << std::endl;
 	for (int i = 0; i < 256; i++){
 		if (liste[i] == NORTH) {
 			boardOneD[i] = 16;
@@ -141,11 +144,19 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 				if (k == WEST + SOUTH)
 					boardOneD[i] = 10;
 			}
-
 			
 		}
 	}
 
+
+	/*tabRobots.push_back(new Robot(176));
+	boardOneD[176]++;
+	tabRobots.push_back(new Robot(238));
+	boardOneD[238]++;
+	tabRobots.push_back(new Robot(211));
+	boardOneD[211]++;
+	tabRobots.push_back(new Robot(145));
+	boardOneD[145]++;*/
 	tabRobots.push_back(new Robot(176));
 	boardOneD[176]++;
 	tabRobots.push_back(new Robot(145));
@@ -154,28 +165,46 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 	boardOneD[211]++;
 	tabRobots.push_back(new Robot(238));
 	boardOneD[238]++;
-
+	
+	
 	tabRobots[0]->setColor(blue);
-	tabRobots[1]->setColor(red);
+	tabRobots[1]->setColor(yellow);
 	tabRobots[2]->setColor(green);
-	tabRobots[3]->setColor(yellow);
+	tabRobots[3]->setColor(red);
+
+	for (int i = 0; i < 4; i++) {
+		tabRobots[i]->setTarget(false);
+		std::cout << tabRobots[i]->getTarget() << std::endl;
+	}
 
 	goal = 54;
 	last = 0;
 	numRobotTarget = 0;
 	tabRobots.at(numRobotTarget)->setTarget(true);
 
-	std::sort(tabRobots.begin() + 1, tabRobots.begin() + 4);
-
-	/*printf("Case 208 : ");
-	printf("%d\n", boardOneD[208]);
-	printf("Case haut 192 : ");
-	printf("%d\n", boardOneD[192]);*/
-
 	afficherGrille();
 	std::cout << std::endl;
 	
 }
+
+void Grid::swap(std::vector <unsigned int> tab, int first, int second) {
+	unsigned int tmp = tab.at(first);
+	tab.at(first) = tab.at(second);
+	tab.at(second) = tmp;
+}
+
+void Grid::robotSorter(std::vector <unsigned int> tab) {
+	if (tab[2] < tab[1]) {
+		swap(tab,1, 2);
+	}
+	if (tab[3] < tab[2]) {
+		swap(tab,2, 3);
+	}
+	if (tab[2] < tab[1]) {
+		swap(tab, 1, 2);
+	}
+}
+
 
 void Grid::afficherMoves(){
 	for (int i = 0; i < 256; i++) {	
@@ -191,7 +220,7 @@ void Grid::afficherMoves(){
 }
 
 void Grid::afficherGrille(){
-
+	
 	srand(time(NULL));
 
 	for (int i = 1; i <= 256; i++) {
@@ -207,20 +236,26 @@ void Grid::afficherGrille(){
 			if (boardOneD[i - 1] == 1) {
 				for (int j = 0; j < 4; j++) {
 					if (tabRobots[j]->getPosition() == i - 1) {
-						switch (tabRobots[j]->getColor())
-						{
-						case red:
-							std::cout << "R\t";
-							break;
-						case green:
-							std::cout << "G\t";
-							break;
-						case blue:
-							std::cout << "B\t";
-							break;
-						case yellow:
-							std::cout << "Y\t";
-							break;
+						if (tabRobots[j]->getTarget()) {
+							std::cout << "M\t";
+						}
+						else {
+							switch (tabRobots[j]->getColor())
+							{
+							case red:
+								std::cout << "R\t";
+								break;
+							case green:
+								std::cout << "G\t";
+								break;
+							case blue:
+								std::cout << "B\t";
+								break;
+							case yellow:
+								std::cout << "Y\t";
+								break;
+
+							}
 						}
 					}
 				}
@@ -229,21 +264,27 @@ void Grid::afficherGrille(){
 			else {
 				for (int j = 0; j < 4; j++) {
 					if (tabRobots[j]->getPosition() == i - 1) {
-						switch (tabRobots[j]->getColor())
-						{
-						case red:							
-							std::cout << boardOneD[i - 1] - 1 << "R\t";
-							break;
-						case green:
-							std::cout << boardOneD[i - 1] - 1 << "G\t";
-							break;
-						case blue:
-							std::cout << boardOneD[i - 1] - 1 << "B\t";
-							break;
-						case yellow:
-							std::cout << boardOneD[i - 1] - 1 << "Y\t";
-							break;
+						if (tabRobots[j]->getTarget()) {
+							std::cout << "M\t";
 						}
+					else {
+						switch (tabRobots[j]->getColor())
+							{
+							case red:							
+								std::cout << boardOneD[i - 1] - 1 << "R\t";
+								break;
+							case green:
+								std::cout << boardOneD[i - 1] - 1 << "G\t";
+								break;
+							case blue:
+								std::cout << boardOneD[i - 1] - 1 << "B\t";
+								break;
+							case yellow:
+								std::cout << boardOneD[i - 1] - 1 << "Y\t";
+								break;
+							}
+					}
+						
 					}
 				}
 			}
@@ -265,6 +306,7 @@ std::vector<unsigned int> Grid::makeKey(){
 	for (int i = 0; i < NB_ROBOTS; i++) {
 		tabRobotsCopy.push_back(tabRobots[i]->getPosition());//tabRobots[i] deja triés à partir de tabRobots[1]
 	}	
+	robotSorter(tabRobotsCopy);
 	return tabRobotsCopy;
 }
 
@@ -278,9 +320,10 @@ inline bool Grid::gameOver() {
 		return false;
 	}
 }
-
+int cpt = 0;
 bool Grid::canMove(unsigned int robot, unsigned int direction) {
-	
+	cpt++;	
+
 	unsigned int index = tabRobots.at(robot)->getPosition();
 
 	if (hasWall(index, direction)) {//S'il y a un mur
@@ -310,21 +353,24 @@ bool Grid::hasWall(unsigned int index, unsigned int direction){
 }
 
 bool Grid::hasRobot(unsigned int index, unsigned int direction) {
-	if (boardOneD[index + OFFSET[direction]] == 176 || boardOneD[index + OFFSET[direction]] == 145 || boardOneD[index + OFFSET[direction]] == 211 || boardOneD[index + OFFSET[direction]] == 238) {//S'il y a un robot
+	if (boardOneD[index + OFFSET[direction]]%2==1) {//S'il y a un robot
 		return true;
 	}
 	return false;
 }
 
+
+
 unsigned int Grid::computeMove(unsigned int robot, unsigned int direction) {//Regarde si déplacement possible
 	
 	unsigned int index = tabRobots.at(robot)->getPosition() + OFFSET[direction];
-	//printf("%d\n", index);
+
 	while (true) {
 		if (hasWall(index, direction)){
 			break;
 		}	
 		unsigned int newIndex = index + OFFSET[direction];
+
 		if (hasRobot(index, direction)) {//S'il y a un robot
 			break;
 		}
@@ -335,39 +381,40 @@ unsigned int Grid::computeMove(unsigned int robot, unsigned int direction) {//Re
 
 //int cpt = 0;
 unsigned int* Grid::doMove(unsigned int robot, unsigned int direction) {
-	/*printf("doMove avec ");
-	printf("robot : ");
-	printf("%d", robot);
-	printf(" ");
-	printf("direction : ");
-	printf("%d\n", direction);*/
-
+	
 	unsigned int start = tabRobots.at(robot)->getPosition();//Position de départ du robot goal
 	unsigned int end = computeMove(robot, direction);//position d'arrivée du robot goal	
 	unsigned int lastMove = last;
 
-	/*printf("Start vaut ");
-	printf("%d", start);
-	printf("  ");
-	printf("End vaut ");
-	printf("%d", end);
-	printf("  ");
-	printf("last vaut ");
-	printf("%d\n", lastMove);*/
+	/*std::cout << "--------------------------------" << std::endl;
+	std::cout << "--------------------------------" << std::endl;
+
+	std::cout << "start: " << start << std::endl;
+	std::cout << "end: " << end << std::endl;
+	std::cout << "lastMove: " << lastMove << std::endl;*/
 
 	tabRobots.at(robot)->setPosition(end);
 
-	/*printf("do_move position robot : ");
-	printf("%d\n", tabRobots.at(robot)->getPosition());*/
-
 	last = PACK_MOVE(robot, direction);
 
-	//setRobot(start);
-	//unsetRobot(end);
+	/*std::cout << "robot: " << robot << std::endl;
+	std::cout << "direction: " << direction << std::endl;
+	std::cout << "last: " << last << std::endl;
+	std::cout << "unset boardOneD: " << boardOneD[start] << std::endl;*/
+
 	UNSET_ROBOT(boardOneD[start]);
+	/*std::cout << "unset boardOneD: " << boardOneD[start] << std::endl;
+	std::cout << "set boardOneD: " << boardOneD[end] << std::endl;*/
 	SET_ROBOT(boardOneD[end]);
+	//std::cout << "set boardOneD: " << boardOneD[end] << std::endl;
 
 	unsigned int* tabMove = new unsigned int[3];
+	/*std::cout << "robot: " << robot << std::endl;
+	std::cout << "start: " << start << std::endl;
+	std::cout << "lastMove: " << lastMove << std::endl;
+
+	std::cout << "--------------------------------" << std::endl;
+	std::cout << "--------------------------------" << std::endl;*/
 	tabMove[0] = robot;
 	tabMove[1] = start;
 	tabMove[2] = lastMove;
@@ -387,25 +434,41 @@ void Grid::undoMove(unsigned int* undo){
 	unsigned int start = undo[1];
 	unsigned int lastMove = undo[2];
 	unsigned int end = tabRobots.at(robot)->getPosition();
+
+	/*printf("-------Undo move-------\n");
+	printf("robot : %d\n", robot);
+	printf("start : %d\n", start);
+	printf("lastMove : %d\n", lastMove);
+	printf("end : %d", end),
+	printf("Position avant : %d\n", tabRobots.at(robot)->getPosition()),*/
 	tabRobots.at(robot)->setPosition(start);
+	//printf("Position apres : %d\n", tabRobots.at(robot)->getPosition()),
 
 	last = lastMove;	
-	//setRobot(start);
-	//unsetRobot(end);
+	/*printf("last : %d\n", last),
+	printf("lastMove : %d\n", lastMove),
+
+	printf("Avant boardOneD[start] : %d\n", boardOneD[start]);
+	printf("Avant boardOneD[end] : %d\n", boardOneD[end]);*/
+
 	SET_ROBOT(boardOneD[start]);
 	UNSET_ROBOT(boardOneD[end]);
+
+	/*printf("Apres boardOneD[start] : %d\n", boardOneD[start]);
+	printf("Apres boardOneD[end] : %d\n", boardOneD[end]);*/
+
 }
 
 bool Grid::checkLeftMove(unsigned int index, unsigned int direction){
 	
-	if (boardOneD[index + OFFSET[direction]] != 4 && boardOneD[index + OFFSET[direction]] != 20 && boardOneD[index + OFFSET[direction]] != 12 && boardOneD[index]!= 2 + 1 && boardOneD[index] !=10 + 1 && boardOneD[index] !=18 + 1){
+	if (boardOneD[index + OFFSET[direction]] != 4 && boardOneD[index + OFFSET[direction]] != 20 && boardOneD[index + OFFSET[direction]] != 12 && boardOneD[index + OFFSET[direction]] != 6 && boardOneD[index]!= 2 + 1 && boardOneD[index] !=10 + 1 && boardOneD[index] !=18 + 1 && boardOneD[index] != 6+1 && boardOneD[index] != 2 && boardOneD[index] != 10 && boardOneD[index] != 18 && boardOneD[index] != 6){
 		return true;
 	}
 	return false;
 }
 
 bool Grid::checkRightMove(unsigned int index, unsigned int direction) {
-	if(boardOneD[index + OFFSET[direction]] != 2 && boardOneD[index + OFFSET[direction]] != 18 && boardOneD[index + OFFSET[direction]] != 10 && boardOneD[index]!= 4 + 1 && boardOneD[index] != 20 + 1 && boardOneD[index] != 12 + 1){
+	if(boardOneD[index + OFFSET[direction]] != 2 && boardOneD[index + OFFSET[direction]] != 18 && boardOneD[index + OFFSET[direction]] != 10 && boardOneD[index + OFFSET[direction]]!=6 && boardOneD[index]!= 4 + 1 && boardOneD[index] != 20 + 1 && boardOneD[index] != 12 + 1 && boardOneD[index] != 6+1 && boardOneD[index] != 4 && boardOneD[index] != 20 && boardOneD[index] != 12 && boardOneD[index] != 6){
 		return true;
 	}
 	return false;
@@ -413,15 +476,15 @@ bool Grid::checkRightMove(unsigned int index, unsigned int direction) {
 
 
 bool Grid::checkUpMove(unsigned int index, unsigned int direction) {
-
-	if((boardOneD[index + OFFSET[direction]] != 8 && boardOneD[index + OFFSET[direction]] != 12 && boardOneD[index + OFFSET[direction]] != 10 && boardOneD[index] != 16+1 && boardOneD[index] != 18 + 1 && boardOneD[index] != 20 + 1)){
+	
+	if((boardOneD[index + OFFSET[direction]] != 8 && boardOneD[index + OFFSET[direction]]!=24 && boardOneD[index + OFFSET[direction]] != 12 && boardOneD[index + OFFSET[direction]] != 10 && boardOneD[index] != 16+1 && boardOneD[index] != 18 + 1 && boardOneD[index] != 20 + 1 && boardOneD[index] != 24+1 && boardOneD[index] != 16 && boardOneD[index] != 18 && boardOneD[index] != 20 && boardOneD[index] != 24)){
 		return true;
 	}
 	return false;
 }
 
 bool Grid::checkDownMove(unsigned int index, unsigned int direction) {
-	if((boardOneD[index + OFFSET[direction]] != 16 && boardOneD[index + OFFSET[direction]] != 20 && boardOneD[index + OFFSET[direction]] != 18 && boardOneD[index] != 8 + 1 && boardOneD[index] != 10 + 1 && boardOneD[index] != 12 + 1)){
+	if((boardOneD[index + OFFSET[direction]] != 16 && boardOneD[index + OFFSET[direction]] != 24 && boardOneD[index + OFFSET[direction]] != 20 && boardOneD[index + OFFSET[direction]] != 18 && boardOneD[index] != 8 + 1 && boardOneD[index] != 10 + 1 && boardOneD[index] != 12 + 1 && boardOneD[index] != 24+1 && boardOneD[index] != 8 && boardOneD[index] != 10 && boardOneD[index] != 12 && boardOneD[index] != 24)){
 		return true;
 	}
 	return false;
@@ -664,21 +727,28 @@ void Grid::deplacerRobot(color c, char dir){
 
 unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector <char> path, std::map <unsigned int*, unsigned int> map) {
 	nodes++;
+	//printf("Nodes++: %d\n",nodes);
 	
 	if (gameOver()) {
 		return depth;// Gagné, en "depth" déplacements
-		std::cout << "Gagné " << std::endl;
+		//printf("game over\n");
 	}
 	if (depth == maxDepth) {// perdu
-		//cout << "Perdu" << endl;
+		/*printf("depth == max_depth\n");
+		printf("depth : %d\n", depth);
+		printf("max_depth : %d\n", maxDepth);*/
 		return 0;
 	}
 	unsigned int remainingDepth = maxDepth - depth;
 
 	if (moves[getRobotGoal()->getPosition()] > remainingDepth) {//Plus de déplacements que ce qu'il reste pour aller au goal
-		//cout << "Perdu 2 " << endl;
+		/*printf("game->moves[game->robots[0]] > height\n");
+		printf("height : %d\n", remainingDepth);
+		printf("game->moves[game->robots[0]] : %d\n", moves[getRobotGoal()->getPosition()]);*/
 		return 0;
 	}
+	/*printf("height != 1 && !set_add(set, make_key(game), height)\n");
+	printf("height : %d\n", remainingDepth);*/
 
 	if (remainingDepth != 1 && !mapAdd(makeKey(), remainingDepth)) {//Si on n'a pas pu ajouter tel déplacement à la map
 		hits++;
@@ -686,21 +756,76 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector
 	}
 	inner++;
 	for (unsigned int robot = 0; robot < 4; robot++) {//Pour chaque robot
+		//printf("Nouveau robot\n");
 	
 		if (robot && moves[tabRobots[numRobotTarget]->getPosition()] == remainingDepth) {
 			continue;
 		}
 		for (unsigned int direction = 1; direction <= 8; direction <<= 1) {
+			//printf("Nouvelle direction\n");
 			if (!canMove(robot, direction)) {
-				//cout << "Continue2" << endl;
 				continue;
 			}			
 		
 			unsigned int* undo = doMove(robot, direction);
+			/*Ok*/
 			unsigned int result = search(depth + 1, maxDepth, path, map);
 			undoMove(undo);
+			//printf("Apres undo\n");
 			if (result) {
-				path[depth] = PACK_MOVE(robot, direction);
+				//printf("Result\n");
+				path.push_back(PACK_MOVE(robot, direction));
+				char c = ' ';
+				char r = ' ';
+				int numRobot = 0;
+				for (int i = 0; i < path.size(); ++i) {
+					std::cout << "CELA VAUT :  " << (path[i] & 0x0f) << std::endl;
+					std::string s = "";
+					if ((path[i] & 0x0f) == NORTH) {
+						c = 'N';
+						std::cout << "Ok c'est bon trouve NORD " << std::endl;
+					}
+					if ((path[i] & 0x0f) == EAST) {
+						std::cout << "Ok c'est bon trouve EAST " << std::endl;
+						c = 'E';
+					}
+					if ((path[i] & 0x0f) == SOUTH) {
+						std::cout << "Ok c'est bon trouve Sud " << std::endl;
+						c = 'S';
+					}
+					if ((path[i] & 0x0f) == WEST) {
+						c = 'O';
+						std::cout << "Ok c'est bon trouve Ouest " << std::endl;
+					}
+
+			
+					if (tabRobots[path[i] >> 4]->getColor() == blue) {
+						r = 'B';
+					}
+					else if (tabRobots[path[i] >> 4]->getColor() == red) {
+						r = 'R';
+					}
+					else if (tabRobots[path[i] >> 4]->getColor() == green) {
+						r = 'G';
+					}
+					else if (tabRobots[path[i] >> 4]->getColor() == yellow) {
+						r = 'Y';
+					}
+					else if (tabRobots[path[i] >> 4]->getColor() == purple) {
+						r = 'P';
+					}
+					else if (tabRobots[path[i] >> 4]->getColor() == pink) {
+						r = 'P';
+					}
+					else if (tabRobots[path[i] >> 4]->getColor() == black) {
+						r = 'B';
+					}
+					else if (tabRobots[path[i] >> 4]->getColor() == cyan) {
+						r = 'C';
+					}				
+
+					printf("\t\t%d- %c ->%c\n", i, r, c);
+				}
 				return result;
 			}
 		}
@@ -725,6 +850,7 @@ unsigned int Grid::principalSearch(std::vector <char> path) {
 		inner = 0;
 
 		resultDepth = search(0, maxDepth, path, map);
+		
 		pathSave(maxDepth, nodes, inner, hits);
 		
 		if (resultDepth) {//Si robotGoal à goal
@@ -736,7 +862,6 @@ unsigned int Grid::principalSearch(std::vector <char> path) {
 	//mapSearch.clear();
 	std::cout << "map deleted" << std::endl;
 	return resultDepth;
-	return 0;
 }
 
 void Grid::pathSave(unsigned int maxDepth, unsigned int nodes, unsigned int inner, unsigned int hits) {
@@ -758,7 +883,16 @@ bool Grid::operator<(unsigned int keyCompare[4]) {
 }
 
 bool Grid::mapAdd(std::vector<unsigned int> key, unsigned int d){
-	//printf("%d\n", cpt);
+	std::sort(key.begin() + 1, key.end());
+	/*printf("On est dans mapAdd\n");
+
+	printf("key[0] : %d\n", key[0]);
+	printf("key[1] : %d\n", key[1]);
+	printf("key[2] : %d\n", key[2]);
+	printf("key[3] : %d\n", key[3]);
+
+	printf("taille, %d\n", mapSearch.size());*/
+
 	keyFound.clear();
 	std::pair<std::vector<unsigned int>, unsigned int> p;
 	std::map<std::vector<unsigned int>, unsigned int>::iterator m = mapSearch.begin();
@@ -766,21 +900,29 @@ bool Grid::mapAdd(std::vector<unsigned int> key, unsigned int d){
 	
 	while(m!=mapSearch.end()){
 		if (m->first == key) {//Si la position existe ds la map
+			/*printf("la position existe ds la map\n");
+			printf("m->first, %d\n", m->first);
+			printf("key, %d\n", key);*/
 			found = 1;
 			for (int i = 0; i < NB_ROBOTS; i++) {
 				keyFound.push_back(key[i]);
 			}
 		
-			if (m->second < d) {//Si nouvelle distance restante meilleure que l'ancienne				
+			if (m->second < d) {//Si nouvelle distance restante meilleure que l'ancienne
+				/*printf("nouvelle distance restante meilleure que l'ancienne\n");
+				printf("m->second, %d\n", m->second);
+				printf("d, %d\n", d);*/
 				m->second = d;
 				return true;
 			}
+			//printf("m->second > d\n");
 			return false;
 		}		
 		m++;
 	}
 
 	if(found==0 || mapSearch.size() == 0){
+		//printf("fouuuund\n");
 		p.first = key;
 		p.second = d;
 		mapSearch.insert(p);

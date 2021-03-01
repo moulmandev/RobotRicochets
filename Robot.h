@@ -19,4 +19,5 @@ public:
 	~Robot();
 
 	Robot operator=(const Robot&);
+	bool operator<(const Robot) const;
 };

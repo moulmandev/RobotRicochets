@@ -24,6 +24,8 @@ private:
 
 public:
 	Grid();
+	void swap(std::vector <unsigned int>,int, int);
+	void robotSorter(std::vector <unsigned int>);
 	void afficherGrille();
 	void afficherMoves();
 	Robot* getRobotGoal();
