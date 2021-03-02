@@ -5,7 +5,7 @@
 #include <vector>
 #include <set>
 #include <map>
-#include "Entry.h"
+#include "constants.h"
 
 class Grid {
 private:
@@ -25,7 +25,8 @@ private:
 public:
 	Grid();
 	void swap(std::vector <unsigned int>,int, int);
-	void robotSorter(std::vector <unsigned int>);
+	void positionSorter(std::vector <unsigned int>);
+	void tabRobotSorter();
 	void afficherGrille();
 	void afficherMoves();
 	Robot* getRobotGoal();
