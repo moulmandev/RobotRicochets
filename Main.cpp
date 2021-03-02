@@ -61,25 +61,22 @@ public:
 		auto container = Wt::cpp14::make_unique<Wt::WContainerWidget>();
 
 		// Create a navigation bar with a link to a web page.
-		Wt::WNavigationBar* navigation = container->addNew<Wt::WNavigationBar>();
-		navigation->setTitle("Corpy Inc.",
-			"https://www.google.com/search?q=corpy+inc");
+		Wt::WNavigationBar* navigation = root()->addNew<Wt::WNavigationBar>();
+		navigation->setTitle("Ricochet Robots",	"http://localhost:8080/");
 		navigation->setResponsive(true);
 
-		Wt::WStackedWidget* contentsStack = container->addNew<Wt::WStackedWidget>();
+		Wt::WStackedWidget* contentsStack = root()->addNew<Wt::WStackedWidget>();
 		contentsStack->addStyleClass("contents");
 
 		// Setup a Left-aligned menu.
 		auto leftMenu = Wt::cpp14::make_unique<Wt::WMenu>(contentsStack);
 		auto leftMenu_ = navigation->addMenu(std::move(leftMenu));
 
-		auto searchResult = Wt::cpp14::make_unique<Wt::WText>("Buy or Sell... Bye!");
-		auto searchResult_ = searchResult.get();
-
-		leftMenu_->addItem("Home", Wt::cpp14::make_unique<Wt::WText>("There is no better place!"));
-		leftMenu_->addItem("Layout", Wt::cpp14::make_unique<Wt::WText>("Layout contents"))
+		leftMenu_->addItem("Accueil", Wt::cpp14::make_unique<Wt::WText>("There is no better place!"));
+		leftMenu_->addItem("Regles du jeu", Wt::cpp14::make_unique<Wt::WText>("Layout contents"))
 			->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/layout"));
-		leftMenu_->addItem("Sales", std::move(searchResult));
+		leftMenu_->addItem("Jouer", Wt::cpp14::make_unique<Wt::WText>("There is no better place!"));
+
 
 		// Setup a Right-aligned menu.
 		auto rightMenu = Wt::cpp14::make_unique<Wt::WMenu>();
@@ -96,8 +93,7 @@ public:
 		popup->itemSelected().connect([=](Wt::WMenuItem* item) {
 			auto messageBox = popup->addChild(
 				Wt::cpp14::make_unique<Wt::WMessageBox>
-				("Help",
-					Wt::WString("<p>Showing Help: {1}</p>").arg(item->text()),
+				("Help", Wt::WString("<p>Showing Help: {1}</p>").arg(item->text()),
 					Wt::Icon::Information,
 					Wt::StandardButton::Ok));
 
@@ -106,7 +102,7 @@ public:
 				});
 
 			messageBox->show();
-			});
+		});
 
 		auto item = Wt::cpp14::make_unique<Wt::WMenuItem>("Help");
 		item->setMenu(std::move(popupPtr));
@@ -117,18 +113,19 @@ public:
 		auto edit = editPtr.get();
 		edit->setPlaceholderText("Enter a search item");
 
-		edit->enterPressed().connect([=] {
-			leftMenu_->select(2); // is the index of the "Sales"
-			searchResult_->setText(Wt::WString("Nothing found for {1}.")
-				.arg(edit->text()));
-			});
-
 		navigation->addSearch(std::move(editPtr), Wt::AlignmentFlag::Right);
 
 	}
 
+	void afficherReglesJeu() {
+		Wt::WText* pageTitle = root()->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Regles du jeu</h1>")));
+		Wt::WFont fontTitle;
+		fontTitle.setFamily(Wt::FontFamily::Monospace, "'Courier New'");
+		fontTitle.setSize(45);
 
-
+		Wt::WText* pageTitle = root()->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Regles du jeu</h1>\n <p Faire parvenir le robot objectif a la case objectif en utilisant tous les robots disponibles")));
+	}
+	
 	void menuPrincipalAlgorithmeResolution() {
 
 		setTitle("Resolution algorithme");
@@ -262,9 +259,9 @@ private:
 HelloApplication::HelloApplication(const Wt::WEnvironment& env)
 	: Wt::WApplication(env)
 {
-
+	afficherReglesJeu();
 	//menuPrincipalAlgorithmeResolution();
-	menuAccueil();
+	//menuAccueil();
 
 }
 
@@ -276,63 +273,6 @@ int main(int argc, char** argv) {
 	
 	cout << "Chemin a suivre : " << endl;
 	cout << grille->principalSearch(path) << endl;
-
-	/*grille->afficherGrille();
-	vector <char> path;
-	grille->principalSearch(path);
-
-	color selectColor;
-	char selectColorC;*/
-
-	/*while (1) {
-		cout << "Choisir une couleur (r/g/b/y) :";
-		cin >> selectColorC;
-		switch (selectColorC)
-
-		{
-
-		case 'r':
-			selectColor = red;
-			break;
-
-		case 'g':
-			selectColor = green;
-			break;
-
-		case 'b':
-			selectColor = blue;
-			break;
-
-		case 'y':
-			selectColor = yellow;
-			break;
-
-		}
-		char selectDir;
-		cout << "Choisir une direction (z/q/s/d) :";
-		cin >> selectDir;
-
-
-		grille->deplacerRobot(selectColor, selectDir);
-		cout << endl << endl;
-		grille->afficherGrille();
-		cout << endl << endl;
-	}*/
-
-	/*User* u = new User[2];
-	u[0].setIdUser(1);
-	u[0].setNom("Dupont");
-	u[0].setPrenom("Paul");
-	u[0].setInvite(0);
-	u[0].setPseudo("PseudoPaul");
-
-	u[1].setIdUser(2);
-	u[1].setNom("Dupons");
-	u[1].setPrenom("Jean");
-	u[1].setInvite(1);
-	u[1].setPseudo("PseudoJean");
-	cout << "Tout fait " << endl;*/
-
 
 	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
 	return std::make_unique<HelloApplication>(env);
