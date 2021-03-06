@@ -10,8 +10,8 @@ private:
 	bool target;
 public:
 	Robot(unsigned int);
-	bool getTarget();
-	color getColor();
+	const bool getTarget();
+	const color getColor();
 	void setColor(color);
 	void setTarget(bool);
 	void setPosition(unsigned int);

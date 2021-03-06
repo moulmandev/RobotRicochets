@@ -10,7 +10,7 @@ Robot::Robot(unsigned int k): position(k){
 	c = (color)(rand() % 8);
 }
 
-bool Robot::getTarget() {
+const bool Robot::getTarget() {
 	return target;
 }
 
@@ -27,7 +27,7 @@ void Robot::setColor(color col)
 	c = col;
 }
 
-color Robot::getColor()
+const color Robot::getColor()
 {
 	return c;
 }

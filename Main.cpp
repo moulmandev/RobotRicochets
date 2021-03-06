@@ -2,38 +2,32 @@
 #include <Wt/WBreak.h>
 #include <Wt/WContainerWidget.h>
 #include<Wt/WLineEdit.h>
+#include "Database.h"
+#include <Wt/WSelectionBox.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WText.h>
-#include "Game.h"
 #include "Grid.h"
 #include "User.h"
-
 #include <Wt/WTemplate.h>
-
 #include <Wt/WBreak.h>
 #include <Wt/WContainerWidget.h>
 #include <Wt/WMenu.h>
 #include <Wt/WStackedWidget.h>
 #include <Wt/WTextArea.h>
-
 #include <Wt/WTable.h>
 #include <Wt/WTableCell.h>
 #include <Wt/WText.h>
 #include <Wt/WTableView.h>
 #include <Wt/WCssDecorationStyle.h>
-#include <Wt/WImage.h>
 #include <Wt/WApplication.h>
 #include <Wt/WStandardItemModel.h>
 #include <Wt/WAbstractItemModel.h>
 #include <Wt/WColor.h>
-#include <Wt/WCssDecorationStyle.h>
 #include <Wt/WFont.h>
 #include <Wt/WVBoxLayout.h>
 #include <Wt/WFlags.h>
-#include <Wt/WStandardItemModel.h>
 #include <Windows.h>
 #include <cmath>
-
 #include <Wt/WLineEdit.h>
 #include <Wt/WMenu.h>
 #include <Wt/WMessageBox.h>
@@ -42,6 +36,19 @@
 #include <Wt/WPopupMenuItem.h>
 #include <Wt/WStackedWidget.h>
 #include <Wt/WText.h>
+#include <Wt/Dbo/backend/Sqlite3.h>
+#include <Wt/WContainerwidget.h>
+#include "stdio.h"
+#include <Wt/WIntValidator.h>
+#include <Wt/WLineEdit.h>
+#include <Wt/WTemplate.h>
+#include <Wt/Chart/WPieChart.h>
+#include <Wt/WApplication.h>
+#include <Wt/WContainerWidget.h>
+#include <Wt/WEnvironment.h>
+#include <Wt/WStandardItemModel.h>
+#include <Wt/WStandardItem.h>
+#include <Wt/WTableView.h>
 
 
 
@@ -51,79 +58,78 @@ using namespace std;
 Grid* grille;
 
 
+
 class HelloApplication : public Wt::WApplication
 {
 public:
 	HelloApplication(const Wt::WEnvironment& env);
 
-	void menuAccueil() {
+	
+	void SubscriptionForm() {
+		root()->clear();
 
-		auto container = Wt::cpp14::make_unique<Wt::WContainerWidget>();
+		Wt::WLineEdit* editLogin = root()->addNew<Wt::WLineEdit>();
+		editLogin->setPlaceholderText("Login");
 
-		// Create a navigation bar with a link to a web page.
-		Wt::WNavigationBar* navigation = root()->addNew<Wt::WNavigationBar>();
-		navigation->setTitle("Ricochet Robots",	"http://localhost:8080/");
-		navigation->setResponsive(true);
-
-		Wt::WStackedWidget* contentsStack = root()->addNew<Wt::WStackedWidget>();
-		contentsStack->addStyleClass("contents");
-
-		// Setup a Left-aligned menu.
-		auto leftMenu = Wt::cpp14::make_unique<Wt::WMenu>(contentsStack);
-		auto leftMenu_ = navigation->addMenu(std::move(leftMenu));
-
-		leftMenu_->addItem("Accueil", Wt::cpp14::make_unique<Wt::WText>("There is no better place!"));
-		leftMenu_->addItem("Regles du jeu", Wt::cpp14::make_unique<Wt::WText>("Layout contents"))
-			->setLink(Wt::WLink(Wt::LinkType::InternalPath, "/layout"));
-		leftMenu_->addItem("Jouer", Wt::cpp14::make_unique<Wt::WText>("There is no better place!"));
+		Wt::WLineEdit* editPassword = root()->addNew<Wt::WLineEdit>();
+		editPassword->setPlaceholderText("Mot de passe");
 
 
-		// Setup a Right-aligned menu.
-		auto rightMenu = Wt::cpp14::make_unique<Wt::WMenu>();
-		auto rightMenu_ = navigation->addMenu(std::move(rightMenu), Wt::AlignmentFlag::Right);
+		Wt::WSelectionBox* sb1 = root()->addNew<Wt::WSelectionBox>();
+		sb1->addItem("France");
+		sb1->addItem("Belgique");
+		sb1->addItem("Royaume-Unis");
+		sb1->addItem("Espagne");
+		sb1->addItem("Pays-bas");
 
-		// Create a popup submenu for the Help menu.
-		auto popupPtr = Wt::cpp14::make_unique<Wt::WPopupMenu>();
-		auto popup = popupPtr.get();
-		popup->addItem("Contents");
-		popup->addItem("Index");
-		popup->addSeparator();
-		popup->addItem("About");
+		sb1->setCurrentIndex(1); // Select 'medium' by default.
+		sb1->setMargin(10, Wt::Side::Right);
 
-		popup->itemSelected().connect([=](Wt::WMenuItem* item) {
-			auto messageBox = popup->addChild(
-				Wt::cpp14::make_unique<Wt::WMessageBox>
-				("Help", Wt::WString("<p>Showing Help: {1}</p>").arg(item->text()),
-					Wt::Icon::Information,
-					Wt::StandardButton::Ok));
+		Wt::WText* out = root()->addNew<Wt::WText>("");
 
-			messageBox->buttonClicked().connect([=] {
-				popup->removeChild(messageBox);
-				});
+		sb1->activated().connect([=] {
+			out->setText(Wt::WString("You selected {1}.")
+				.arg(sb1->currentText()));
+			});
 
-			messageBox->show();
+		Wt::WPushButton* SubscriptionButton = root()->addNew<Wt::WPushButton>("Valider");
+
+		SubscriptionButton->clicked().connect([=] {
+			if (editLogin->text().empty() || editPassword->text().empty()){
+				root()->addWidget(std::make_unique<Wt::WText>("Veuillez remplir tous les champs"));
+			}
+			db->addUserToDatabase(editLogin->text().toUTF8(), editPassword->text().toUTF8());
+
 		});
-
-		auto item = Wt::cpp14::make_unique<Wt::WMenuItem>("Help");
-		item->setMenu(std::move(popupPtr));
-		rightMenu_->addItem(std::move(item));
-
-		// Add a Search control.
-		auto editPtr = Wt::cpp14::make_unique<Wt::WLineEdit>();
-		auto edit = editPtr.get();
-		edit->setPlaceholderText("Enter a search item");
-
-		navigation->addSearch(std::move(editPtr), Wt::AlignmentFlag::Right);
-
 	}
 
 	void afficherReglesJeu() {
+
+		Wt::WLink link = Wt::WLink("http://localhost:8080/");
+		link.setTarget(Wt::LinkTarget::NewWindow);
+		root()->addNew<Wt::WAnchor>(link)->addNew<Wt::WImage>(Wt::WLink("https://www.emweb.be/css/emweb_small.png"));////////////////////////////////METTRE LOGO JEUU
+
 		Wt::WText* pageTitle = root()->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Regles du jeu</h1>")));
 		Wt::WFont fontTitle;
-		fontTitle.setFamily(Wt::FontFamily::Monospace, "'Courier New'");
-		fontTitle.setSize(45);
 
-		Wt::WText* pageTitle = root()->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Regles du jeu</h1>\n <p Faire parvenir le robot objectif a la case objectif en utilisant tous les robots disponibles")));
+		fontTitle.setFamily(Wt::FontFamily::Monospace, "'Courier New'");
+		fontTitle.setSize(12);
+
+		pageTitle->decorationStyle().setFont(fontTitle); 
+		Wt::WText* ExplanationsRules = root()->addWidget(std::make_unique<Wt::WText>("Trouvez le chemin le plus rapide pour emmener le robot objectif à la case object, en vous aidant des murs et de tous les autres robots\n Pour cela, cliquez sur l'un des robots, et indiquez là où vous souhaitez qu'il se dirige.\n"));
+		Wt::WFont fontRules;
+		fontRules.setFamily(Wt::FontFamily::Fantasy, "'Western'");
+		fontRules.setSize(12);
+		ExplanationsRules->decorationStyle().setFont(fontRules);		
+		Wt::WImage* image = root()->addNew<Wt::WImage>(Wt::WLink("https://img1.freepng.fr/20171220/zcw/attention-png-5a3a85cd8fadc8.8287464015137847815885.jpg"));//////////////////////////////METTRE PHOTO ATTENTION
+		image->setMaximumSize(30, 240);
+		Wt::WText* textWarning = root()->addWidget(std::make_unique<Wt::WText>("Attention, votre robot ne pas s'arreter autre part que contre un mur ou contre un robot\n"));
+		Wt::WFont fontWarning;
+		fontWarning.setStyle(Wt::FontStyle::Italic);
+
+
+		Wt::WImage* imageLogo = root()->addNew<Wt::WImage>(Wt::WLink("https://www.regledujeu.fr/wp-content/uploads/ricochet-robots-plateau.jpg"));//////////////////////////////METTRE PHOTO JEUU
+
 	}
 	
 	void menuPrincipalAlgorithmeResolution() {
@@ -159,8 +165,7 @@ public:
 		ExplanationsPage->decorationStyle().setFont(fontExplanations);
 
 		
-		//root()->setPadding(12, Wt::WFlags<Wt::Side::CenterX>);
-		
+
 		btnPrecomputeMinMoves = root()->addWidget(std::make_unique<Wt::WPushButton>("Precompute minimum moves"));		
 		btnSolutionPath = root()->addWidget(std::make_unique<Wt::WPushButton>("Shortest path"));
 
@@ -208,10 +213,86 @@ public:
 			}
 		}
 	
-	}	
+	}
 
+	void displayUserStatistics(int id) {
+		root()->clear();
+		root()->addWidget(std::make_unique<Wt::WText>("Login\n"));
+	}
+
+	void connectionForm(){
+		root()->clear();
+
+		Wt::WLineEdit* editLogin = root()->addNew<Wt::WLineEdit>();
+		editLogin->setPlaceholderText("Login");
+
+		Wt::WLineEdit* editPassword = root()->addNew<Wt::WLineEdit>();
+		editPassword->setPlaceholderText("Mot de passe");
+
+		Wt::WPushButton* connectionButton = root()->addNew<Wt::WPushButton>();
+		connectionButton->setText("Se connecter");
+
+		Wt::WPushButton* subscriptionButton = root()->addNew<Wt::WPushButton>();
+		subscriptionButton->setText("S'inscrire");
+
+		Wt::WCssDecorationStyle connectionButtonDecoration;
+		connectionButtonDecoration.setBackgroundColor(Wt::WColor::WColor(155,255,255,255));
+		connectionButton->setDecorationStyle(connectionButtonDecoration);
+
+		Wt::WCssDecorationStyle messageErreurConnectionDecoration;
+		messageErreurConnectionDecoration.setBackgroundColor(Wt::WColor::WColor(255, 0, 0, 255));
+
+		connectionButton->clicked().connect([=]{
+
+			Wt::WString k = editLogin->text();
+			Wt::WString g = editPassword->text();
+
+			if (db->checkConnection(k.toUTF8(), g.toUTF8())) {
+				cout << "Okk connection" << endl;
+				//displayUserStatistics(2);
+			}
+			else {
+				root()->addWidget(std::make_unique<Wt::WText>("Login ou mot de passe incorrectes. Veuillez reessayer ou vous creer un compte\n"));
+				editLogin->setText("The number must be in the range 0 to 150");
+				editPassword->setText("The number must be in the range 0 to 150");
+			}
+		});
+
+		subscriptionButton->clicked().connect([=] {
+			SubscriptionForm();
+		});
+
+	}
+
+	void initializeBd() {
+
+		db = new Database();
+		db->createDB();
+		db->createTable("DROP TABLE IF EXISTS Users;");
+
+		db->createTable("CREATE TABLE IF NOT EXISTS Users("
+			"idUsers INTEGER PRIMARY KEY," //AUTO_INCREMENT NOT NULL
+			"login VARCHAR(255),"
+			"passwd VARCHAR(255),"
+			"gameNb INT,"
+			"wonGameNb INT,"
+			"ratio FLOAT"
+			");");
+
+		db->addUserToDatabase("swan.frere", "passwordSwan");
+		db->addUserToDatabase("mathilde.marza", "passwordMathilde");
+		db->addUserToDatabase("simon.machado", "passwordSimon");
+		db->addUserToDatabase("theo.escolano", "passwordTheo");
+	}	
+	
+
+	void displayUserPage() {
+
+	}
+
+	
 	void fctDisplayPath() {
-		root()->refresh();///////////TROUVER AUTRE
+		root()->clear();
 		
 		path.push_back('t');
 		path.push_back('d');
@@ -248,21 +329,20 @@ public:
 	}
 
 private:
-	
 	Wt::WTable* table = root()->addWidget(std::make_unique<Wt::WTable>());
 	Wt::WPushButton* btnPrecomputeMinMoves;
 	Wt::WPushButton* btnSolutionPath;
 	vector <char> path;
+	Database* db;
 };
 
 
 HelloApplication::HelloApplication(const Wt::WEnvironment& env)
 	: Wt::WApplication(env)
 {
-	afficherReglesJeu();
-	//menuPrincipalAlgorithmeResolution();
-	//menuAccueil();
-
+	Wt::WApplication::instance()->useStyleSheet("c:/Users/33660/Desktop/Template.css");
+	initializeBd();
+	connectionForm();
 }
 
 
@@ -270,9 +350,9 @@ int main(int argc, char** argv) {
 
 	grille = new Grid();
 	vector <char> path;
-	
+
 	cout << "Chemin a suivre : " << endl;
-	cout << grille->principalSearch(path) << endl;
+	cout << grille->principalSearch(path) << endl;	
 
 	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
 	return std::make_unique<HelloApplication>(env);
