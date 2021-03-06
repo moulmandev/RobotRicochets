@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-enum color { blue, red, green, yellow, purple, pink, black, cyan };
+enum color {blue, red, green, yellow, purple, pink, black, cyan};
 
 class Robot {
 private:

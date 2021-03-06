@@ -33,8 +33,8 @@ public:
 
 	/*Plus court chemin*/
 	void pathSave(unsigned int maxDepth, unsigned int nodes, unsigned int inner, unsigned int hits);
-	unsigned int search(unsigned int, unsigned int, std::vector <char>, std::map <unsigned int*, unsigned int>);
-	unsigned int principalSearch(std::vector <char> path);
+	unsigned int search(unsigned int, unsigned int, std::vector <char>&, std::map <unsigned int*, unsigned int>);
+	std::vector<std::string> principalSearch(std::vector <char>& path);
 	void precomputeMinimumMoves();
 	inline bool gameOver();
 	void swap(std::vector <unsigned int>&, int, int);
