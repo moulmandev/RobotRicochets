@@ -1,33 +1,42 @@
 #pragma once
 #include <iostream>
+#include <Wt/Dbo/Dbo.h>
 #include "Statistics.h"
+
+namespace dbo = Wt::Dbo;
 
 class User {
 
 public:
-	User(int, bool, std::string, std::string, std::string);
+	User(int id, std::string l, std::string p, std::string ps);
 	User();
 
 	int getIdUser();
-	bool getInvite();
-	std::string getFirstName();
-	std::string getLastName();
+	std::string getLogin();
+	std::string getPassword();
 
 	void setIdUser(int);
-	void setInvite(bool);
-	void setPrenom(std::string);
-	void setNom(std::string);
-	void setPseudo(std::string);
-	void displayUserStatistics();
-	void displayUserIdentity();
+	void setLogin(std::string);
+	void setPassword(std::string);
+
+	template<class Action>
+	void persist(Action& a)
+	{
+		dbo::field(a, login, "login");
+		dbo::field(a, password, "password");
+		dbo::field(a, gameNb, "gameNb");
+		dbo::field(a, wonGameNb, "wonGameNb");
+		dbo::field(a, ratio, "ratio");
+
+	};
+
 	~User();
 
 private:
 	int idUser;
-	bool invite;
-	Statistics userStatistics;
-	std::string firstName;
-	std::string pseudo;
-	std::string lastName;
-
+	std::string password;
+	std::string login;
+	int gameNb;
+	int wonGameNb;
+	float ratio;
 };

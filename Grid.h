@@ -24,8 +24,7 @@ private:
 
 public:
 	Grid();
-	void swap(std::vector <unsigned int>,int, int);
-	void positionSorter(std::vector <unsigned int>);
+	
 	void tabRobotSorter();
 	void afficherGrille();
 	void afficherMoves();
@@ -38,7 +37,8 @@ public:
 	unsigned int principalSearch(std::vector <char> path);
 	void precomputeMinimumMoves();
 	inline bool gameOver();
-	inline void swap(unsigned int* array, unsigned int a, unsigned int b);
+	void swap(std::vector <unsigned int>&, int, int);
+	void positionSorter(std::vector <unsigned int>&);
 	bool hasWall(unsigned int, unsigned int);
 	bool hasRobot(unsigned int index, unsigned int direction);
 	bool mapAdd(std::vector<unsigned int>, unsigned int depth);
@@ -54,6 +54,6 @@ public:
 	std::vector<unsigned int> makeKey();
 	bool operator<( unsigned int [4]);
 	bool canMove(unsigned int, unsigned int);
-	unsigned int* getPrecomputeMinimumMovesArray();
+	const unsigned int* getPrecomputeMinimumMovesArray();
 
 };
