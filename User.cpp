@@ -1,9 +1,9 @@
 #include "User.h"
 
-User::User(int id, std::string l, std::string p, std::string ps): idUser(id), gameNb(0), login(l), password(p), wonGameNb(0), ratio(0){
+User::User(int id, std::string l, std::string p, std::string ps): idUser(id), gameNb(0), login(l), password(p), country(""), ratio(0){
 	std::cout << "User Constructor" << std::endl;
 }
-User::User(): idUser(0), password(""), login(""), gameNb(0), wonGameNb(0), ratio(0){
+User::User(): idUser(0), password(""), login(""), gameNb(0), country(""), ratio(0){
 	std::cout << "User Constructor by default" << std::endl;
 }
 
@@ -18,6 +18,14 @@ std::string User::getLogin() {
 
 std::string User::getPassword() {
 	return password;
+}
+
+std::string User::getCountry() {
+	return country;
+}
+
+void User::setCountry(std::string c) {
+	country = c;
 }
 
 void User::setIdUser(int id) {

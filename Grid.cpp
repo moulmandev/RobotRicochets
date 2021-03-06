@@ -155,12 +155,12 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 	tabRobots.push_back(new Robot(238));
 	boardOneD[238]++;
 
-	tabRobotSorter();
-	
 	tabRobots[0]->setColor(blue);
 	tabRobots[1]->setColor(yellow);
 	tabRobots[2]->setColor(green);
 	tabRobots[3]->setColor(red);
+
+	tabRobotSorter();
 
 	for (int i = 0; i < 4; i++) {
 		tabRobots[i]->setTarget(false);
@@ -702,7 +702,7 @@ void Grid::deplacerRobot(color c, char dir){
 
 
 
-unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector <char> path, std::map <unsigned int*, unsigned int> map) {
+unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector <char>& path, std::map <unsigned int*, unsigned int> map) {
 	nodes++;
 	
 	if (gameOver()) {
@@ -738,51 +738,6 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector
 			
 			if (result){
 				path.push_back(PACK_MOVE(robot, direction));
-				
-				char c = ' ';
-				char r = ' ';
-				int numRobot = 0;
-				for (int i = 0; i < path.size(); ++i) {
-					std::string s = "";
-					if ((path[i] & 0x0f) == NORTH) {
-						c = 'N';
-					}
-					if ((path[i] & 0x0f) == EAST) {
-						c = 'E';
-					}
-					if ((path[i] & 0x0f) == SOUTH) {
-						c = 'S';
-					}
-					if ((path[i] & 0x0f) == WEST) {
-						c = 'O';
-					}
-			
-					if (tabRobots[path[i] >> 4]->getColor() == blue) {
-						r = 'B';
-					}
-					else if (tabRobots[path[i] >> 4]->getColor() == red) {
-						r = 'R';
-					}
-					else if (tabRobots[path[i] >> 4]->getColor() == green) {
-						r = 'G';
-					}
-					else if (tabRobots[path[i] >> 4]->getColor() == yellow) {
-						r = 'Y';
-					}
-					else if (tabRobots[path[i] >> 4]->getColor() == purple) {
-						r = 'P';
-					}
-					else if (tabRobots[path[i] >> 4]->getColor() == pink) {
-						r = 'P';
-					}
-					else if (tabRobots[path[i] >> 4]->getColor() == black) {
-						r = 'B';
-					}
-					else if (tabRobots[path[i] >> 4]->getColor() == cyan) {
-						r = 'C';
-					}			
-					printf("\t\t%d- %c ->%c\n", i, r, c);
-				}
 				return result;
 			}
 		}
@@ -792,16 +747,19 @@ unsigned int Grid::search(unsigned int depth, unsigned int maxDepth, std::vector
 
 
 
-unsigned int Grid::principalSearch(std::vector <char> path) {
+std::vector<std::string> Grid::principalSearch(std::vector <char>& path) {
+	std::vector<std::string> pathSolution;
+	pathSolution.clear();
+
 	if (gameOver()) {
-		return 0;
+		return pathSolution;
 	}
 	unsigned int resultDepth = 0;
 	std::map <unsigned int*, unsigned int> map;
 
 	precomputeMinimumMoves();
 	for (unsigned int maxDepth = 1; maxDepth < MAX_DEPTH; maxDepth++){ //Tant que l'on a pas réussi
-
+		
 		nodes = 0;
 		hits = 0;
 		inner = 0;
@@ -809,16 +767,61 @@ unsigned int Grid::principalSearch(std::vector <char> path) {
 		resultDepth = search(0, maxDepth, path, map);
 		
 		pathSave(maxDepth, nodes, inner, hits);
-		
-		if (resultDepth) {//Si robotGoal à goal
-			break;
-		}
 
-	}
+		if (resultDepth) {//Si robotGoal à goal
+
+			char c = ' ';
+			char r = ' ';
+
+			std::string k ="";
+
+			for (int i = 0; i < path.size(); ++i) {
+				std::cout << "path.size() : " << path.size() << std::endl;
+				std::string etape = "";
+				if (tabRobots[path[i] >> 4]->getColor() == blue) {
+					k = "B";
+					r = 'B';
+				}
+				else if (tabRobots[path[i] >> 4]->getColor() == red) {
+					k ="R";
+					r = 'R';
+				}
+				else if (tabRobots[path[i] >> 4]->getColor() == green) {
+					k = "G";
+					r = 'G';
+				}
+				else if (tabRobots[path[i] >> 4]->getColor() == yellow) {
+					k = "Y";
+					r = 'Y';
+				}
+				if ((path[i] & 0x0f) == NORTH) {
+					k += "N";
+					c = 'N';
+				}
+				else if ((path[i] & 0x0f) == EAST) {
+					k += "E";
+					c = 'E';
+				}
+				else if ((path[i] & 0x0f) == SOUTH) {
+					k += "S";
+					c = 'S';
+				}
+				else if ((path[i] & 0x0f) == WEST) {
+					k += "O";
+					c = 'O';
+				}
+				pathSolution.push_back(k);
+				printf("\t\t%d- %c ->%c\n", i, r, c);
+
+			}
+		
+			mapSearch.clear();
+			std::cout << "map deleted" << std::endl;
+			return pathSolution;
+
+		}
+	}	
 	
-	mapSearch.clear();
-	std::cout << "map deleted" << std::endl;
-	return resultDepth;
 }
 
 void Grid::pathSave(unsigned int maxDepth, unsigned int nodes, unsigned int inner, unsigned int hits) {

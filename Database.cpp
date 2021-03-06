@@ -6,7 +6,7 @@ using namespace std;
 
 int Database::checkConnection(string login, string mdp) {
 
-	/*sqlite3* DB;
+	sqlite3* DB;
 	int exit = sqlite3_open(dir, &DB);
 
 	string sql = "SELECT idUsers FROM Users WHERE login =";
@@ -17,27 +17,24 @@ int Database::checkConnection(string login, string mdp) {
 	sql += mdp;
 	sql += "';";
 
-	int result = sqlite3_exec(DB, sql.c_str(), callback, NULL, NULL);
-	cout << "result vaut : " << result << endl;
-	/*if (result != SQLITE_OK)
+	struct sqlite3_stmt* selectstmt;
+	int result = sqlite3_prepare_v2(DB, sql.c_str(), -1, &selectstmt, NULL);
+	if (result == SQLITE_OK)
 	{
-		return -1;
-	}*/
-	
-	//return result;
-
-	return 0;
-}
-
-int Database::callback(void* notUsed, int argc, char** argv, char** azColName) {
-	cout << "DANS CALLBAAAAAACK " << endl;
-	for (int i = 0; i < argc; i++) {
-		cout << azColName[i] << ": " << argv[i] << endl;
+		if (sqlite3_step(selectstmt) == SQLITE_ROW)
+		{
+			int rc = sqlite3_exec(DB, sql.c_str(), callback, NULL, NULL);
+			cout << "RECORD FOUNDED::::::::::::::::::::::::::" << rc << endl;
+			return 1;
+		}
+		else
+		{
+			cout << "RECORD NOT FOUNDED" << endl;
+			return -1;
+		}
 	}
-	cout << endl;
-	return 0;
+	sqlite3_finalize(selectstmt);
 }
-
 
 int Database::createDB() {
 	sqlite3* DB;
@@ -49,18 +46,20 @@ int Database::createDB() {
 	return 0;
 }
 
-int Database::addUserToDatabase(string login, string password) {
+int Database::addUserToDatabase(string login, string password, string country) {
 
 	sqlite3* DB;
 	char* messageError;
 	int exit = sqlite3_open(dir, &DB);
 
-	string sql = "INSERT INTO Users (login, passwd, gameNb, wonGameNb, ratio) VALUES (";
+	string sql = "INSERT INTO Users (login, passwd, country, gameNb, ratio) VALUES (";
 	sql += "'";
 	sql += login;
 	sql += "','";
 	sql += password;
-	sql += "',0, 0, 1.0";
+	sql += "','";
+	sql += country;
+	sql += "',0, 1.0";
 	sql += ");";
 
 	//cout << "SQL vaut " << sql << endl;

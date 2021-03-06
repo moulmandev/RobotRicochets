@@ -55,9 +55,6 @@
 using namespace std;
 
 
-Grid* grille;
-
-
 
 class HelloApplication : public Wt::WApplication
 {
@@ -85,29 +82,20 @@ public:
 		sb1->setCurrentIndex(1); // Select 'medium' by default.
 		sb1->setMargin(10, Wt::Side::Right);
 
-		Wt::WText* out = root()->addNew<Wt::WText>("");
-
-		sb1->activated().connect([=] {
-			out->setText(Wt::WString("You selected {1}.")
-				.arg(sb1->currentText()));
-			});
-
 		Wt::WPushButton* SubscriptionButton = root()->addNew<Wt::WPushButton>("Valider");
 
 		SubscriptionButton->clicked().connect([=] {
 			if (editLogin->text().empty() || editPassword->text().empty()){
 				root()->addWidget(std::make_unique<Wt::WText>("Veuillez remplir tous les champs"));
 			}
-			db->addUserToDatabase(editLogin->text().toUTF8(), editPassword->text().toUTF8());
-
+			else {
+				db->addUserToDatabase(editLogin->text().toUTF8(), editPassword->text().toUTF8(), sb1->currentText().toUTF8());
+			}
 		});
 	}
 
-	void afficherReglesJeu() {
+	void afficherReglesJeu(){
 
-		Wt::WLink link = Wt::WLink("http://localhost:8080/");
-		link.setTarget(Wt::LinkTarget::NewWindow);
-		root()->addNew<Wt::WAnchor>(link)->addNew<Wt::WImage>(Wt::WLink("https://www.emweb.be/css/emweb_small.png"));////////////////////////////////METTRE LOGO JEUU
 
 		Wt::WText* pageTitle = root()->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Regles du jeu</h1>")));
 		Wt::WFont fontTitle;
@@ -121,86 +109,26 @@ public:
 		fontRules.setFamily(Wt::FontFamily::Fantasy, "'Western'");
 		fontRules.setSize(12);
 		ExplanationsRules->decorationStyle().setFont(fontRules);		
-		Wt::WImage* image = root()->addNew<Wt::WImage>(Wt::WLink("https://img1.freepng.fr/20171220/zcw/attention-png-5a3a85cd8fadc8.8287464015137847815885.jpg"));//////////////////////////////METTRE PHOTO ATTENTION
-		image->setMaximumSize(30, 240);
 		Wt::WText* textWarning = root()->addWidget(std::make_unique<Wt::WText>("Attention, votre robot ne pas s'arreter autre part que contre un mur ou contre un robot\n"));
 		Wt::WFont fontWarning;
 		fontWarning.setStyle(Wt::FontStyle::Italic);
-
 
 		Wt::WImage* imageLogo = root()->addNew<Wt::WImage>(Wt::WLink("https://www.regledujeu.fr/wp-content/uploads/ricochet-robots-plateau.jpg"));//////////////////////////////METTRE PHOTO JEUU
 
 	}
 	
-	void menuPrincipalAlgorithmeResolution() {
-
-		setTitle("Resolution algorithme");
-		HWND hd = GetDesktopWindow();
-		RECT rect;
-		
-		GetWindowRect(hd, &rect);
-		int window_width = (rect.right - rect.left);
-		int window_height = (rect.bottom - rect.top);
-
-		root()->resize(window_width, window_height);//Mettre taille ecran
-		Wt::WCssDecorationStyle decorationPage;
-		decorationPage.setBackgroundColor(Wt::WColor::WColor(135, 233, 144, 255));
-		//decorationPage.setBackgroundImage("C:/Users/33660/Desktop/technology.jpg");
-
-		root()->setDecorationStyle(decorationPage);
-
-		
-		Wt::WText* pageTitle = root()->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Resolution d'algorithme</h1>")));
-		Wt::WFont fontTitle;
-
-		fontTitle.setFamily(Wt::FontFamily::Monospace, "'Courier New'");
-		fontTitle.setSize(45);
-
-		pageTitle->decorationStyle().setFont(fontTitle);
-
-		Wt::WText* ExplanationsPage = root()->addWidget(std::make_unique<Wt::WText>(Wt::WString("<p>Choisissez l'action que vous souhaitez effectuer : </p>")));
-		Wt::WFont fontExplanations;
-		fontExplanations.setFamily(Wt::FontFamily::Fantasy, "'Western'");
-		fontExplanations.setSize(12);
-		ExplanationsPage->decorationStyle().setFont(fontExplanations);
-
-		
-
-		btnPrecomputeMinMoves = root()->addWidget(std::make_unique<Wt::WPushButton>("Precompute minimum moves"));		
-		btnSolutionPath = root()->addWidget(std::make_unique<Wt::WPushButton>("Shortest path"));
-
-
-		btnSolutionPath->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
-		btnPrecomputeMinMoves->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
-
-
-		auto precomputeMinimumMovesArray = [this] {
-			btnPrecomputeMinMoves->setEnabled(false);
-			btnSolutionPath->setEnabled(true);
-			fctDisplayPrecomputeMinimumMoves();		
-		};
-
-		auto pathArray = [this]{
-			btnSolutionPath->setEnabled(false);
-			table->clear();
-			btnPrecomputeMinMoves->setEnabled(true);
-			fctDisplayPath();
-		};
-
-		btnPrecomputeMinMoves->clicked().connect(precomputeMinimumMovesArray);		
-		btnSolutionPath->clicked().connect(pathArray);
-	}
 	
-	void fctDisplayPrecomputeMinimumMoves() {
-		
+	void fctDisplayPrecomputeMinimumMoves(Grid* grille) {
+		cout << "Dans fctDisplayPrecomputeMinimumMoves" << endl;
+
+		Wt::WTable* table = root()->addWidget(std::make_unique<Wt::WTable>());		
 		Wt::WCssDecorationStyle PrecomputeMinimumArrayStyle;
 		PrecomputeMinimumArrayStyle.setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
-
 
 		table->setDecorationStyle(PrecomputeMinimumArrayStyle);
 
 		for (int i = 0; i < 16; i++) {
-			for (int j = 0; j < 16; j++) {				
+			for (int j = 0; j < 16; j++) {		
 				if (grille->getPrecomputeMinimumMovesArray()[i * 16 + j] != INT_MAX && grille->getPrecomputeMinimumMovesArray()[i * 16 + j] != 0) {
 					table->elementAt(i, j)->addNew<Wt::WText>(to_string(grille->getPrecomputeMinimumMovesArray()[i * 16 + j]));
 				}
@@ -247,14 +175,15 @@ public:
 			Wt::WString k = editLogin->text();
 			Wt::WString g = editPassword->text();
 
-			if (db->checkConnection(k.toUTF8(), g.toUTF8())) {
+			int idFounded = db->checkConnection(k.toUTF8(), g.toUTF8());
+
+			if (idFounded !=0) {
 				cout << "Okk connection" << endl;
-				//displayUserStatistics(2);
+				cout << "On fait la connexion avec le user " << idFounded << endl;
+				//displayUserStatistics(idFounded);
 			}
 			else {
 				root()->addWidget(std::make_unique<Wt::WText>("Login ou mot de passe incorrectes. Veuillez reessayer ou vous creer un compte\n"));
-				editLogin->setText("The number must be in the range 0 to 150");
-				editPassword->setText("The number must be in the range 0 to 150");
 			}
 		});
 
@@ -271,68 +200,138 @@ public:
 		db->createTable("DROP TABLE IF EXISTS Users;");
 
 		db->createTable("CREATE TABLE IF NOT EXISTS Users("
-			"idUsers INTEGER PRIMARY KEY," //AUTO_INCREMENT NOT NULL
+			"idUsers INTEGER PRIMARY KEY,"
 			"login VARCHAR(255),"
 			"passwd VARCHAR(255),"
+			"country VARCHAR(255),"
 			"gameNb INT,"
-			"wonGameNb INT,"
 			"ratio FLOAT"
 			");");
 
-		db->addUserToDatabase("swan.frere", "passwordSwan");
-		db->addUserToDatabase("mathilde.marza", "passwordMathilde");
-		db->addUserToDatabase("simon.machado", "passwordSimon");
-		db->addUserToDatabase("theo.escolano", "passwordTheo");
+		db->addUserToDatabase("swan.frere", "passwordSwan", "France");
+		db->addUserToDatabase("mathilde.marza", "passwordMathilde", "Espagne");
+		db->addUserToDatabase("simon.machado", "passwordSimon", "Royaume-Unis");
+		db->addUserToDatabase("theo.escolano", "passwordTheo", "Pays-Bas");
 	}	
 	
 
 	void displayUserPage() {
 
 	}
-
 	
-	void fctDisplayPath() {
+	void resolutionAlgorithm(Grid* grille) {
 		root()->clear();
+
+		vector <char> path;
+		vector <string> chemin = grille->principalSearch(path);
+
+		cout << "ALGO FINI " << chemin.size() << endl;
+
+		for (int i = 0; i< chemin.size(); i++) {
+			cout << chemin[i] << endl;
+		}
+
+		setTitle("Resolution algorithme");
+		HWND hd = GetDesktopWindow();
+		RECT rect;
+
+		GetWindowRect(hd, &rect);
+		int window_width = (rect.right - rect.left);
+		int window_height = (rect.bottom - rect.top);
+
+		root()->resize(window_width, window_height);//Mettre taille ecran
+		Wt::WCssDecorationStyle decorationPage;
+		decorationPage.setBackgroundColor(Wt::WColor::WColor(135, 233, 144, 255));
+
+		root()->setDecorationStyle(decorationPage);
+
+		Wt::WText* pageTitle = root()->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Resolution d'algorithme</h1>")));
+		Wt::WFont fontTitle;
+
+		fontTitle.setFamily(Wt::FontFamily::Monospace, "'Courier New'");
+		fontTitle.setSize(45);
+
+		pageTitle->decorationStyle().setFont(fontTitle);
+
+		Wt::WText* ExplanationsPage = root()->addWidget(std::make_unique<Wt::WText>(Wt::WString("<p>Choisissez l'action que vous souhaitez effectuer : </p>")));
+		Wt::WFont fontExplanations;
+		fontExplanations.setFamily(Wt::FontFamily::Fantasy, "'Western'");
+		fontExplanations.setSize(12);
+		ExplanationsPage->decorationStyle().setFont(fontExplanations);
+
+		Wt::WPushButton* btnPrecomputeMinMoves = root()->addNew<Wt::WPushButton>("Precompute minimum moves");
+		Wt::WPushButton* btnSolutionPath = root()->addNew<Wt::WPushButton>("Chemin le plus court");
+
 		
-		path.push_back('t');
-		path.push_back('d');
-		path.push_back('l');
-		path.push_back('r');
+		btnSolutionPath->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
+		btnPrecomputeMinMoves->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
 
-		Wt::WCssDecorationStyle textTop;
-		Wt::WCssDecorationStyle textDown;
-		Wt::WCssDecorationStyle textLeft;
-		Wt::WCssDecorationStyle textRight;
+		btnSolutionPath->clicked().connect([=] {
+			cout << "OKKKKK CLIQUE" << endl;
+			btnSolutionPath->setEnabled(false);
+			btnPrecomputeMinMoves->setEnabled(true);
+			fctDisplayPath(chemin);
+		});
 
-		textTop.setForegroundColor(Wt::WColor(255, 140, 0, 155));
-		textDown.setForegroundColor(Wt::WColor(0, 255, 0, 155));
-		textLeft.setForegroundColor(Wt::WColor(255, 0, 0, 155));
-		textRight.setForegroundColor(Wt::WColor(0, 0, 255, 155));
+		btnPrecomputeMinMoves->clicked().connect([=] {
+			btnPrecomputeMinMoves->setEnabled(false);
+			btnSolutionPath->setEnabled(true);
+			fctDisplayPrecomputeMinimumMoves(grille);
+		});
+	
+	}
 
+	void fctDisplayPath(vector<string> pathSolution) {
+		root()->clear();
+
+		cout << "Dans fctDisplayPath " << endl;
+		for (int i = 0; i < pathSolution.size(); i++) {
+			cout << "lalalalal" << endl;
+			cout << pathSolution[i] << endl;
+		}
+
+		Wt::WPushButton* SubscriptionButton = root()->addNew<Wt::WPushButton>("Retour");
 		
-		for (int i = 0; i < path.size(); i++){
+		Wt::WCssDecorationStyle textColor;
 
-			if (path.at(i) == 't') {
-				root()->addWidget(std::make_unique<Wt::WText>("Top\n"))->setDecorationStyle(textTop);
+		for (int i = pathSolution.size()-1; i >=0; i--){
+			cout << "pathSolution.at(i).at(0) " << pathSolution.at(i)[0] << endl;
+
+			if (pathSolution.at(i).at(0) == 'B') {
+				textColor.setForegroundColor(Wt::WColor(0, 0, 255, 255));
+				root()->addWidget(std::make_unique<Wt::WText>("B"))->setDecorationStyle(textColor);
 			}
-			else if (path.at(i) == 'd') {
-				root()->addWidget(std::make_unique<Wt::WText>("Down\n"))->setDecorationStyle(textDown);
+			else if (pathSolution.at(i).at(0) == 'R') {
+				textColor.setForegroundColor(Wt::WColor(255, 0, 0, 255));
+				root()->addWidget(std::make_unique<Wt::WText>("R"))->setDecorationStyle(textColor);
 			}
-			else if (path.at(i) == 'l') {
-				root()->addWidget(std::make_unique<Wt::WText>("Left\n"))->setDecorationStyle(textLeft);
+			else if (pathSolution.at(i).at(0) == 'G') {
+				textColor.setForegroundColor(Wt::WColor(0, 0, 255, 255));
+				root()->addWidget(std::make_unique<Wt::WText>("G"))->setDecorationStyle(textColor);
 			}
-			else if (path.at(i) == 'r') {
-				//root()->addWidget(std::make_unique<Wt::WText>("Right\n"))->setDecorationStyle(textRight);
-				root()->addNew<Wt::WImage>(Wt::WLink("C:/Users/33660/Desktop/arrow.png"));
+			else if (pathSolution.at(i).at(0) == 'Y') {
+				textColor.setForegroundColor(Wt::WColor(255, 165, 0, 255));
+				root()->addWidget(std::make_unique<Wt::WText>("Y"))->setDecorationStyle(textColor);
 			}
+			if (pathSolution.at(i).at(1) == 'N') {
+				root()->addWidget(std::make_unique<Wt::WText>("N"))->setDecorationStyle(textColor);
+			}
+			else if (pathSolution.at(i).at(1) == 'S') {
+				root()->addWidget(std::make_unique<Wt::WText>("S"))->setDecorationStyle(textColor);
+			}
+			else if (pathSolution.at(i).at(1) == 'E') {
+				root()->addWidget(std::make_unique<Wt::WText>("E"))->setDecorationStyle(textColor);
+			}
+			else if (pathSolution.at(i).at(1) == 'O') {
+				root()->addWidget(std::make_unique<Wt::WText>("O"))->setDecorationStyle(textColor);
+			}
+			
 		}
 	}
 
 private:
-	Wt::WTable* table = root()->addWidget(std::make_unique<Wt::WTable>());
 	Wt::WPushButton* btnPrecomputeMinMoves;
 	Wt::WPushButton* btnSolutionPath;
-	vector <char> path;
 	Database* db;
 };
 
@@ -340,19 +339,19 @@ private:
 HelloApplication::HelloApplication(const Wt::WEnvironment& env)
 	: Wt::WApplication(env)
 {
-	Wt::WApplication::instance()->useStyleSheet("c:/Users/33660/Desktop/Template.css");
 	initializeBd();
+	Grid* grille = new Grid();
 	connectionForm();
+	//resolutionAlgorithm(grille);
+	vector <char> path;
+	vector <string> chemin = grille->principalSearch(path);
+	//fctDisplayPath(chemin);
+	fctDisplayPrecomputeMinimumMoves(grille);
+	
 }
 
 
 int main(int argc, char** argv) {
-
-	grille = new Grid();
-	vector <char> path;
-
-	cout << "Chemin a suivre : " << endl;
-	cout << grille->principalSearch(path) << endl;	
 
 	return Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
 	return std::make_unique<HelloApplication>(env);

@@ -14,9 +14,11 @@ public:
 	int getIdUser();
 	std::string getLogin();
 	std::string getPassword();
+	std::string getCountry();
 
 	void setIdUser(int);
 	void setLogin(std::string);
+	void setCountry(std::string);
 	void setPassword(std::string);
 
 	template<class Action>
@@ -25,9 +27,8 @@ public:
 		dbo::field(a, login, "login");
 		dbo::field(a, password, "password");
 		dbo::field(a, gameNb, "gameNb");
-		dbo::field(a, wonGameNb, "wonGameNb");
+		dbo::field(a, country, "country");
 		dbo::field(a, ratio, "ratio");
-
 	};
 
 	~User();
@@ -36,7 +37,7 @@ private:
 	int idUser;
 	std::string password;
 	std::string login;
+	std::string country;
 	int gameNb;
-	int wonGameNb;
 	float ratio;
 };
