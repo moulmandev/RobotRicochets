@@ -17,7 +17,7 @@ void Game::gameVue() {
 	std::cout << "Liste joueurs : " << std::endl;
 
 	for (int i = 0; i < nbJoueurs; i++) {
-		std::cout << "-" << users[i].getLastName() << " " << users[i].getFirstName() << endl;
+		std::cout << "-" << users[i].getLogin() << endl;
 	}
 	cout << endl;	
 }

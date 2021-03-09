@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-enum color { blue, red, green, yellow, purple, pink, black, cyan };
+enum color {blue, red, green, yellow, purple, pink, black, cyan};
 
 class Robot {
 private:
@@ -10,8 +10,8 @@ private:
 	bool target;
 public:
 	Robot(unsigned int);
-	bool getTarget();
-	color getColor();
+	const bool getTarget();
+	const color getColor();
 	void setColor(color);
 	void setTarget(bool);
 	void setPosition(unsigned int);

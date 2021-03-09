@@ -22,3 +22,4 @@
 const int OFFSET[] = {0, -16, 1, 0, 16, 0, 0, 0, -1};
 
 const unsigned int REVERSE[] = {0, SOUTH, WEST, 0, NORTH, 0, 0, 0, EAST};
+

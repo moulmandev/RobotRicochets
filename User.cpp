@@ -1,9 +1,9 @@
 #include "User.h"
 
-User::User(int id, bool i, std::string p, std::string n, std::string ps): idUser(i), invite(i), firstName(p), lastName(n), userStatistics(), pseudo(ps){
+User::User(int id, std::string l, std::string p, std::string ps): idUser(id), gameNb(0), login(l), password(p), country(""), ratio(0){
 	std::cout << "User Constructor" << std::endl;
 }
-User::User(): idUser(0), invite(0), firstName(""), lastName(""){
+User::User(): idUser(0), password(""), login(""), gameNb(0), country(""), ratio(0){
 	std::cout << "User Constructor by default" << std::endl;
 }
 
@@ -11,46 +11,32 @@ int User::getIdUser(){
 	return idUser;
 }
 
-bool User::getInvite() {
-	return invite;
+
+std::string User::getLogin() {
+	return login;
 }
 
-std::string User::getLastName() {
-	return lastName;
+std::string User::getPassword() {
+	return password;
 }
 
-std::string User::getFirstName() {
-	return firstName;
+std::string User::getCountry() {
+	return country;
+}
+
+void User::setCountry(std::string c) {
+	country = c;
 }
 
 void User::setIdUser(int id) {
 	idUser = id;
 }
-void User::setInvite(bool i) {
-	invite = i;
-}
-void User::setPrenom(std::string p) {
-	firstName = p;
-}
-void User::setNom(std::string n) {
-	lastName = n;
-}
 
-void User::setPseudo(std::string p) {
-	pseudo = p;
+void User::setLogin(std::string l) {
+	login = l;
 }
-
-void User::displayUserStatistics() {
-	std::cout << "Statistiques de " << lastName << " " << firstName << " :" <<std::endl;
-	userStatistics.displayStatistics();
-}
-
-void User::displayUserIdentity() {
-	std::cout << "Nom : " << lastName << std::endl;
-	std::cout << "Prenom : " << firstName << std::endl;
-	std::cout << "Pseudo : " << pseudo << std::endl;
-	displayUserStatistics();
-
+void User::setPassword(std::string p) {
+	password = p;
 }
 
 User::~User() {
