@@ -14,7 +14,7 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 	srand(time(NULL));
 	tabRobots.clear();
 
-	/*int mursPossibles[] = { 16, 8, 4, 2, 20, 18, 12, 10 };
+	int mursPossibles[] = { 16, 8, 4, 2, 20, 18, 12, 10 };
 	for (int i = 0; i < 256; i++) {
 
 		boardOneD[i] = 0;
@@ -27,24 +27,40 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 			boardOneD[i] = 10;
 		else if (i == 255)
 			boardOneD[i] = 12;
-		//Haut de la grille
+		//Haut de la grille 16, 20, 18
 		else if (i <= 15) {
-			boardOneD[i] = 16;
+			int randNord[] = { 16, 20, 18 };
+			if (rand() % 8 == 0)
+				boardOneD[i] = randNord[rand() % 3];
+			else
+				boardOneD[i] = 16;
 		}
-		//Bas de la grille
+		//Bas de la grille 8, 10, 12
 		else if (i >= 255 - 15) {
-			boardOneD[i] = 8;
+			int randSud[] = { 8, 10, 12 };
+			if (rand() % 8 == 0)
+				boardOneD[i] = randSud[rand() % 3];
+			else
+				boardOneD[i] = 8;
 		}
-		//Gauche de la grille
+		//Gauche de la grille 2, 18, 10
 		else if (i % 16 == 0) {
-			boardOneD[i] = 2;
+			int randOuest[] = { 2, 18, 10 };
+			if (rand() % 8 == 0)
+				boardOneD[i] = randOuest[rand() % 3];
+			else
+				boardOneD[i] = 2;
 		}
-		//Droite de la grille
+		//Droite de la grille 4, 20, 12
 		else if (i == 15 || i == 31 || i == 47 || i == 63 || i == 79 || i == 95 || i == 111 || i == 127 || i == 143 || i == 159 || i == 175 || i == 191 || i == 207 || i == 223 || i == 239 || i == 255) {
-			boardOneD[i] = 4;
+			int randEst[] = { 4, 20, 12 };
+			if (rand() % 8 == 0)
+				boardOneD[i] = randEst[rand() % 3];
+			else
+				boardOneD[i] = 4;
 		}
 
-		if (rand() % 4 == 0 && !(i <= 15 || i >= 255 - 15 || i % 16 == 0 || (i == 15 || i == 31 || i == 47 || i == 63 || i == 79 || i == 95 || i == 111 || i == 127 || i == 143 || i == 159 || i == 175 || i == 191 || i == 207 || i == 223 || i == 239 || i == 255)) ){
+		if (rand() % 6 == 0 && !(i <= 15 || i >= 255 - 15 || i % 16 == 0 || (i == 15 || i == 31 || i == 47 || i == 63 || i == 79 || i == 95 || i == 111 || i == 127 || i == 143 || i == 159 || i == 175 || i == 191 || i == 207 || i == 223 || i == 239 || i == 255))) {
 
 			if (rand() % 4 != 0)
 				boardOneD[i] = mursPossibles[rand() % 4];
@@ -84,9 +100,25 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 	goal = rand() % 256;
 	goal = rand() % 256;
 	goal = rand() % 256;
-	cout << "Choix robot goal position: " << tabRobots.at(numRobotTarget)->getPosition() << endl;*/
+	std::cout << "Choix robot goal position: " << tabRobots.at(numRobotTarget)->getPosition() << std::endl;
 
-	unsigned int liste[256] = {9, 1, 5, 1, 3, 9, 1, 1, 1, 3, 9, 1, 1, 1, 1, 3, 8, 2, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 6, 8, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 0, 3, 8, 0, 0, 0, 0, 2, 12, 0, 2, 9, 0, 0, 0, 0, 4, 2, 12, 0, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 3, 10, 9, 0, 0, 0, 3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 6, 8, 0, 0, 0, 0, 4, 4, 0, 0, 2, 12, 0, 0, 2, 8, 1, 0, 0, 0, 0, 2, 9, 3, 8, 0, 0, 1, 0, 0, 2, 8, 0, 4, 0, 2, 12, 2, 12, 6, 8, 0, 0, 0, 0, 0, 6, 8, 18, 9, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 4, 0, 3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 0, 2, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 0, 0, 0, 2, 9, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, 2, 12, 2, 8, 0, 0, 16, 3, 8, 0, 0, 0, 4, 0, 0, 0, 0, 1, 2, 8, 6, 8, 0, 0, 0, 0, 0, 0, 3, 8, 0, 0, 0, 16, 2, 12, 5, 4, 4, 4, 6, 12, 4, 4, 4, 4, 6, 12, 4, 4, 6};
+
+
+	tabRobotSorter();
+
+	for (int i = 0; i < 4; i++) {
+		tabRobots[i]->setTarget(false);
+	}
+
+
+	last = 0;
+	numRobotTarget = rand() % 4;
+	tabRobots.at(numRobotTarget)->setTarget(true);
+
+	afficherGrille();
+	std::cout << std::endl;
+
+	/*unsigned int liste[256] = {9, 1, 5, 1, 3, 9, 1, 1, 1, 3, 9, 1, 1, 1, 1, 3, 8, 2, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 6, 8, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 0, 3, 8, 0, 0, 0, 0, 2, 12, 0, 2, 9, 0, 0, 0, 0, 4, 2, 12, 0, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 3, 10, 9, 0, 0, 0, 3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 6, 8, 0, 0, 0, 0, 4, 4, 0, 0, 2, 12, 0, 0, 2, 8, 1, 0, 0, 0, 0, 2, 9, 3, 8, 0, 0, 1, 0, 0, 2, 8, 0, 4, 0, 2, 12, 2, 12, 6, 8, 0, 0, 0, 0, 0, 6, 8, 18, 9, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 4, 0, 3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 0, 2, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 0, 0, 0, 2, 9, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, 2, 12, 2, 8, 0, 0, 16, 3, 8, 0, 0, 0, 4, 0, 0, 0, 0, 1, 2, 8, 6, 8, 0, 0, 0, 0, 0, 0, 3, 8, 0, 0, 0, 16, 2, 12, 5, 4, 4, 4, 6, 12, 4, 4, 4, 4, 6, 12, 4, 4, 6};
 	
 	for (int i = 0; i < 256; i++){
 		if (liste[i] == NORTH) {
@@ -173,8 +205,7 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 	tabRobots.at(numRobotTarget)->setTarget(true);
 
 	afficherGrille();
-	std::cout << std::endl;
-	
+	std::cout << std::endl;*/
 }
 
 void Grid::swap(std::vector <unsigned int>& tab, int first, int second) {
@@ -556,10 +587,10 @@ void Grid::deplacerRobot(color c, char dir) {
 		if (tabRobots[i]->getColor() == c)
 			rob = tabRobots[i];
 
-	deplacerRobot(c, dir);
+	deplacerRobot(rob, dir);
 }
 
-void Grid::deplacerRobot(Robot* rob, char dir){
+void Grid::deplacerRobot(Robot* rob, char dir) {
 	int xRob = (int)(rob->getPosition() / 16);
 	int yRob = (int)(rob->getPosition() % 16);	int index;
 	index = xRob * 16 + yRob;
@@ -567,16 +598,16 @@ void Grid::deplacerRobot(Robot* rob, char dir){
 	switch (dir)
 	{
 	case 'z':
-		if (index > 15 && (boardOneD[index] != 16 && boardOneD[index] != 18 && boardOneD[index] != 20)) {
+		if (index > 15 && (boardOneD[index] != 17 && boardOneD[index] != 19 && boardOneD[index] != 21)) {
 			bool continuer = true;
 			while (continuer) {
 
 				//Mur au Sud
-				if (boardOneD[index - 16] == 8) {
+				if (boardOneD[index - 16] == 8 || boardOneD[index - 16] == 10 || boardOneD[index - 16] == 12) {
 					continuer = false;
 				}
 				//Mur au Nord et case vide
-				else if (boardOneD[index - 16] == 16 && boardOneD[index - 16] % 2 == 0) {
+				else if ((boardOneD[index - 16] == 16 || boardOneD[index - 16] == 20 || boardOneD[index - 16] == 18) && boardOneD[index - 16] % 2 == 0) {
 					boardOneD[index]--;
 					boardOneD[index - 16]++;
 					rob->setPosition(rob->getPosition() - 16);
@@ -603,16 +634,16 @@ void Grid::deplacerRobot(Robot* rob, char dir){
 		break;
 
 	case 's':
-		if (index < 255 - 15 && (boardOneD[index] != 8 && boardOneD[index] != 12 && boardOneD[index] != 10)) {
+		if (index < 255 - 15 && (boardOneD[index] != 9 && boardOneD[index] != 13 && boardOneD[index] != 11)) {
 			bool continuer = true;
 			while (continuer) {
 
 				//Mur au Nord
-				if (boardOneD[index + 16] == 16) {
+				if (boardOneD[index + 16] == 16 || boardOneD[index + 16] == 20 || boardOneD[index + 16] == 18) {
 					continuer = false;
 				}
 				//Mur au Sud et case vide
-				else if (boardOneD[index + 16] == 8 && boardOneD[index + 16] % 2 == 0) {
+				else if ((boardOneD[index + 16] == 8 || boardOneD[index + 16] == 12 || boardOneD[index + 16] == 10) && boardOneD[index + 16] % 2 == 0) {
 					boardOneD[index]--;
 					boardOneD[index + 16]++;
 					rob->setPosition(rob->getPosition() + 16);
@@ -639,16 +670,16 @@ void Grid::deplacerRobot(Robot* rob, char dir){
 		break;
 
 	case 'q':
-		if (index % 16 != 0 && (boardOneD[index] != 2 && boardOneD[index] != 18 && boardOneD[index] != 10)) {
+		if (index % 16 != 0 && (boardOneD[index] != 3 && boardOneD[index] != 19 && boardOneD[index] != 11)) {
 			bool continuer = true;
 			while (continuer) {
 
 				//Mur a l'Est
-				if (boardOneD[index - 1] == 4) {
+				if (boardOneD[index - 1] == 4 || boardOneD[index - 1] == 12 || boardOneD[index - 1] == 20) {
 					continuer = false;
 				}
 				//Mur a l'Ouest et case vide
-				else if (boardOneD[index - 1] == 2 && boardOneD[index - 1] % 2 == 0) {
+				else if ((boardOneD[index - 1] == 2 || boardOneD[index - 1] == 18 || boardOneD[index - 1] == 10) && boardOneD[index - 1] % 2 == 0) {
 					boardOneD[index]--;
 					boardOneD[index - 1]++;
 					rob->setPosition(rob->getPosition() - 1);
@@ -674,16 +705,16 @@ void Grid::deplacerRobot(Robot* rob, char dir){
 		}
 		break;
 	case 'd':
-		if ((boardOneD[index] != 4 && boardOneD[index] != 20 && boardOneD[index] != 12)) {
+		if ((boardOneD[index] != 5 && boardOneD[index] != 21 && boardOneD[index] != 13)) {
 			bool continuer = true;
 			while (continuer) {
 
 				//Mur a l'Ouest
-				if (boardOneD[index + 1] == 2) {
+				if (boardOneD[index + 1] == 2 || boardOneD[index + 1] == 18 || boardOneD[index + 1] == 10) {
 					continuer = false;
 				}
 				//Mur a l'Est et case vide
-				else if (boardOneD[index + 1] == 4 && boardOneD[index + 1] % 2 == 0) {
+				else if ((boardOneD[index + 1] == 4 || boardOneD[index + 1] == 20 || boardOneD[index + 1] == 12) && boardOneD[index + 1] % 2 == 0) {
 					boardOneD[index]--;
 					boardOneD[index + 1]++;
 					rob->setPosition(rob->getPosition() + 1);

@@ -24,6 +24,7 @@ public:
 	int createDB();
 	int addUserToDatabase(std::string, std::string, std::string);
 	int createTable(std::string sql);
+	void addGamePlayed(int);
 
 private:
 	const char* dir = "./databaseRicochetRobots.db";

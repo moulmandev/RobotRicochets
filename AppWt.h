@@ -41,6 +41,7 @@ public:
 	void logout();
 	void fctDisplayPrecomputeMinimumMoves(Grid* grille);
 	void initializeBd();
+	void afficherChoixAlgo();
 	void resolutionAlgorithm(Grid* grille);
 	void fctDisplayPath(vector<string> pathSolution);
 	void displayUserStatistics(int id);

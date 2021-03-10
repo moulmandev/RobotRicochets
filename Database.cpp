@@ -1,4 +1,5 @@
 #include "Database.h"
+#include <string>
 
 using namespace std;
 

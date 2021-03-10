@@ -56,11 +56,11 @@ void AppWt::startGame()
 	WPushButton* boutonMenu = container->addWidget(std::make_unique<Wt::WPushButton>("RETOUR MENU"));
 	boutonMenu->clicked().connect(this, &AppWt::showMenu);
 
-	WPushButton* boutonAlgo = containerAlgo->addWidget(std::make_unique<Wt::WPushButton>("Utiliser l'algorithme"));
-	boutonAlgo->clicked().connect([=] {
-		containerAlgo->clear();
-		resolutionAlgorithm(grille);
-	});
+	resolutionAlgorithm(grille);
+
+}
+
+void AppWt::afficherChoixAlgo() {
 
 }
 
@@ -75,7 +75,7 @@ void AppWt::showRegles()
 	fontTitle.setSize(12);
 
 	pageTitle->decorationStyle().setFont(fontTitle);
-	Wt::WText* ExplanationsRules = container->addWidget(std::make_unique<Wt::WText>("Trouvez le chemin le plus rapide pour emmener le robot objectif à la case object, en vous aidant des murs et de tous les autres robots\n Pour cela, cliquez sur l'un des robots, et indiquez là où vous souhaitez qu'il se dirige.\n"));
+	Wt::WText* ExplanationsRules = container->addWidget(std::make_unique<Wt::WText>("Trouvez le chemin le plus rapide pour emmener le robot objectif ï¿½ la case object, en vous aidant des murs et de tous les autres robots\n Pour cela, cliquez sur l'un des robots, et indiquez lï¿½ oï¿½ vous souhaitez qu'il se dirige.\n"));
 	Wt::WFont fontRules;
 	fontRules.setFamily(Wt::FontFamily::Fantasy, "'Western'");
 	fontRules.setSize(12);
@@ -127,6 +127,7 @@ void AppWt::inscription()
 	WPushButton* boutonMenu = container->addWidget(std::make_unique<Wt::WPushButton>("RETOUR MENU"));
 	boutonMenu->clicked().connect(this, &AppWt::showMenu);
 }
+
 
 void AppWt::login()
 {
@@ -197,6 +198,8 @@ void AppWt::initializeBd()
 	db->addUserToDatabase("simon.machado", "passwordSimon", "Royaume-Unis");
 	db->addUserToDatabase("theo.escolano", "passwordTheo", "Pays-Bas");
 }
+
+
 
 void AppWt::resolutionAlgorithm(Grid* grille)
 {
@@ -283,23 +286,22 @@ void AppWt::fctDisplayPath(vector<string> pathSolution)
 			textColor.setForegroundColor(Wt::WColor(255, 0, 0, 255));
 		}
 		else if (pathSolution.at(i).at(0) == 'G') {
-			textColor.setForegroundColor(Wt::WColor(0, 0, 255, 255));
+			textColor.setForegroundColor(Wt::WColor(0, 255, 0, 255));
 		}
 		else if (pathSolution.at(i).at(0) == 'Y') {
 			textColor.setForegroundColor(Wt::WColor(255, 165, 0, 255));
 		}
 		if (pathSolution.at(i).at(1) == 'N') {
-			auto text = containerAlgo->addWidget(std::make_unique<Wt::WText>("N"));
-			text->setDecorationStyle(textColor);
+			containerAlgo->addWidget(std::make_unique<Wt::WText>("Nord "));
 		}
 		else if (pathSolution.at(i).at(1) == 'S') {
-			containerAlgo->addWidget(std::make_unique<Wt::WText>("S"))->setDecorationStyle(textColor);
+			containerAlgo->addWidget(std::make_unique<Wt::WText>("Sud "))->setDecorationStyle(textColor);
 		}
 		else if (pathSolution.at(i).at(1) == 'E') {
-			containerAlgo->addWidget(std::make_unique<Wt::WText>("E"))->setDecorationStyle(textColor);
+			containerAlgo->addWidget(std::make_unique<Wt::WText>("Est "))->setDecorationStyle(textColor);
 		}
 		else if (pathSolution.at(i).at(1) == 'O') {
-			containerAlgo->addWidget(std::make_unique<Wt::WText>("O"))->setDecorationStyle(textColor);
+			containerAlgo->addWidget(std::make_unique<Wt::WText>("Ouest "))->setDecorationStyle(textColor);
 		}
 
 	}
