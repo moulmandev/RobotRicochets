@@ -10,12 +10,20 @@ AppWt::AppWt(const WEnvironment& env) : WApplication(env)
 	initializeBd();
 	setTitle("Robot Ricochets");
 	container = root()->addWidget(cpp14::make_unique<WContainerWidget>());
+	containerText = root()->addWidget(cpp14::make_unique<WContainerWidget>());
 	containerAlgo = root()->addWidget(cpp14::make_unique<WContainerWidget>());
-	grille = new Grid();
-	showMenu();
-	//container->setStyleClass("classBody");
-	//useStyleSheet("C:\\Users\\frere\\Desktop\\IUT\\PTUT\\RobotRicochets");
+	containerMenu = root()->addWidget(cpp14::make_unique<WContainerWidget>());
+	containerRules = root()->addWidget(cpp14::make_unique<WContainerWidget>());
 
+	grille = new Grid();
+
+	containerMenu->setMargin(700, Wt::Side::CenterX);
+	containerText->setMargin(700, Wt::Side::Left);
+	containerAlgo->setMargin(700, Wt::Side::Left);
+	containerRules->setMargin(700, Wt::Side::Left);
+
+	showMenu();
+	
 }
 
 AppWt::~AppWt()
@@ -25,10 +33,11 @@ AppWt::~AppWt()
 void AppWt::showMenu()
 {
 	container->clear();
-	container->resize(150, 150);
-
-	auto vbox = container->setLayout(Wt::cpp14::make_unique<Wt::WVBoxLayout>());
-
+	containerText->clear();
+	containerAlgo->clear();
+	//containerMenu->resize(150, 150);
+	auto vbox = containerMenu->setLayout(Wt::cpp14::make_unique<Wt::WVBoxLayout>());
+	vbox->setContentsMargins(0, 0, 0, 0);
 
 	WPushButton* boutonPlay = vbox->addWidget(std::make_unique<Wt::WPushButton>("JOUER"));
 	WPushButton* boutonRegles = vbox->addWidget(std::make_unique<Wt::WPushButton>("REGLES"));
@@ -49,18 +58,11 @@ void AppWt::showMenu()
 void AppWt::startGame()
 {
 	container->clear();
-
 	WidgetGrille* wtGrid = container->addWidget(std::make_unique<WidgetGrille>());
 	wtGrid->setGrid(grille);
-
 	WPushButton* boutonMenu = container->addWidget(std::make_unique<Wt::WPushButton>("RETOUR MENU"));
 	boutonMenu->clicked().connect(this, &AppWt::showMenu);
-
 	resolutionAlgorithm(grille);
-
-}
-
-void AppWt::afficherChoixAlgo() {
 
 }
 
@@ -68,25 +70,25 @@ void AppWt::showRegles()
 {
 	container->clear();
 
-	Wt::WText* pageTitle = container->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Regles du jeu</h1>")));
+	Wt::WText* pageTitle = containerRules->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Regles du jeu</h1>")));
 	Wt::WFont fontTitle;
 
 	fontTitle.setFamily(Wt::FontFamily::Monospace, "'Courier New'");
 	fontTitle.setSize(12);
 
 	pageTitle->decorationStyle().setFont(fontTitle);
-	Wt::WText* ExplanationsRules = container->addWidget(std::make_unique<Wt::WText>("Trouvez le chemin le plus rapide pour emmener le robot objectif � la case object, en vous aidant des murs et de tous les autres robots\n Pour cela, cliquez sur l'un des robots, et indiquez l� o� vous souhaitez qu'il se dirige.\n"));
+	Wt::WText* ExplanationsRules = containerRules->addWidget(std::make_unique<Wt::WText>("Trouvez le chemin le plus rapide pour emmener le robot objectif � la case object, en vous aidant des murs et de tous les autres robots\n Pour cela, cliquez sur l'un des robots, et indiquez l� o� vous souhaitez qu'il se dirige.\n"));
 	Wt::WFont fontRules;
 	fontRules.setFamily(Wt::FontFamily::Fantasy, "'Western'");
 	fontRules.setSize(12);
 	ExplanationsRules->decorationStyle().setFont(fontRules);
-	Wt::WText* textWarning = container->addWidget(std::make_unique<Wt::WText>("Attention, votre robot ne pas s'arreter autre part que contre un mur ou contre un robot\n"));
+	Wt::WText* textWarning = containerRules->addWidget(std::make_unique<Wt::WText>("Attention, votre robot ne pas s'arreter autre part que contre un mur ou contre un robot\n"));
 	Wt::WFont fontWarning;
 	fontWarning.setStyle(Wt::FontStyle::Italic);
 
-	Wt::WImage* imageLogo = container->addNew<Wt::WImage>(Wt::WLink("https://www.regledujeu.fr/wp-content/uploads/ricochet-robots-plateau.jpg"));//////////////////////////////METTRE PHOTO JEUU
+	Wt::WImage* imageLogo = containerRules->addNew<Wt::WImage>(Wt::WLink("https://www.regledujeu.fr/wp-content/uploads/ricochet-robots-plateau.jpg"));//////////////////////////////METTRE PHOTO JEUU
 
-	WPushButton* boutonMenu = container->addWidget(std::make_unique<Wt::WPushButton>("RETOUR MENU"));
+	WPushButton* boutonMenu = containerRules->addWidget(std::make_unique<Wt::WPushButton>("RETOUR MENU"));
 	boutonMenu->clicked().connect(this, &AppWt::showMenu);
 }
 
@@ -213,31 +215,24 @@ void AppWt::resolutionAlgorithm(Grid* grille)
 	}
 
 	setTitle("Resolution algorithme");
-	HWND hd = GetDesktopWindow();
-	RECT rect;
 
-	GetWindowRect(hd, &rect);
-	int window_width = (rect.right - rect.left);
-	int window_height = (rect.bottom - rect.top);
 
-	container->resize(window_width, window_height);//Mettre taille ecran
-
-	Wt::WText* pageTitle = container->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Resolution d'algorithme</h1>")));
+	Wt::WText* pageTitle = containerText->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Resolution d'algorithme</h1>")));
 	Wt::WFont fontTitle;
 
 	fontTitle.setFamily(Wt::FontFamily::Monospace, "'Courier New'");
-	fontTitle.setSize(45);
+	fontTitle.setSize(30);
 
 	pageTitle->decorationStyle().setFont(fontTitle);
 
-	Wt::WText* ExplanationsPage = container->addWidget(std::make_unique<Wt::WText>(Wt::WString("<p>Choisissez l'action que vous souhaitez effectuer : </p>")));
+	Wt::WText* ExplanationsPage = containerText->addWidget(std::make_unique<Wt::WText>(Wt::WString("<p>Choisissez l'action que vous souhaitez effectuer : </p>")));
 	Wt::WFont fontExplanations;
 	fontExplanations.setFamily(Wt::FontFamily::Fantasy, "'Western'");
 	fontExplanations.setSize(12);
 	ExplanationsPage->decorationStyle().setFont(fontExplanations);
 
-	Wt::WPushButton* btnPrecomputeMinMoves = container->addNew<Wt::WPushButton>("Precompute minimum moves");
-	Wt::WPushButton* btnSolutionPath = container->addNew<Wt::WPushButton>("Chemin le plus court");
+	Wt::WPushButton* btnPrecomputeMinMoves = containerText->addNew<Wt::WPushButton>("Precompute minimum moves");
+	Wt::WPushButton* btnSolutionPath = containerText->addNew<Wt::WPushButton>("Chemin le plus court");
 
 
 	btnSolutionPath->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
@@ -260,7 +255,6 @@ void AppWt::fctDisplayPrecomputeMinimumMoves(Grid* grille)
 {
 	containerAlgo->clear();
 	std::cout << "Dans fctDisplayPrecomputeMinimumMoves" << std::endl;
-
 	WidgetGrilleMove* wtGrid = containerAlgo->addWidget(std::make_unique<WidgetGrilleMove>());
 	wtGrid->setGrid(grille);
 

@@ -71,8 +71,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Template.css">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </None>
   </ItemGroup>
 </Project>
