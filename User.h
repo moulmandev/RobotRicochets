@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <Wt/Dbo/Dbo.h>
-#include "Statistics.h"
 
 namespace dbo = Wt::Dbo;
 

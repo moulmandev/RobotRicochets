@@ -1,15 +1,18 @@
 #include "AppWt.h"
+#include <Wt/WVBoxLayout.h>
+
 #include<iostream>
+#include "WidgetGrille.h"
 
 AppWt::AppWt(const WEnvironment& env) : WApplication(env)
 {
-
+	
+	initializeBd();
 	setTitle("Robot Ricochets");
 	container = root()->addWidget(cpp14::make_unique<WContainerWidget>());
+	grille = new Grid();
 	showMenu();
-
 	//container->setStyleClass("classBody");
-
 	//useStyleSheet("C:\\Users\\frere\\Desktop\\IUT\\PTUT\\RobotRicochets");
 
 }
@@ -21,12 +24,20 @@ AppWt::~AppWt()
 void AppWt::showMenu()
 {
 	container->clear();
+	container->resize(150, 150);
 
-	WPushButton* boutonPlay = container->addWidget(std::make_unique<Wt::WPushButton>("JOUER"));
-	WPushButton* boutonRegles = container->addWidget(std::make_unique<Wt::WPushButton>("REGLES"));
-	WPushButton* boutonLogin = container->addWidget(std::make_unique<Wt::WPushButton>("SE CONNECTER"));
-	WPushButton* boutonRegister = container->addWidget(std::make_unique<Wt::WPushButton>("S'INSCRIRE"));
+	auto vbox = container->setLayout(Wt::cpp14::make_unique<Wt::WVBoxLayout>());
 
+
+	WPushButton* boutonPlay = vbox->addWidget(std::make_unique<Wt::WPushButton>("JOUER"));
+	WPushButton* boutonRegles = vbox->addWidget(std::make_unique<Wt::WPushButton>("REGLES"));
+	WPushButton* boutonLogin = vbox->addWidget(std::make_unique<Wt::WPushButton>("SE CONNECTER"));
+	WPushButton* boutonRegister = vbox->addWidget(std::make_unique<Wt::WPushButton>("S'INSCRIRE"));
+
+	boutonPlay->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
+	boutonRegles->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
+	boutonLogin->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
+	boutonRegister->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
 
 	boutonPlay->clicked().connect(this, &AppWt::startGame);
 	boutonRegles->clicked().connect(this, &AppWt::showRegles);
@@ -36,6 +47,13 @@ void AppWt::showMenu()
 
 void AppWt::startGame()
 {
+	container->clear();
+
+	WidgetGrille* wtGrid = container->addWidget(std::make_unique<WidgetGrille>());
+	wtGrid->setGrid(grille);
+
+	WPushButton* boutonMenu = container->addWidget(std::make_unique<Wt::WPushButton>("RETOUR MENU"));
+	boutonMenu->clicked().connect(this, &AppWt::showMenu);
 }
 
 void AppWt::showRegles()
@@ -106,13 +124,15 @@ void AppWt::login()
 {
 	container->clear();
 
-	Wt::WLineEdit* editLogin = container->addNew<Wt::WLineEdit>();
+	auto vbox = container->setLayout(Wt::cpp14::make_unique<Wt::WVBoxLayout>());
+
+	WLineEdit* editLogin = vbox->addWidget(std::make_unique<Wt::WLineEdit>("Login"));
 	editLogin->setPlaceholderText("Login");
 
-	Wt::WLineEdit* editPassword = container->addNew<Wt::WLineEdit>();
-	editPassword->setPlaceholderText("Mot de passe");
+	WLineEdit* editPassword = vbox->addWidget(std::make_unique<Wt::WLineEdit>("Password"));
+	editLogin->setPlaceholderText("Mot de passe");
 
-	Wt::WPushButton* connectionButton = container->addNew<Wt::WPushButton>();
+	WPushButton* connectionButton = vbox->addWidget(std::make_unique<Wt::WPushButton>("Login"));
 	connectionButton->setText("Se connecter");
 
 	Wt::WCssDecorationStyle connectionButtonDecoration;

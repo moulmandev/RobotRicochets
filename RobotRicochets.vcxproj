@@ -155,30 +155,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Desktop\sqlite-amalgamation-3340100\sqlite3.c" />
+    <ClCompile Include="sqlite3.c" />
+    <ClCompile Include="AppWt.cpp" />
     <ClCompile Include="Database.cpp" />
-    <ClCompile Include="Case.cpp" />
-    <ClCompile Include="Entry.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Statistics.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AppWt.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Database.h" />
     <ClInclude Include="Robot.h" />
-    <ClInclude Include="Statistics.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="Vue.h" />
     <ClInclude Include="WidgetGrille.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Template.css" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

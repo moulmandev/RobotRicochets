@@ -1,10 +1,7 @@
 #include "Robot.h"
 #include <ctime>
 
-
-
 using namespace std;
-
 
 Robot::Robot(unsigned int k): position(k){
 	srand(time(NULL));
@@ -15,6 +12,11 @@ const bool Robot::getTarget() {
 	return target;
 }
 
+const bool Robot::getFocus()
+{
+	return focus;
+}
+
 unsigned int Robot::getPosition() {
 	return position;
 }
@@ -23,19 +25,22 @@ unsigned int Robot::getPosition() {
 void Robot::setPosition(unsigned int k) {
 	position = k;
 }
-void Robot::setColor(color col)
-{
+
+void Robot::setColor(color col) {
 	c = col;
 }
 
-const color Robot::getColor()
-{
+const color Robot::getColor() {
 	return c;
 }
 
-
 void Robot::setTarget(bool b){
 	target = b;
+}
+
+void Robot::setFocus(bool value)
+{
+	this->focus = value;
 }
 
 

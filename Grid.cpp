@@ -310,6 +310,21 @@ Robot* Grid::getRobotGoal() {
 	return tabRobots.at(numRobotTarget);
 }
 
+int* Grid::getBoard()
+{
+	return boardOneD;
+}
+
+int Grid::getGoal()
+{
+	return goal;
+}
+
+std::vector<Robot*> Grid::getRobots()
+{
+	return tabRobots;
+}
+
 std::vector<unsigned int> Grid::makeKey(){
 	std::vector<unsigned int> tabRobotsCopy;
 
@@ -346,6 +361,7 @@ bool Grid::canMove(unsigned int robot, unsigned int direction) {
 		return false;
 	}
 	return true;
+
 }
 
 const unsigned int* Grid::getPrecomputeMinimumMovesArray() {
@@ -540,11 +556,10 @@ void Grid::deplacerRobot(color c, char dir) {
 		if (tabRobots[i]->getColor() == c)
 			rob = tabRobots[i];
 
-	deplacerRobot(rob, dir);
+	deplacerRobot(c, dir);
 }
 
 void Grid::deplacerRobot(Robot* rob, char dir){
-
 	int xRob = (int)(rob->getPosition() / 16);
 	int yRob = (int)(rob->getPosition() % 16);	int index;
 	index = xRob * 16 + yRob;
@@ -702,21 +717,6 @@ void Grid::deplacerRobot(Robot* rob, char dir){
 			std::cout << "Fini !!!" << std::endl;
 
 	}
-}
-
-int* Grid::getBoard()
-{
-	return boardOneD;
-}
-
-int Grid::getGoal()
-{
-	return goal;
-}
-
-std::vector<Robot*> Grid::getRobots()
-{
-	return tabRobots;
 }
 
 

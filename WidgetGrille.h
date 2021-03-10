@@ -24,7 +24,6 @@ class WidgetGrille : public Wt::WPaintedWidget
 
 private:
 	Grid* grid;
-	int hoveredItem = -1;
 	std::vector<int> routePositions;
 	Robot* selectedRobot = nullptr;
 
@@ -41,11 +40,6 @@ protected:
 	void paintEvent(Wt::WPaintDevice* paintDevice) {
 		Wt::WPainter painter(paintDevice);
 
-		// Main frame
-		drawNonFilledRect(painter, 0, 0, GRID_SIZE, GRID_SIZE, Wt::WColor(Wt::StandardColor::Yellow));
-
-		// Grid
-		//int *board = this->grid->getBoard();
 		for (int i = 0; i < CASE_NUM; i++) {
 			for (int j = 0; j < CASE_NUM; j++) {
 				painter.setBrush(Wt::WColor(Wt::StandardColor::Red));
@@ -115,7 +109,6 @@ protected:
 			int realX = (x / CASE_SIZE);
 			int realY = (y / CASE_SIZE);
 			int positionTab = (realY * CASE_NUM + realX);
-			std::cout << "Clicked tab = " << positionTab << " !" << std::endl;
 
 			Robot* robot = getRobot(positionTab);
 			if (robot != nullptr) {
@@ -124,7 +117,6 @@ protected:
 			} else {
 				if (selectedRobot != nullptr) {
 					//if (this->grid->canMove(getRobotIndex(selectedRobot), positionTab)) {
-						std::cout << "titi : " << std::endl;
 						char dir = '-';
 						int rPos = selectedRobot->getPosition();
 						int rX = rPos % CASE_NUM;
@@ -170,22 +162,18 @@ protected:
 			int x = position % CASE_NUM;
 			int y = position / CASE_NUM;
 			
-
-			int red = (robot->getColor() & 0xFF000000) >> 24;
-			int green = (robot->getColor() & 0x00FF0000) >> 16;
-			int blue = (robot->getColor() & 0x0000FF00) >> 8;
-
-			if (robot->getTarget()) {
+			if (robot->getFocus()) {
 				drawNonFilledRect(painter, x * CASE_SIZE + 4, y * CASE_SIZE + 4, CASE_SIZE - 8, CASE_SIZE - 8, Wt::StandardColor::Black);
 			}
-
-			drawRobot(painter, x, y, Wt::WColor(red, green, blue, 255));
+			int* rbg = intToRGB(robot->getColor());
+			drawRobot(painter, x, y, Wt::WColor(rbg[0], rbg[1], rbg[2], 255));
 		}
 
 		int positionMission = this->grid->getGoal();
 		int xMission = positionMission % CASE_NUM;
 		int yMission = positionMission / CASE_NUM;
-		drawMission(painter, xMission, yMission, Wt::WColor(Wt::StandardColor::Yellow));
+		int* toto = intToRGB(this->grid->getRobotGoal()->getColor());
+		drawMission(painter, xMission, yMission, Wt::WColor(toto[0], toto[1], toto[2], 255));
 	}
 
 	// x, y grid pas en coordonnées
@@ -212,10 +200,19 @@ protected:
 
 	Robot* getSelectedRobot() {
 		for (auto& robot : this->grid->getRobots()) {
-			if (robot->getTarget())
+			if (robot->getFocus())
 				return robot;
 		}
 		return nullptr;
+	}
+
+	int* intToRGB(int color) {
+		int rtn[3];
+		rtn[0] = (color & 0x00ff0000) >> 16;
+		rtn[1] = (color & 0x0000ff00) >> 8;
+		rtn[2] = (color & 0x000000ff);
+		
+		return rtn;
 	}
 
 	int getRobotIndex(Robot* robot) {
@@ -228,11 +225,10 @@ protected:
 
 	void setRobotSelected(int position) {
 		for (auto& robot : this->grid->getRobots()) {
-			robot->setTarget(false);
+			robot->setFocus(false);
 			if (robot->getPosition() == position)
-				robot->setTarget(true);
+				robot->setFocus(true);
 		}
-
 	}
 
 	// x, y grid pas en coordonnées

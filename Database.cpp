@@ -17,14 +17,14 @@ int Database::checkConnection(string login, string mdp) {
 
 	struct sqlite3_stmt* selectstmt;
 	int result = sqlite3_prepare_v2(DB, sql.c_str(), -1, &selectstmt, NULL);
-	if (result == SQLITE_OK) {
-		if (sqlite3_step(selectstmt) == SQLITE_ROW) {
+	if (result == SQLITE_OK){
+		if (sqlite3_step(selectstmt) == SQLITE_ROW){
 			int rc = 0;
 			sqlite3_exec(DB, sql.c_str(), callback, &rc, NULL);
 			cout << "RECORD FOUNDED:" << rc << endl;
 			return rc;
 		}
-		else {
+		else{
 			cout << "RECORD NOT FOUNDED" << endl;
 			return -1;
 		}

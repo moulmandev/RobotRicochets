@@ -29,11 +29,9 @@ public:
 	void afficherGrille();
 	void afficherMoves();
 	Robot* getRobotGoal();
+	int* getBoard();
 	void deplacerRobot(color c, char dir);
 	void deplacerRobot(Robot* rob, char dir);
-	int* getBoard();
-	int getGoal();
-	std::vector<Robot*> getRobots();
 
 	/*Plus court chemin*/
 	void pathSave(unsigned int maxDepth, unsigned int nodes, unsigned int inner, unsigned int hits);
@@ -55,6 +53,8 @@ public:
 	bool checkRightMove(unsigned int index, unsigned int direction);
 	bool checkUpMove(unsigned int index, unsigned int direction);
 	bool checkDownMove(unsigned int index, unsigned int direction);
+	int getGoal();
+	std::vector<Robot*> getRobots();
 	std::vector<unsigned int> makeKey();
 	bool operator<( unsigned int [4]);
 	bool canMove(unsigned int, unsigned int);

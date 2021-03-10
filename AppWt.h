@@ -1,16 +1,24 @@
 #pragma once
+
 #include <Wt/WApplication.h>
 #include <Wt/WBreak.h>
 #include <Wt/WContainerWidget.h>
 #include <Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WText.h>
-#include<string>
 #include <Wt/WTable.h>
 #include <Wt/WSelectionBox.h>
+#include <Wt/WGridLayout.h>
+#include<string>
+#include<Windows.h>
+
 
 #include"Grid.h";
 #include"Database.h"
+
+#include "sqlite3.h"
+#include "stdio.h"
+
 
 using namespace Wt;
 
@@ -36,4 +44,5 @@ public:
 	void fctDisplayPath(vector<string> pathSolution);
 	void displayUserStatistics(int id);
 };
+
 
