@@ -157,6 +157,8 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\Desktop\sqlite-amalgamation-3340100\sqlite3.c" />
     <ClCompile Include="Database.cpp" />
+    <ClCompile Include="Case.cpp" />
+    <ClCompile Include="Entry.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Robot.cpp" />
@@ -165,6 +167,7 @@
     <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Case.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Game.h" />
@@ -173,6 +176,7 @@
     <ClInclude Include="Statistics.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="Vue.h" />
+    <ClInclude Include="WidgetGrille.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
