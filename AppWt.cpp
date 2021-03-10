@@ -2,7 +2,7 @@
 #include <Wt/WVBoxLayout.h>
 
 #include<iostream>
-#include "WidgetGrille.h"
+#include "WidgetGrilleMove.h"
 
 AppWt::AppWt(const WEnvironment& env) : WApplication(env)
 {
@@ -10,6 +10,7 @@ AppWt::AppWt(const WEnvironment& env) : WApplication(env)
 	initializeBd();
 	setTitle("Robot Ricochets");
 	container = root()->addWidget(cpp14::make_unique<WContainerWidget>());
+	containerAlgo = root()->addWidget(cpp14::make_unique<WContainerWidget>());
 	grille = new Grid();
 	showMenu();
 	//container->setStyleClass("classBody");
@@ -54,6 +55,8 @@ void AppWt::startGame()
 
 	WPushButton* boutonMenu = container->addWidget(std::make_unique<Wt::WPushButton>("RETOUR MENU"));
 	boutonMenu->clicked().connect(this, &AppWt::showMenu);
+	resolutionAlgorithm(grille);
+
 }
 
 void AppWt::showRegles()
@@ -168,30 +171,6 @@ void AppWt::logout()
 {
 }
 
-void AppWt::fctDisplayPrecomputeMinimumMoves(Grid* grille)
-{
-	std::cout << "Dans fctDisplayPrecomputeMinimumMoves" << std::endl;
-
-	Wt::WTable* table = root()->addWidget(std::make_unique<Wt::WTable>());
-	Wt::WCssDecorationStyle PrecomputeMinimumArrayStyle;
-	PrecomputeMinimumArrayStyle.setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
-
-	table->setDecorationStyle(PrecomputeMinimumArrayStyle);
-
-	for (int i = 0; i < 16; i++) {
-		for (int j = 0; j < 16; j++) {
-			if (grille->getPrecomputeMinimumMovesArray()[i * 16 + j] != INT_MAX && grille->getPrecomputeMinimumMovesArray()[i * 16 + j] != 0) {
-				table->elementAt(i, j)->addNew<Wt::WText>(std::to_string(grille->getPrecomputeMinimumMovesArray()[i * 16 + j]));
-			}
-			else if (grille->getPrecomputeMinimumMovesArray()[i * 16 + j] == 0) {
-				table->elementAt(i, j)->addNew<Wt::WText>("X");
-			}
-			else {
-				table->elementAt(i, j)->addNew<Wt::WText>("");
-			}
-		}
-	}
-}
 
 void AppWt::initializeBd()
 {
@@ -216,8 +195,6 @@ void AppWt::initializeBd()
 
 void AppWt::resolutionAlgorithm(Grid* grille)
 {
-	container->clear();
-
 	vector <char> path;
 	vector <string> chemin = grille->principalSearch(path);
 
@@ -236,10 +213,6 @@ void AppWt::resolutionAlgorithm(Grid* grille)
 	int window_height = (rect.bottom - rect.top);
 
 	container->resize(window_width, window_height);//Mettre taille ecran
-	Wt::WCssDecorationStyle decorationPage;
-	decorationPage.setBackgroundColor(Wt::WColor::WColor(135, 233, 144, 255));
-
-	container->setDecorationStyle(decorationPage);
 
 	Wt::WText* pageTitle = container->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Resolution d'algorithme</h1>")));
 	Wt::WFont fontTitle;
@@ -275,9 +248,20 @@ void AppWt::resolutionAlgorithm(Grid* grille)
 		});
 }
 
+void AppWt::fctDisplayPrecomputeMinimumMoves(Grid* grille)
+{
+	containerAlgo->clear();
+	std::cout << "Dans fctDisplayPrecomputeMinimumMoves" << std::endl;
+
+	WidgetGrilleMove* wtGrid = containerAlgo->addWidget(std::make_unique<WidgetGrilleMove>());
+	wtGrid->setGrid(grille);
+
+}
+
+
 void AppWt::fctDisplayPath(vector<string> pathSolution)
 {
-	container->clear();
+	containerAlgo->clear();
 
 	for (int i = 0; i < pathSolution.size(); i++) {
 		cout << pathSolution[i] << endl;
@@ -289,35 +273,33 @@ void AppWt::fctDisplayPath(vector<string> pathSolution)
 
 		if (pathSolution.at(i).at(0) == 'B') {
 			textColor.setForegroundColor(Wt::WColor(0, 0, 255, 255));
-			container->addWidget(std::make_unique<Wt::WText>("B"))->setDecorationStyle(textColor);
 		}
 		else if (pathSolution.at(i).at(0) == 'R') {
 			textColor.setForegroundColor(Wt::WColor(255, 0, 0, 255));
-			container->addWidget(std::make_unique<Wt::WText>("R"))->setDecorationStyle(textColor);
 		}
 		else if (pathSolution.at(i).at(0) == 'G') {
 			textColor.setForegroundColor(Wt::WColor(0, 0, 255, 255));
-			container->addWidget(std::make_unique<Wt::WText>("G"))->setDecorationStyle(textColor);
 		}
 		else if (pathSolution.at(i).at(0) == 'Y') {
 			textColor.setForegroundColor(Wt::WColor(255, 165, 0, 255));
-			container->addWidget(std::make_unique<Wt::WText>("Y"))->setDecorationStyle(textColor);
 		}
 		if (pathSolution.at(i).at(1) == 'N') {
-			container->addWidget(std::make_unique<Wt::WText>("N"))->setDecorationStyle(textColor);
+			auto text = containerAlgo->addWidget(std::make_unique<Wt::WText>("N"));
+			text->setDecorationStyle(textColor);
 		}
 		else if (pathSolution.at(i).at(1) == 'S') {
-			container->addWidget(std::make_unique<Wt::WText>("S"))->setDecorationStyle(textColor);
+			containerAlgo->addWidget(std::make_unique<Wt::WText>("S"))->setDecorationStyle(textColor);
 		}
 		else if (pathSolution.at(i).at(1) == 'E') {
-			container->addWidget(std::make_unique<Wt::WText>("E"))->setDecorationStyle(textColor);
+			containerAlgo->addWidget(std::make_unique<Wt::WText>("E"))->setDecorationStyle(textColor);
 		}
 		else if (pathSolution.at(i).at(1) == 'O') {
-			container->addWidget(std::make_unique<Wt::WText>("O"))->setDecorationStyle(textColor);
+			containerAlgo->addWidget(std::make_unique<Wt::WText>("O"))->setDecorationStyle(textColor);
 		}
 
 	}
 }
+
 
 void AppWt::displayUserStatistics(int id)
 {

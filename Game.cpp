@@ -19,7 +19,7 @@ void Game::gameVue() {
 	for (int i = 0; i < nbJoueurs; i++) {
 		std::cout << "-" << users[i].getLogin() << endl;
 	}
-	cout << endl;	
+	cout << endl;
 }
 
 Grid* Game::getMap() {

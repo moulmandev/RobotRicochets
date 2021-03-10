@@ -55,6 +55,7 @@ using namespace std;
 #include <Wt/WTableView.h>
 
 using namespace std;
+namespace dbo = Wt::Dbo;
 
 class HelloApplication : public Wt::WApplication
 {
@@ -107,7 +108,7 @@ public:
 		fontTitle.setSize(12);
 
 		pageTitle->decorationStyle().setFont(fontTitle); 
-		Wt::WText* ExplanationsRules = root()->addWidget(std::make_unique<Wt::WText>("Trouvez le chemin le plus rapide pour emmener le robot objectif à la case object, en vous aidant des murs et de tous les autres robots\n Pour cela, cliquez sur l'un des robots, et indiquez là où vous souhaitez qu'il se dirige.\n"));
+		Wt::WText* ExplanationsRules = root()->addWidget(std::make_unique<Wt::WText>("Trouvez le chemin le plus rapide pour emmener le robot objectif ï¿½ la case object, en vous aidant des murs et de tous les autres robots\n Pour cela, cliquez sur l'un des robots, et indiquez lï¿½ oï¿½ vous souhaitez qu'il se dirige.\n"));
 		Wt::WFont fontRules;
 		fontRules.setFamily(Wt::FontFamily::Fantasy, "'Western'");
 		fontRules.setSize(12);

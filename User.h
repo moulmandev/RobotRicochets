@@ -32,6 +32,7 @@ public:
 
 	~User();
 
+
 private:
 	int idUser;
 	std::string password;

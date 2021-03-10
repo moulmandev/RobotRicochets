@@ -26,6 +26,7 @@ class AppWt : public WApplication
 {
 private:
 	Wt::WContainerWidget* container;
+	Wt::WContainerWidget* containerAlgo;
 	Database* db;
 	Grid* grille;
 public:
