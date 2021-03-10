@@ -167,7 +167,7 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 		std::cout << tabRobots[i]->getTarget() << std::endl;
 	}
 
-	goal = 54;
+	goal = 16;
 	last = 0;
 	numRobotTarget = 0;
 	tabRobots.at(numRobotTarget)->setTarget(true);

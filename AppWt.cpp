@@ -55,7 +55,12 @@ void AppWt::startGame()
 
 	WPushButton* boutonMenu = container->addWidget(std::make_unique<Wt::WPushButton>("RETOUR MENU"));
 	boutonMenu->clicked().connect(this, &AppWt::showMenu);
-	resolutionAlgorithm(grille);
+
+	WPushButton* boutonAlgo = containerAlgo->addWidget(std::make_unique<Wt::WPushButton>("Utiliser l'algorithme"));
+	boutonAlgo->clicked().connect([=] {
+		containerAlgo->clear();
+		resolutionAlgorithm(grille);
+	});
 
 }
 
