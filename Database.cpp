@@ -2,8 +2,6 @@
 
 using namespace std;
 
-
-
 int Database::checkConnection(string login, string mdp) {
 
 	sqlite3* DB;
@@ -19,18 +17,42 @@ int Database::checkConnection(string login, string mdp) {
 
 	struct sqlite3_stmt* selectstmt;
 	int result = sqlite3_prepare_v2(DB, sql.c_str(), -1, &selectstmt, NULL);
-	if (result == SQLITE_OK)
-	{
-		if (sqlite3_step(selectstmt) == SQLITE_ROW)
-		{
-			int rc = sqlite3_exec(DB, sql.c_str(), callback, NULL, NULL);
-			cout << "RECORD FOUNDED::::::::::::::::::::::::::" << rc << endl;
-			return 1;
+	if (result == SQLITE_OK) {
+		if (sqlite3_step(selectstmt) == SQLITE_ROW) {
+			int rc = 0;
+			sqlite3_exec(DB, sql.c_str(), callback, &rc, NULL);
+			cout << "RECORD FOUNDED:" << rc << endl;
+			return rc;
 		}
-		else
-		{
+		else {
 			cout << "RECORD NOT FOUNDED" << endl;
 			return -1;
+		}
+	}
+	sqlite3_finalize(selectstmt);
+}
+
+
+bool Database::checkLogin(string login) {
+
+	sqlite3* DB;
+	int exit = sqlite3_open(dir, &DB);
+
+	string sql = "SELECT idUsers FROM Users WHERE login =";
+	sql += "'";
+	sql += login;
+	sql += "';";
+
+	struct sqlite3_stmt* selectstmt;
+	int result = sqlite3_prepare_v2(DB, sql.c_str(), -1, &selectstmt, NULL);
+	if (result == SQLITE_OK) {
+		if (sqlite3_step(selectstmt) == SQLITE_ROW) {
+			cout << "LOGIN FOUNDED" << endl;
+			return 1;
+		}
+		else {
+			cout << "LOGIN NOT FOUNDED" << endl;
+			return 0;
 		}
 	}
 	sqlite3_finalize(selectstmt);

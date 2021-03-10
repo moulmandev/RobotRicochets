@@ -1,0 +1,10 @@
+
+.classBody
+{
+    display: flex;
+    flex-direction: column;
+}
+
+div {
+    margin-left: 50px;
+}

@@ -346,7 +346,6 @@ bool Grid::canMove(unsigned int robot, unsigned int direction) {
 		return false;
 	}
 	return true;
-
 }
 
 const unsigned int* Grid::getPrecomputeMinimumMovesArray() {
@@ -535,11 +534,16 @@ void Grid::precomputeMinimumMoves() {//Calcule le nb min de mouvements pour chaq
 
 }
 
-void Grid::deplacerRobot(color c, char dir){
+void Grid::deplacerRobot(color c, char dir) {
 	Robot* rob = new Robot(0);
 	for (int i = 0; i < 4; i++)
 		if (tabRobots[i]->getColor() == c)
 			rob = tabRobots[i];
+
+	deplacerRobot(rob, dir);
+}
+
+void Grid::deplacerRobot(Robot* rob, char dir){
 
 	int xRob = (int)(rob->getPosition() / 16);
 	int yRob = (int)(rob->getPosition() % 16);	int index;
@@ -691,13 +695,28 @@ void Grid::deplacerRobot(color c, char dir){
 		break;
 
 		for (int i = 0; i < 4; i++)
-			if (tabRobots[i]->getColor() == c)
+			if (tabRobots[i]->getColor() == rob->getColor())
 				tabRobots[i] = rob;
 
 		if (rob->getTarget() && rob->getPosition() == goal)
 			std::cout << "Fini !!!" << std::endl;
 
 	}
+}
+
+int* Grid::getBoard()
+{
+	return boardOneD;
+}
+
+int Grid::getGoal()
+{
+	return goal;
+}
+
+std::vector<Robot*> Grid::getRobots()
+{
+	return tabRobots;
 }
 
 

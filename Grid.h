@@ -30,6 +30,10 @@ public:
 	void afficherMoves();
 	Robot* getRobotGoal();
 	void deplacerRobot(color c, char dir);
+	void deplacerRobot(Robot* rob, char dir);
+	int* getBoard();
+	int getGoal();
+	std::vector<Robot*> getRobots();
 
 	/*Plus court chemin*/
 	void pathSave(unsigned int maxDepth, unsigned int nodes, unsigned int inner, unsigned int hits);
