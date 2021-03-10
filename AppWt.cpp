@@ -12,15 +12,9 @@ AppWt::AppWt(const WEnvironment& env) : WApplication(env)
 	container = root()->addWidget(cpp14::make_unique<WContainerWidget>());
 	containerText = root()->addWidget(cpp14::make_unique<WContainerWidget>());
 	containerAlgo = root()->addWidget(cpp14::make_unique<WContainerWidget>());
-	containerMenu = root()->addWidget(cpp14::make_unique<WContainerWidget>());
 	containerRules = root()->addWidget(cpp14::make_unique<WContainerWidget>());
 
 	grille = new Grid();
-
-	containerMenu->setMargin(700, Wt::Side::CenterX);
-	containerText->setMargin(700, Wt::Side::Left);
-	containerAlgo->setMargin(700, Wt::Side::Left);
-	containerRules->setMargin(700, Wt::Side::Left);
 
 	showMenu();
 	
@@ -30,13 +24,20 @@ AppWt::~AppWt()
 {
 }
 
+void AppWt::clearContainers() {
+	container->clear();
+	containerAlgo->clear();
+	containerText->clear();
+	containerRules->clear();
+}
+
 void AppWt::showMenu()
 {
 	container->clear();
-	containerText->clear();
-	containerAlgo->clear();
-	//containerMenu->resize(150, 150);
-	auto vbox = containerMenu->setLayout(Wt::cpp14::make_unique<Wt::WVBoxLayout>());
+	clearContainers();
+	container->resize(200, 200);
+	container->setMargin(700, Wt::Side::CenterX);
+	auto vbox = container->setLayout(Wt::cpp14::make_unique<Wt::WVBoxLayout>());
 	vbox->setContentsMargins(0, 0, 0, 0);
 
 	WPushButton* boutonPlay = vbox->addWidget(std::make_unique<Wt::WPushButton>("JOUER"));
@@ -57,18 +58,20 @@ void AppWt::showMenu()
 
 void AppWt::startGame()
 {
-	container->clear();
+	clearContainers();
 	WidgetGrille* wtGrid = container->addWidget(std::make_unique<WidgetGrille>());
 	wtGrid->setGrid(grille);
 	WPushButton* boutonMenu = container->addWidget(std::make_unique<Wt::WPushButton>("RETOUR MENU"));
 	boutonMenu->clicked().connect(this, &AppWt::showMenu);
+	
 	resolutionAlgorithm(grille);
 
 }
 
 void AppWt::showRegles()
 {
-	container->clear();
+	clearContainers();
+	containerRules->setMargin(200, Wt::Side::Left);
 
 	Wt::WText* pageTitle = containerRules->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Regles du jeu</h1>")));
 	Wt::WFont fontTitle;
@@ -95,7 +98,7 @@ void AppWt::showRegles()
 
 void AppWt::inscription()
 {
-	container->clear();
+	clearContainers();
 
 	WLineEdit* editLogin = container->addNew<WLineEdit>();
 	editLogin->setPlaceholderText("Login");
@@ -122,7 +125,7 @@ void AppWt::inscription()
 		}
 		else {
 			db->addUserToDatabase(editLogin->text().toUTF8(), editPassword->text().toUTF8(), sb1->currentText().toUTF8());
-			showMenu();
+			startGame();
 		}
 		});
 
@@ -130,10 +133,9 @@ void AppWt::inscription()
 	boutonMenu->clicked().connect(this, &AppWt::showMenu);
 }
 
-
 void AppWt::login()
 {
-	container->clear();
+	clearContainers();
 
 	auto vbox = container->setLayout(Wt::cpp14::make_unique<Wt::WVBoxLayout>());
 
@@ -163,16 +165,13 @@ void AppWt::login()
 		if (idFounded != -1) {
 			std::cout << "Okk connection" << std::endl;
 			std::cout << "On fait la connexion avec le user " << idFounded << std::endl;
-			displayUserStatistics(idFounded);
+			startGame();
 		}
 		else {
 			std::cout << "Login ou mot de passe incorrectes. Veuillez reessayer ou vous creer un compte\n" << std::endl;
 			root()->addWidget(std::make_unique<Wt::WText>("Login ou mot de passe incorrectes. Veuillez reessayer ou vous creer un compte\n"));
 		}
 		});
-
-	WPushButton* boutonMenu = container->addWidget(std::make_unique<Wt::WPushButton>("RETOUR MENU"));
-	boutonMenu->clicked().connect(this, &AppWt::showMenu);
 }
 
 void AppWt::logout()
@@ -201,10 +200,12 @@ void AppWt::initializeBd()
 	db->addUserToDatabase("theo.escolano", "passwordTheo", "Pays-Bas");
 }
 
-
-
 void AppWt::resolutionAlgorithm(Grid* grille)
 {
+
+	containerText->setMargin(700, Wt::Side::Left);
+	containerAlgo->setMargin(700, Wt::Side::Left);
+
 	vector <char> path;
 	vector <string> chemin = grille->principalSearch(path);
 
@@ -286,7 +287,7 @@ void AppWt::fctDisplayPath(vector<string> pathSolution)
 			textColor.setForegroundColor(Wt::WColor(255, 165, 0, 255));
 		}
 		if (pathSolution.at(i).at(1) == 'N') {
-			containerAlgo->addWidget(std::make_unique<Wt::WText>("Nord "));
+			containerAlgo->addWidget(std::make_unique<Wt::WText>("Nord "))->setDecorationStyle(textColor);
 		}
 		else if (pathSolution.at(i).at(1) == 'S') {
 			containerAlgo->addWidget(std::make_unique<Wt::WText>("Sud "))->setDecorationStyle(textColor);

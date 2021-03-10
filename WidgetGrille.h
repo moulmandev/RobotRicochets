@@ -25,6 +25,7 @@ class WidgetGrille : public Wt::WPaintedWidget
 {
 
 private:
+	int cpt;
 	Grid* grid;
 	std::vector<int> routePositions;
 	Robot* selectedRobot = nullptr;
@@ -32,7 +33,8 @@ private:
 public:
 	WidgetGrille() : WPaintedWidget()
 	{	
-		resize(GRID_SIZE, GRID_SIZE);  // 32x32
+		cpt = 0;
+		resize(GRID_SIZE+50, GRID_SIZE);  // 32x32
 	}
 
 	void setGrid(Grid* grid) {
@@ -41,7 +43,9 @@ public:
 protected:
 	void paintEvent(Wt::WPaintDevice* paintDevice) {
 		Wt::WPainter painter(paintDevice);
-
+		Wt::WFlags<Wt::AlignmentFlag> flags(Wt::AlignmentFlag::Center);
+		painter.drawText(GRID_SIZE+5,5, ROBOT_SIZE, ROBOT_SIZE, flags, to_string(cpt));
+		painter.save();
 		for (int i = 0; i < CASE_NUM; i++) {
 			for (int j = 0; j < CASE_NUM; j++) {
 				painter.setBrush(Wt::WColor(Wt::StandardColor::Red));
@@ -130,12 +134,11 @@ protected:
 							else if (realX < rX) dir = 'q';
 
 							this->grid->deplacerRobot(selectedRobot, dir);
-
+							cpt++;
 							if (this->grid->getGoal() == this->grid->getRobotGoal()->getPosition()) {
-
-								Wt::StandardButton answer = Wt::WMessageBox::show("Bravo !", "<p>Vous avez réussi votre mission !</p>", Wt::StandardButton::Ok);
+								Wt::StandardButton answer = Wt::WMessageBox::show("Bravo !", "Vous avez reussi votre mission !", Wt::StandardButton::Ok);
 								if (answer == Wt::StandardButton::Ok) {
-										
+									update();
 								}
 									
 							}
@@ -278,5 +281,5 @@ protected:
 		painter.save();
 	}
 
-
+	
 };

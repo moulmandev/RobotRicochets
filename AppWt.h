@@ -28,7 +28,6 @@ private:
 	Wt::WContainerWidget* container;
 	Wt::WContainerWidget* containerAlgo;
 	Wt::WContainerWidget* containerText;
-	Wt::WContainerWidget* containerMenu;
 	Wt::WContainerWidget* containerRules;
 
 	Database* db;
@@ -37,6 +36,7 @@ public:
 
 	AppWt(const WEnvironment& env);
 	~AppWt();
+	void clearContainers();
 	void showMenu();
 	void startGame();
 	void showRegles();
