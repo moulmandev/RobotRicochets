@@ -10,7 +10,9 @@
 #include <Wt/WPen.h>
 #include <Wt/WPointF.h>
 #include <Wt/WSpinBox.h>
-
+#include <Wt/WMessageBox.h>
+#include <Wt/WPushButton.h>
+#include <Wt/WText.h>
 #include <Wt/WTemplate.h>
 
 #define GRID_SIZE 640
@@ -128,11 +130,19 @@ protected:
 							else if (realX < rX) dir = 'q';
 
 							this->grid->deplacerRobot(selectedRobot, dir);
+
+							if (this->grid->getGoal() == this->grid->getRobotGoal()->getPosition()) {
+
+								Wt::StandardButton answer = Wt::WMessageBox::show("Bravo !", "<p>Vous avez réussi votre mission !</p>", Wt::StandardButton::Ok);
+								if (answer == Wt::StandardButton::Ok) {
+										
+								}
+									
+							}
 						}
 					//}
 				}
 			}
-			
 			update();
 		});
 

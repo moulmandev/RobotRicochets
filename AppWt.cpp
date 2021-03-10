@@ -242,13 +242,13 @@ void AppWt::resolutionAlgorithm(Grid* grille)
 		btnSolutionPath->setEnabled(false);
 		btnPrecomputeMinMoves->setEnabled(true);
 		fctDisplayPath(chemin);
-		});
+	});
 
 	btnPrecomputeMinMoves->clicked().connect([=] {
 		btnPrecomputeMinMoves->setEnabled(false);
 		btnSolutionPath->setEnabled(true);
 		fctDisplayPrecomputeMinimumMoves(grille);
-		});
+	});
 }
 
 void AppWt::fctDisplayPrecomputeMinimumMoves(Grid* grille)
@@ -302,8 +302,7 @@ void AppWt::fctDisplayPath(vector<string> pathSolution)
 }
 
 
-void AppWt::displayUserStatistics(int id)
-{
+void AppWt::displayUserStatistics(int id) {
 	root()->clear();
 	root()->addWidget(std::make_unique<Wt::WText>("Login\n"));
 }
