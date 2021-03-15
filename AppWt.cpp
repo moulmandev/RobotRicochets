@@ -218,7 +218,7 @@ void AppWt::resolutionAlgorithm(Grid* grille)
 	setTitle("Resolution algorithme");
 
 
-	Wt::WText* pageTitle = containerText->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Resolution d'algorithme</h1>")));
+	Wt::WText* pageTitle = containerText->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Algorithme de résolution</h1>")));
 	Wt::WFont fontTitle;
 
 	fontTitle.setFamily(Wt::FontFamily::Monospace, "'Courier New'");
