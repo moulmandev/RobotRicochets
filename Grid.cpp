@@ -81,7 +81,7 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 		int x = rand() % 256;
 		if (boardOneD[x] % 2 == 0) {
 			boardOneD[x]++;//Rajout d'un robot
-			//Mettre le robot dans votre tableau
+			//Mettre le robot dans le tableau
 			tabRobots.push_back(new Robot(x));
 		}
 		else {
@@ -116,95 +116,6 @@ Grid::Grid() : depth(0), nodes(0), inner(0), hits(0), last(0) {
 
 	afficherGrille();
 	std::cout << std::endl;
-
-	//unsigned int liste[256] = {9, 1, 5, 1, 3, 9, 1, 1, 1, 3, 9, 1, 1, 1, 1, 3, 8, 2, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 6, 8, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 0, 3, 8, 0, 0, 0, 0, 2, 12, 0, 2, 9, 0, 0, 0, 0, 4, 2, 12, 0, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 3, 10, 9, 0, 0, 0, 3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 6, 8, 0, 0, 0, 0, 4, 4, 0, 0, 2, 12, 0, 0, 2, 8, 1, 0, 0, 0, 0, 2, 9, 3, 8, 0, 0, 1, 0, 0, 2, 8, 0, 4, 0, 2, 12, 2, 12, 6, 8, 0, 0, 0, 0, 0, 6, 8, 18, 9, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 4, 0, 3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 0, 2, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 0, 0, 0, 2, 9, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, 2, 12, 2, 8, 0, 0, 16, 3, 8, 0, 0, 0, 4, 0, 0, 0, 0, 1, 2, 8, 6, 8, 0, 0, 0, 0, 0, 0, 3, 8, 0, 0, 0, 16, 2, 12, 5, 4, 4, 4, 6, 12, 4, 4, 4, 4, 6, 12, 4, 4, 6};
-	//
-	//for (int i = 0; i < 256; i++){
-	//	if (liste[i] == NORTH) {
-	//		boardOneD[i] = 16;
-	//	}
-	//	if (liste[i] == EAST)
-	//		boardOneD[i] = 4;
-	//	if (liste[i] == SOUTH)
-	//		boardOneD[i] = 8;
-	//	if (liste[i] == WEST)
-	//		boardOneD[i] = 2;
-	//	if (liste[i] == WEST + NORTH)
-	//		boardOneD[i] = 18;
-	//	if (liste[i] == WEST + SOUTH)
-	//		boardOneD[i] = 10;
-	//	if (liste[i] == EAST + NORTH)
-	//		boardOneD[i] = 20;
-	//	if (liste[i] == EAST + SOUTH)
-	//		boardOneD[i] = 12;		
-	//	if (liste[i] == NORTH + SOUTH) {
-	//		boardOneD[i] = 24;
-	//	}
-	//	if (liste[i] == EAST + WEST) {
-	//		boardOneD[i] = 6;
-	//	}
-	//	if (liste[i] == 0) {
-	//		boardOneD[i] = 0;
-	//	}
-
-	//	if (liste[i] >= 16){
-	//		if (liste[i] == 16) {
-	//			boardOneD[i] = 0;//Juste un robot
-	//		}
-
-	//		else {//Un robot + un mur
-	//			int k = liste[i] % 16;
-	//			if (k == NORTH) {
-	//				boardOneD[i] = 16;
-	//			}
-	//			if (k == EAST)
-	//				boardOneD[i] = 4;
-	//			if (k == SOUTH)
-	//				boardOneD[i] = 8;
-	//			if (k == WEST)
-	//				boardOneD[i] = 2;
-	//			if (k == WEST + NORTH)
-	//				boardOneD[i] = 18;
-	//			if (k == EAST + NORTH)
-	//				boardOneD[i] = 20;
-	//			if (k == EAST + SOUTH)
-	//				boardOneD[i] = 12;
-	//			if (k == WEST + SOUTH)
-	//				boardOneD[i] = 10;
-	//		}
-	//		
-	//	}
-	//}
-
-
-	//tabRobots.push_back(new Robot(0));
-	//boardOneD[0]++;
-	//tabRobots.push_back(new Robot(211));
-	//boardOneD[211]++;
-	//tabRobots.push_back(new Robot(145));
-	//boardOneD[145]++;
-	//tabRobots.push_back(new Robot(238));
-	//boardOneD[238]++;
-
-	//tabRobots[0]->setColor(blue);
-	//tabRobots[1]->setColor(yellow);
-	//tabRobots[2]->setColor(green);
-	//tabRobots[3]->setColor(red);
-
-	//tabRobotSorter();
-
-	//for (int i = 0; i < 4; i++) {
-	//	tabRobots[i]->setTarget(false);
-	//	std::cout << tabRobots[i]->getTarget() << std::endl;
-	//}
-
-	//goal = 86;
-	//last = 0;
-	//numRobotTarget = 0;
-	//tabRobots.at(numRobotTarget)->setTarget(true);
-
-	//afficherGrille();
-	//std::cout << std::endl;
 }
 
 void Grid::swap(std::vector <unsigned int>& tab, int first, int second) {
@@ -433,7 +344,6 @@ unsigned int Grid::computeMove(unsigned int robot, unsigned int direction) {//Re
 	return index;
 }
 
-//int cpt = 0;
 unsigned int* Grid::doMove(unsigned int robot, unsigned int direction) {
 	
 	unsigned int start = tabRobots.at(robot)->getPosition();//Position de départ du robot goal
@@ -470,7 +380,6 @@ void Grid::undoMove(unsigned int* undo){
 	unsigned int lastMove = undo[2];
 	unsigned int end = tabRobots.at(robot)->getPosition();
 
-	
 	tabRobots.at(robot)->setPosition(start);
 
 	last = lastMove;	
@@ -915,6 +824,5 @@ bool Grid::mapAdd(std::vector<unsigned int> key, unsigned int d) {
 		mapSearch.emplace(key, d);
 		return true;
 	}
-
 }
 

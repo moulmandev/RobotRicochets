@@ -7,7 +7,7 @@ namespace dbo = Wt::Dbo;
 class User {
 
 public:
-	User(int id, std::string l, std::string p, std::string ps);
+	User(int, std::string, std::string, std::string);
 	User();
 
 	int getIdUser();

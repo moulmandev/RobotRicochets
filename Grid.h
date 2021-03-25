@@ -24,7 +24,6 @@ private:
 
 public:
 	Grid();
-	
 	void tabRobotSorter();
 	void afficherGrille();
 	void afficherMoves();
@@ -59,5 +58,4 @@ public:
 	bool operator<( unsigned int [4]);
 	bool canMove(unsigned int, unsigned int);
 	const unsigned int* getPrecomputeMinimumMovesArray();
-
 };

@@ -1,5 +1,4 @@
 #pragma once
-
 #include <Wt/WApplication.h>
 #include <Wt/WBreak.h>
 #include <Wt/WContainerWidget.h>
@@ -11,15 +10,10 @@
 #include <Wt/WGridLayout.h>
 #include<string>
 #include<Windows.h>
-
-
 #include"Grid.h";
 #include"Database.h"
-
 #include "sqlite3.h"
 #include "stdio.h"
-
-
 using namespace Wt;
 
 class AppWt : public WApplication
@@ -32,8 +26,8 @@ private:
 
 	Database* db;
 	Grid* grille;
-public:
 
+public:
 	AppWt(const WEnvironment& env);
 	~AppWt();
 	void clearContainers();

@@ -74,7 +74,6 @@ int Database::addUserToDatabase(string login, string password, string country) {
 	sqlite3* DB;
 	char* messageError;
 	int exit = sqlite3_open(dir, &DB);
-
 	string sql = "INSERT INTO Users (login, passwd, country, gameNb, ratio) VALUES (";
 	sql += "'";
 	sql += login;
@@ -84,8 +83,6 @@ int Database::addUserToDatabase(string login, string password, string country) {
 	sql += country;
 	sql += "',0, 1.0";
 	sql += ");";
-
-	//cout << "SQL vaut " << sql << endl;
 
 	exit = sqlite3_exec(DB, sql.c_str(), NULL, 0, &messageError);
 	if (exit != SQLITE_OK) {
@@ -101,7 +98,6 @@ int Database::addUserToDatabase(string login, string password, string country) {
 
 int Database::createTable(string sql) {
 	sqlite3* DB;
-
 	try {
 		int exit = 0;
 		exit = sqlite3_open(dir, &DB);

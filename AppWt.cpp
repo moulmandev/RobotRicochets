@@ -6,7 +6,6 @@
 
 AppWt::AppWt(const WEnvironment& env) : WApplication(env)
 {
-	
 	initializeBd();
 	setTitle("Robot Ricochets");
 	container = root()->addWidget(cpp14::make_unique<WContainerWidget>());
@@ -15,9 +14,7 @@ AppWt::AppWt(const WEnvironment& env) : WApplication(env)
 	containerRules = root()->addWidget(cpp14::make_unique<WContainerWidget>());
 
 	grille = new Grid();
-
 	showMenu();
-	
 }
 
 AppWt::~AppWt()
@@ -65,7 +62,6 @@ void AppWt::startGame()
 	boutonMenu->clicked().connect(this, &AppWt::showMenu);
 	
 	resolutionAlgorithm(grille);
-
 }
 
 void AppWt::showRegles()
@@ -105,7 +101,6 @@ void AppWt::inscription()
 
 	WLineEdit* editPassword = container->addNew<WLineEdit>();
 	editPassword->setPlaceholderText("Mot de passe");
-
 
 	WSelectionBox* sb1 = container->addNew<WSelectionBox>();
 	sb1->addItem("France");
@@ -156,7 +151,6 @@ void AppWt::login()
 	messageErreurConnectionDecoration.setBackgroundColor(Wt::WColor::WColor(255, 0, 0, 255));
 
 	connectionButton->clicked().connect([=] {
-
 		Wt::WString k = editLogin->text();
 		Wt::WString g = editPassword->text();
 
@@ -202,7 +196,6 @@ void AppWt::initializeBd()
 
 void AppWt::resolutionAlgorithm(Grid* grille)
 {
-
 	containerText->setMargin(700, Wt::Side::Left);
 	containerAlgo->setMargin(700, Wt::Side::Left);
 
@@ -216,7 +209,6 @@ void AppWt::resolutionAlgorithm(Grid* grille)
 	}
 
 	setTitle("Resolution algorithme");
-
 
 	Wt::WText* pageTitle = containerText->addWidget(std::make_unique<Wt::WText>(Wt::WString("<h1>Algorithme de résolution</h1>")));
 	Wt::WFont fontTitle;
@@ -234,7 +226,6 @@ void AppWt::resolutionAlgorithm(Grid* grille)
 
 	Wt::WPushButton* btnPrecomputeMinMoves = containerText->addNew<Wt::WPushButton>("Precompute minimum moves");
 	Wt::WPushButton* btnSolutionPath = containerText->addNew<Wt::WPushButton>("Chemin le plus court");
-
 
 	btnSolutionPath->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
 	btnPrecomputeMinMoves->decorationStyle().setBackgroundColor(Wt::WColor::WColor(220, 220, 220, 155));
@@ -258,7 +249,6 @@ void AppWt::fctDisplayPrecomputeMinimumMoves(Grid* grille)
 	std::cout << "Dans fctDisplayPrecomputeMinimumMoves" << std::endl;
 	WidgetGrilleMove* wtGrid = containerAlgo->addWidget(std::make_unique<WidgetGrilleMove>());
 	wtGrid->setGrid(grille);
-
 }
 
 

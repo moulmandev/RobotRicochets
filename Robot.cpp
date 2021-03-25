@@ -64,6 +64,3 @@ bool Robot::operator<(const Robot r) const {
 	}
 	return false;
 }
-
-
-

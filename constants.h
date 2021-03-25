@@ -10,9 +10,7 @@
 #define SOUTH 0x04
 #define WEST  0x08
 
-
 #define ROBOT 0x01
-
 
 #define SET_ROBOT(x) (x |= ROBOT)
 #define UNSET_ROBOT(x) (x &= ~ROBOT)

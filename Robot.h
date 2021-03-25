@@ -3,7 +3,6 @@
 
 enum color { blue = 0x009dff, red = 0xff0000, green = 0x149414, yellow = 0xfbd428};
 
-
 class Robot {
 private:
 	color c;

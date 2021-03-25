@@ -53,8 +53,6 @@ protected:
 				Wt::WColor color;
 				color.setRgb(40, 40, 40, 100);
 
-				//griid
-				//drawNonFilledRect(painter, j * CASE_SIZE, i * CASE_SIZE, CASE_SIZE, CASE_SIZE, color);
 				int position = (i * CASE_NUM + j);
 				switch (this->grid->getBoard()[position]) {
 				case 16:
@@ -122,59 +120,34 @@ protected:
 				selectedRobot = robot;
 			} else {
 				if (selectedRobot != nullptr) {
-					//if (this->grid->canMove(getRobotIndex(selectedRobot), positionTab)) {
-						char dir = '-';
-						int rPos = selectedRobot->getPosition();
-						int rX = rPos % CASE_NUM;
-						int rY = rPos / CASE_NUM;
-						if (realY == rY || realX == rX) {
-							if (realY > rY) dir = 's';
-							else if (realY < rY) dir = 'z';
-							else if (realX > rX) dir = 'd';
-							else if (realX < rX) dir = 'q';
-
-							this->grid->deplacerRobot(selectedRobot, dir);
-							cpt++;
-							if (this->grid->getGoal() == this->grid->getRobotGoal()->getPosition()) {
-								Wt::StandardButton answer = Wt::WMessageBox::show("Bravo !", "Vous avez reussi votre mission !", Wt::StandardButton::Ok);
-								if (answer == Wt::StandardButton::Ok) {
-									update();
-								}
-									
-							}
+					char dir = '-';
+					int rPos = selectedRobot->getPosition();
+					int rX = rPos % CASE_NUM;
+					int rY = rPos / CASE_NUM;
+					if (realY == rY || realX == rX) {
+						if (realY > rY) dir = 's';
+						else if (realY < rY) dir = 'z';
+						else if (realX > rX) dir = 'd';
+						else if (realX < rX) dir = 'q';
+						this->grid->deplacerRobot(selectedRobot, dir);
+						cpt++;
+						if (this->grid->getGoal() == this->grid->getRobotGoal()->getPosition()) {
+							Wt::StandardButton answer = Wt::WMessageBox::show("Bravo !", "Vous avez reussi votre mission !", Wt::StandardButton::Ok);
+							if (answer == Wt::StandardButton::Ok) {
+								update();
+							}		
 						}
-					//}
+					}
 				}
 			}
 			update();
 		});
-
-		/*
-		this->mouseMoved().connect(bindSafe([this, &painter] (const Wt::WMouseEvent& e) {
-			int x = e.widget().x;
-			int y = e.widget().y;
-			int realX = (x / CASE_SIZE);
-			int realY = (y / CASE_SIZE);
-			int positionTab = (realY * CASE_NUM + realX);
-
-
-			Robot* robot = getRobot(positionTab);
-			if (robot != nullptr) {
-				int x = positionTab % CASE_NUM;
-				int y = positionTab / CASE_NUM;
-				//drawRoute(painter, x, y);
-			}
-
-			std::cout << "Hover:  " << positionTab << " !" << std::endl;
-		}));
-		*/
 
 		for (int i = 0; i < this->grid->getRobots().size(); i++) {
 			Robot* robot = this->grid->getRobots().at(i);
 			int position = robot->getPosition();
 			int x = position % CASE_NUM;
 			int y = position / CASE_NUM;
-			
 			if (robot->getFocus()) {
 				drawNonFilledRect(painter, x * CASE_SIZE + 4, y * CASE_SIZE + 4, CASE_SIZE - 8, CASE_SIZE - 8, Wt::StandardColor::Black);
 			}
@@ -280,6 +253,4 @@ protected:
 		}
 		painter.save();
 	}
-
-	
 };
