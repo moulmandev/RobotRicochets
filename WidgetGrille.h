@@ -43,8 +43,6 @@ public:
 protected:
 	void paintEvent(Wt::WPaintDevice* paintDevice) {
 		Wt::WPainter painter(paintDevice);
-		Wt::WFlags<Wt::AlignmentFlag> flags(Wt::AlignmentFlag::Center);
-		painter.drawText(GRID_SIZE+5,5, ROBOT_SIZE, ROBOT_SIZE, flags, to_string(cpt));
 		painter.save();
 		for (int i = 0; i < CASE_NUM; i++) {
 			for (int j = 0; j < CASE_NUM; j++) {
@@ -162,7 +160,7 @@ protected:
 		drawMission(painter, xMission, yMission, Wt::WColor(toto[0], toto[1], toto[2], 255));
 	}
 
-	// x, y grid pas en coordonnées
+	// x, y grid pas en coordonnï¿½es
 	void drawRoute(Wt::WPainter& painter, int x, int y) {
 		//TODO: get color from robot
 		Wt::WColor color;
@@ -217,7 +215,7 @@ protected:
 		}
 	}
 
-	// x, y grid pas en coordonnées
+	// x, y grid pas en coordonnï¿½es
 	void drawRobot(Wt::WPainter& painter, int x, int y, Wt::WColor color) {
 		painter.setBrush(Wt::WBrush(color));
 		painter.drawEllipse(x * CASE_SIZE + ((CASE_SIZE - ROBOT_SIZE) / 2), y * CASE_SIZE + ((CASE_SIZE - ROBOT_SIZE) / 2), ROBOT_SIZE, ROBOT_SIZE);
